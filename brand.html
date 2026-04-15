@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MW Dev — Brand Identity v2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --blue: #0066FF;
+    --cyan: #00D4FF;
+    --dark: #06060C;
+    --card: #0C0C14;
+    --border: rgba(255,255,255,0.06);
+    --text: #B8B8CC;
+    --text-dim: #555566;
+    --white: #E8E8F0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Subtle background texture ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,102,255,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(0,212,255,0.03) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .page {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 0 64px;
+    animation: heroIn 0.8s ease-out;
+  }
+
+  @keyframes heroIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .logo-symbol {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-symbol svg {
+    filter: drop-shadow(0 4px 40px rgba(0,102,255,0.2));
+    transition: filter 0.5s ease, transform 0.5s ease;
+  }
+
+  .logo-symbol:hover svg {
+    filter: drop-shadow(0 8px 60px rgba(0,102,255,0.35));
+    transform: scale(1.03);
+  }
+
+  .hero-wordmark {
+    margin-top: 32px;
+    text-align: center;
+  }
+
+  .hero-wordmark h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 10px;
+    color: var(--white);
+    text-transform: uppercase;
+  }
+
+  .hero-wordmark .tagline {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 8px;
+  }
+
+  /* ── CONCEPT SECTION ── */
+  .concept {
+    margin-top: 64px;
+    padding: 40px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 40px;
+    align-items: center;
+    animation: fadeUp 0.8s ease-out 0.2s both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .concept-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .concept-text h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 12px;
+  }
+
+  .concept-text p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .concept-text .highlight {
+    color: var(--cyan);
+    font-weight: 500;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section {
+    margin-top: 56px;
+    animation: fadeUp 0.8s ease-out 0.3s both;
+  }
+
+  .section-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(0,102,255,0.2), transparent);
+  }
+
+  /* ── VARIATIONS GRID ── */
+  .var-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .var-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.3s ease;
+    cursor: default;
+  }
+
+  .var-card:hover {
+    border-color: rgba(0,102,255,0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .var-card.light {
+    background: #F2F2F8;
+    border-color: #E0E0E8;
+  }
+
+  .var-card.light:hover {
+    border-color: rgba(0,102,255,0.3);
+  }
+
+  .var-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .var-card.light .var-label {
+    color: #999;
+  }
+
+  /* ── HORIZONTAL LOCKUP ── */
+  .lockup-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .lockup-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .lockup-card:hover {
+    border-color: rgba(0,102,255,0.15);
+  }
+
+  .lockup-card.light {
+    background: #F2F2F8;
+    border-color: #E0E0E8;
+  }
+
+  .lockup-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 6px;
+    color: var(--white);
+  }
+
+  .lockup-card.light .lockup-text {
+    color: #0A0A0F;
+  }
+
+  .lockup-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--cyan);
+  }
+
+  /* ── FAVICON STRIP ── */
+  .favicon-strip {
+    display: flex;
+    gap: 24px;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 32px 0;
+  }
+
+  .fav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .fav-frame {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .fav-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+  }
+
+  /* ── COLOR PALETTE ── */
+  .palette {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .color-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .color-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .color-block {
+    height: 72px;
+  }
+
+  .color-info {
+    padding: 12px 14px;
+  }
+
+  .color-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .color-hex {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  /* ── TYPOGRAPHY PREVIEW ── */
+  .type-preview {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .type-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .type-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .type-sample-mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 2px;
+  }
+
+  .type-sample-sans {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--white);
+  }
+
+  .type-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-align: right;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 80px;
+    text-align: center;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .var-grid { grid-template-columns: repeat(2, 1fr); }
+    .palette { grid-template-columns: repeat(2, 1fr); }
+    .concept { grid-template-columns: 1fr; text-align: center; }
+    .hero-wordmark h1 { font-size: 18px; letter-spacing: 6px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══ HERO ═══ -->
+  <div class="hero">
+    <div class="logo-symbol">
+      <svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- 
+          CONCEPT: Diamond/shield shape formed by MW
+          The M reads top-down, the W reads bottom-up.
+          Together they form a single geometric diamond,
+          representing duality: frontend↔backend, input↔output.
+          The negative space in the center creates a code bracket < > shape.
+        -->
+
+        <!-- Outer diamond shape -->
+        <path d="M80 8 L152 80 L80 152 L8 80 Z" stroke="#0066FF" stroke-width="3" fill="none" opacity="0.15"/>
+
+        <!-- M shape (top half) — two chevrons going down -->
+        <path d="M32 56 L56 32 L80 56 L104 32 L128 56" 
+              stroke="#0066FF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+        <!-- W shape (bottom half) — two chevrons going up -->
+        <path d="M32 104 L56 128 L80 104 L104 128 L128 104" 
+              stroke="#0066FF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+        <!-- Connecting verticals on the sides -->
+        <path d="M32 56 L32 104" stroke="#0066FF" stroke-width="10" stroke-linecap="round" fill="none"/>
+        <path d="M128 56 L128 104" stroke="#0066FF" stroke-width="10" stroke-linecap="round" fill="none"/>
+
+        <!-- Center vertical — the shared axis -->
+        <path d="M80 56 L80 104" stroke="#00D4FF" stroke-width="10" stroke-linecap="round" fill="none"/>
+
+        <!-- Small cyan diamond accent — "pixel" / origin point -->
+        <rect x="76" y="76" width="8" height="8" rx="1.5" fill="#00D4FF" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <div class="hero-wordmark">
+      <h1>MW Dev</h1>
+      <div class="tagline">Software Developer</div>
+    </div>
+  </div>
+
+  <!-- ═══ CONCEPT ═══ -->
+  <div class="concept">
+    <div class="concept-icon">
+      <svg width="100" height="100" viewBox="0 0 160 160" fill="none">
+        <path d="M80 8 L152 80 L80 152 L8 80 Z" stroke="#0066FF" stroke-width="2" fill="none" opacity="0.1"/>
+        <path d="M32 56 L56 32 L80 56 L104 32 L128 56" stroke="#0066FF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M32 104 L56 128 L80 104 L104 128 L128 104" stroke="#0066FF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M32 56 L32 104" stroke="#0066FF" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M128 56 L128 104" stroke="#0066FF" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M80 56 L80 104" stroke="#00D4FF" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <rect x="76" y="76" width="8" height="8" rx="1.5" fill="#00D4FF" opacity="0.6"/>
+      </svg>
+    </div>
+    <div class="concept-text">
+      <h3>The Concept</h3>
+      <p>
+        A letra <span class="highlight">M</span> se forma nas chevrons superiores. 
+        A letra <span class="highlight">W</span> se espelha nas inferiores — porque W é um M invertido. 
+        Juntas, criam uma forma de <span class="highlight">diamante</span> que representa a dualidade do full-stack: 
+        frontend ↔ backend, client ↔ server, input ↔ output. 
+        O traço central em <span class="highlight">ciano</span> é o eixo que conecta as duas metades — o desenvolvedor que une tudo.
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══ SYMBOL VARIATIONS ═══ -->
+  <div class="section">
+    <div class="section-header">Symbol Variations</div>
+    <div class="var-grid">
+      <!-- Primary dark -->
+      <div class="var-card">
+        <svg width="64" height="64" viewBox="0 0 160 160" fill="none">
+          <path d="M80 8 L152 80 L80 152 L8 80 Z" stroke="#0066FF" stroke-width="3" fill="none" opacity="0.15"/>
+          <path d="M32 56 L56 32 L80 56 L104 32 L128 56" stroke="#0066FF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M32 104 L56 128 L80 104 L104 128 L128 104" stroke="#0066FF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M32 56 L32 104" stroke="#0066FF" stroke-width="10" stroke-linecap="round" fill="none"/>
+          <path d="M128 56 L128 104" stroke="#0066FF" stroke-width="10" stroke-linecap="round" fill="none"/>
+          <path d="M80 56 L80 104" stroke="#00D4FF" stroke-width="10" stroke-linecap="round" fill="none"/>
+          <rect x="76" y="76" width="8" height="8" rx="1.5" fill="#00D4FF" opacity="0.6"/>
+        </svg>
+        <span class="var-label">Primary</span>
+      </div>
+
+      <!-- Light bg -->
+      <div class="var-card light">
+        <svg width="64" height="64" viewBox="0 0 160 160" fill="none">
+          <path d="M80 8 L152 80 L80 152 L8 80 Z" stroke="#0066FF" stroke-width="3" fill="none" opacity="0.08"/>
+          <path d="M32 56 L56 32 L80 56 L104 32 L128 56" stroke="#0066FF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M32 104 L56 128 L80 104 L104 128 L128 104" stroke="#0066FF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M32 56 L32 104" stroke="#0066FF" stroke-width="10" stroke-linecap="round" fill="none"/>
+          <path d="M128 56 L128 104" stroke="#0066FF" stroke-width="10" stroke-linecap="round" fill="none"/>
+          <path d="M80 56 L80 104" stroke="#00D4FF" stroke-width="10" stroke-linecap="round" fill="none"/>
+          <rect x="76" y="76" width="8" height="8" rx="1.5" fill="#00D4FF" opacity="0.5"/>
+        </svg>
+        <span class="var-label">Light</span>
+      </div>
+
+      <!-- Mono white -->
+      <div class="var-card">
+        <svg width="64" height="64" viewBox="0 0 160 160" fill="none">
+          <path d="M80 8 L152 80 L80 152 L8 80 Z" stroke="#fff" stroke-width="3" fill="none" opacity="0.06"/>
+          <path d="M32 56 L56 32 L80 56 L104 32 L128 56" stroke="#ffffff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M32 104 L56 128 L80 104 L104 128 L128 104" stroke="#ffffff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M32 56 L32 104" stroke="#ffffff" stroke-width="10" stroke-linecap="round" fill="none"/>
+          <path d="M128 56 L128 104" stroke="#ffffff" stroke-width="10" stroke-linecap="round" fill="none"/>
+          <path d="M80 56 L80 104" stroke="#ffffff" stroke-width="10" stroke-linecap="round" fill="none" opacity="0.5"/>
+          <rect x="76" y="76" width="8" height="8" rx="1.5" fill="#fff" opacity="0.3"/>
+        </svg>
+        <span class="var-label">Mono</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ HORIZONTAL LOCKUPS ═══ -->
+  <div class="section">
+    <div class="section-header">Lockup Variations</div>
+    <div class="lockup-row">
+      <div class="lockup-card">
+        <svg width="40" height="40" viewBox="0 0 160 160" fill="none">
+          <path d="M32 56 L56 32 L80 56 L104 32 L128 56" stroke="#0066FF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M32 104 L56 128 L80 104 L104 128 L128 104" stroke="#0066FF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M32 56 L32 104" stroke="#0066FF" stroke-width="12" stroke-linecap="round" fill="none"/>
+          <path d="M128 56 L128 104" stroke="#0066FF" stroke-width="12" stroke-linecap="round" fill="none"/>
+          <path d="M80 56 L80 104" stroke="#00D4FF" stroke-width="12" stroke-linecap="round" fill="none"/>
+        </svg>
+        <div class="lockup-dot"></div>
+        <span class="lockup-text">MW DEV</span>
+      </div>
+      <div class="lockup-card light">
+        <svg width="40" height="40" viewBox="0 0 160 160" fill="none">
+          <path d="M32 56 L56 32 L80 56 L104 32 L128 56" stroke="#0066FF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M32 104 L56 128 L80 104 L104 128 L128 104" stroke="#0066FF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M32 56 L32 104" stroke="#0066FF" stroke-width="12" stroke-linecap="round" fill="none"/>
+          <path d="M128 56 L128 104" stroke="#0066FF" stroke-width="12" stroke-linecap="round" fill="none"/>
+          <path d="M80 56 L80 104" stroke="#00D4FF" stroke-width="12" stroke-linecap="round" fill="none"/>
+        </svg>
+        <div class="lockup-dot"></div>
+        <span class="lockup-text" style="color:#0A0A0F;">MW DEV</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FAVICON TEST ═══ -->
+  <div class="section">
+    <div class="section-header">Favicon &amp; App Icon</div>
+    <div class="favicon-strip">
+      <div class="fav-item">
+        <div class="fav-frame" style="width:72px;height:72px;padding:10px;border-radius:16px;">
+          <svg viewBox="0 0 160 160" fill="none" width="52" height="52">
+            <path d="M32 56 L56 32 L80 56 L104 32 L128 56" stroke="#0066FF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M32 104 L56 128 L80 104 L104 128 L128 104" stroke="#0066FF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M32 56 L32 104" stroke="#0066FF" stroke-width="14" stroke-linecap="round" fill="none"/>
+            <path d="M128 56 L128 104" stroke="#0066FF" stroke-width="14" stroke-linecap="round" fill="none"/>
+            <path d="M80 56 L80 104" stroke="#00D4FF" stroke-width="14" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <span class="fav-label">App Icon</span>
+      </div>
+      <div class="fav-item">
+        <div class="fav-frame" style="width:48px;height:48px;padding:6px;">
+          <svg viewBox="0 0 160 160" fill="none" width="36" height="36">
+            <path d="M32 56 L56 32 L80 56 L104 32 L128 56" stroke="#0066FF" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M32 104 L56 128 L80 104 L104 128 L128 104" stroke="#0066FF" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M32 56 L32 104" stroke="#0066FF" stroke-width="16" stroke-linecap="round" fill="none"/>
+            <path d="M128 56 L128 104" stroke="#0066FF" stroke-width="16" stroke-linecap="round" fill="none"/>
+            <path d="M80 56 L80 104" stroke="#00D4FF" stroke-width="16" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <span class="fav-label">48px</span>
+      </div>
+      <div class="fav-item">
+        <div class="fav-frame" style="width:32px;height:32px;padding:4px;">
+          <svg viewBox="0 0 160 160" fill="none" width="24" height="24">
+            <path d="M32 56 L56 32 L80 56 L104 32 L128 56" stroke="#0066FF" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M32 104 L56 128 L80 104 L104 128 L128 104" stroke="#0066FF" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M32 56 L32 104" stroke="#0066FF" stroke-width="20" stroke-linecap="round" fill="none"/>
+            <path d="M128 56 L128 104" stroke="#0066FF" stroke-width="20" stroke-linecap="round" fill="none"/>
+            <path d="M80 56 L80 104" stroke="#00D4FF" stroke-width="20" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <span class="fav-label">32px</span>
+      </div>
+      <div class="fav-item">
+        <div class="fav-frame" style="width:16px;height:16px;padding:2px;">
+          <svg viewBox="0 0 160 160" fill="none" width="12" height="12">
+            <path d="M32 56 L56 32 L80 56 L104 32 L128 56" stroke="#0066FF" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M32 104 L56 128 L80 104 L104 128 L128 104" stroke="#0066FF" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M32 56 L32 104" stroke="#0066FF" stroke-width="26" stroke-linecap="round" fill="none"/>
+            <path d="M128 56 L128 104" stroke="#0066FF" stroke-width="26" stroke-linecap="round" fill="none"/>
+            <path d="M80 56 L80 104" stroke="#00D4FF" stroke-width="26" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <span class="fav-label">16px</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ COLOR PALETTE ═══ -->
+  <div class="section">
+    <div class="section-header">Brand Palette</div>
+    <div class="palette">
+      <div class="color-card">
+        <div class="color-block" style="background:#0066FF;"></div>
+        <div class="color-info">
+          <div class="color-name">Electric Blue</div>
+          <div class="color-hex">#0066FF</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-block" style="background:#00D4FF;"></div>
+        <div class="color-info">
+          <div class="color-name">Cyan</div>
+          <div class="color-hex">#00D4FF</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-block" style="background:#06060C;"></div>
+        <div class="color-info">
+          <div class="color-name">Void</div>
+          <div class="color-hex">#06060C</div>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-block" style="background:#F2F2F8;"></div>
+        <div class="color-info">
+          <div class="color-name">Cloud</div>
+          <div class="color-hex">#F2F2F8</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TYPOGRAPHY ═══ -->
+  <div class="section">
+    <div class="section-header">Typography</div>
+    <div class="type-preview">
+      <div class="type-row">
+        <span class="type-sample-mono">MW Dev</span>
+        <div class="type-meta">JetBrains Mono<br/>Headings · Code</div>
+      </div>
+      <div class="type-row">
+        <span class="type-sample-sans">Building the future, one commit at a time.</span>
+        <div class="type-meta">DM Sans<br/>Body · UI</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <div class="footer">
+    <p>MW Dev — Brand Identity System v2</p>
+  </div>
+
+</div>
+</body>
+</html>
