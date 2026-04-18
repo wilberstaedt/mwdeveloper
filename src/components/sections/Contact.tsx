@@ -3,10 +3,12 @@ import { Mail, MessageCircle, ArrowUpRight, Clock, FileText } from "lucide-react
 import { Reveal } from "@/components/ui/Reveal";
 import { Badge } from "@/components/ui/Badge";
 import { GridBackground, GlowOrb } from "@/components/ui/GridBackground";
+import { useCvPath } from "@/i18n/useCvPath";
 import { contact, mailto, waLink } from "@/data/contact";
 
 export function Contact() {
   const { t } = useTranslation();
+  const cvPath = useCvPath();
 
   return (
     <section id="contact" className="relative overflow-hidden py-24 md:py-36">
@@ -84,7 +86,7 @@ export function Contact() {
 
         <Reveal delay={0.35}>
           <a
-            href="/cv.pdf"
+            href={cvPath}
             target="_blank"
             rel="noreferrer"
             className="group mx-auto mt-4 inline-flex items-center gap-3 rounded-2xl border border-[color:var(--color-border-strong)] bg-[color:var(--color-card)]/60 px-6 py-4 transition-all hover:-translate-y-1 hover:border-[color:var(--color-cyan)] hover:bg-[color:var(--color-card-hover)]"

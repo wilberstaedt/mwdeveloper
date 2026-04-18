@@ -19,20 +19,23 @@ i18n
       "pt-BR": { translation: ptBR },
     },
     fallbackLng: "en",
-    supportedLngs: SUPPORTED_LANGS,
-    nonExplicitSupportedLngs: true,
-    load: "currentOnly",
+    supportedLngs: ["en", "es", "pt-BR"],
     interpolation: { escapeValue: false },
+    react: { useSuspense: false },
     detection: {
       order: ["localStorage", "navigator"],
       caches: ["localStorage"],
       lookupLocalStorage: "mwdev-lang",
+      convertDetectedLanguage: (lng) => {
+        if (lng.toLowerCase().startsWith("pt")) return "pt-BR";
+        if (lng.toLowerCase().startsWith("es")) return "es";
+        return "en";
+      },
     },
   });
 
 i18n.on("languageChanged", (lng) => {
-  const root = document.documentElement;
-  root.lang = lng;
+  document.documentElement.lang = lng;
 });
 
 export default i18n;

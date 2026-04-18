@@ -1,9 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { Logo } from "@/components/ui/Logo";
+import { useCvPath } from "@/i18n/useCvPath";
 import { contact } from "@/data/contact";
 
 export function Footer() {
   const { t } = useTranslation();
+  const cvPath = useCvPath();
   const year = new Date().getFullYear();
 
   return (
@@ -45,7 +47,7 @@ export function Footer() {
             {t("footer.links.linkedin")}
           </a>
           <a
-            href="/cv.pdf"
+            href={cvPath}
             target="_blank"
             rel="noreferrer"
             className="mono text-xs uppercase tracking-[0.22em] text-[color:var(--color-text)] transition-colors hover:text-[color:var(--color-cyan)]"

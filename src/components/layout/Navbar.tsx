@@ -4,12 +4,14 @@ import { FileText } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { Badge } from "@/components/ui/Badge";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { useCvPath } from "@/i18n/useCvPath";
 import { cn } from "@/lib/utils";
 
 const navKeys = ["work", "services", "about", "contact"] as const;
 
 export function Navbar() {
   const { t } = useTranslation();
+  const cvPath = useCvPath();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export function Navbar() {
             </a>
           ))}
           <a
-            href="/cv.pdf"
+            href={cvPath}
             target="_blank"
             rel="noreferrer"
             className="mono inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] text-[color:var(--color-cyan)] transition-colors hover:text-[color:var(--color-text-bright)]"
