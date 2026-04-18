@@ -1,24 +1,27 @@
+import { useTranslation } from "react-i18next";
 import { Reveal } from "@/components/ui/Reveal";
 import { services } from "@/data/services";
 
 export function Services() {
+  const { t } = useTranslation();
+
   return (
     <section id="services" className="relative py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-6 md:px-10">
         <Reveal>
           <div className="mb-14 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <span className="text-eyebrow">What I Do</span>
+              <span className="text-eyebrow">{t("services.eyebrow")}</span>
               <h2 className="mt-4 max-w-xl text-balance text-3xl font-medium leading-tight tracking-tight text-[color:var(--color-text-bright)] md:text-5xl">
-                O que eu entrego — produto
-                <span className="text-[color:var(--color-cyan)]"> rodando</span>
-                , não promessa.
+                {t("services.headingA")}{" "}
+                <span className="text-[color:var(--color-cyan)]">
+                  {t("services.headingB")}
+                </span>
+                {t("services.headingC")}
               </h2>
             </div>
             <p className="max-w-sm text-sm leading-relaxed text-[color:var(--color-text)]">
-              Faço do zero ou continuo de onde o time parou. Back-end, front,
-              infra e deploy — entrego funcionando com cliente usando no dia a
-              dia.
+              {t("services.intro")}
             </p>
           </div>
         </Reveal>
@@ -39,10 +42,10 @@ export function Services() {
                   </div>
 
                   <h3 className="mt-8 text-xl font-medium text-[color:var(--color-text-bright)]">
-                    {service.title}
+                    {t(`services.items.${service.id}.title`)}
                   </h3>
                   <p className="mt-3 max-w-md text-sm leading-relaxed text-[color:var(--color-text)]">
-                    {service.description}
+                    {t(`services.items.${service.id}.description`)}
                   </p>
 
                   <div className="mt-6 flex flex-wrap gap-2">

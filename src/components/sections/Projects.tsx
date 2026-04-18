@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { ArrowUpRight } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 import { StatusDot } from "@/components/ui/StatusDot";
@@ -5,21 +6,25 @@ import { projects, type Project } from "@/data/projects";
 import { cn } from "@/lib/utils";
 
 export function Projects() {
+  const { t } = useTranslation();
+
   return (
     <section id="work" className="relative py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-6 md:px-10">
         <Reveal>
           <div className="mb-14 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <span className="text-eyebrow">Selected Work</span>
+              <span className="text-eyebrow">{t("projects.eyebrow")}</span>
               <h2 className="mt-4 max-w-xl text-balance text-3xl font-medium leading-tight tracking-tight text-[color:var(--color-text-bright)] md:text-5xl">
-                Produtos que eu construí —{" "}
-                <span className="text-[color:var(--color-cyan)]">e mantenho</span>.
+                {t("projects.headingA")}{" "}
+                <span className="text-[color:var(--color-cyan)]">
+                  {t("projects.headingB")}
+                </span>
+                .
               </h2>
             </div>
             <p className="max-w-sm text-sm leading-relaxed text-[color:var(--color-text)]">
-              Sistemas com clientes reais usando. Cada projeto aqui tem código
-              meu do schema do banco ao CSS do botão.
+              {t("projects.intro")}
             </p>
           </div>
         </Reveal>
@@ -30,7 +35,9 @@ export function Projects() {
               key={project.id}
               delay={i * 0.08}
               className={cn(
-                project.featured ? "md:col-span-6 lg:col-span-4" : "md:col-span-3 lg:col-span-2",
+                project.featured
+                  ? "md:col-span-6 lg:col-span-4"
+                  : "md:col-span-3 lg:col-span-2",
               )}
             >
               <ProjectCard project={project} />
@@ -43,6 +50,20 @@ export function Projects() {
 }
 
 function ProjectCard({ project }: { project: Project }) {
+  const { t } = useTranslation();
+  const base = `projects.items.${project.id}`;
+  const name =
+    project.id === "sistemaCleaning"
+      ? "Sistema Cleaning"
+      : project.id === "fourhub"
+      ? "FourHub"
+      : "Maestri";
+
+  const highlights = t(`${base}.highlights`, {
+    returnObjects: true,
+    defaultValue: [] as string[],
+  }) as string[];
+
   const body = (
     <article
       className={cn(
@@ -55,7 +76,7 @@ function ProjectCard({ project }: { project: Project }) {
         <div className="flex items-center gap-2">
           <StatusDot status={project.status} />
           <span className="mono text-[10px] uppercase tracking-[0.22em] text-[color:var(--color-text-dim)]">
-            {project.statusLabel}
+            {t(`${base}.statusLabel`)}
           </span>
         </div>
         {project.href && (
@@ -70,7 +91,7 @@ function ProjectCard({ project }: { project: Project }) {
             project.featured ? "text-3xl md:text-4xl" : "text-2xl",
           )}
         >
-          {project.name}
+          {name}
         </h3>
         <p
           className={cn(
@@ -78,15 +99,15 @@ function ProjectCard({ project }: { project: Project }) {
             project.featured ? "text-base" : "text-sm",
           )}
         >
-          {project.tagline}
+          {t(`${base}.tagline`)}
         </p>
         <p className="mt-5 text-sm leading-relaxed text-[color:var(--color-text)]">
-          {project.description}
+          {t(`${base}.description`)}
         </p>
 
-        {project.featured && (
+        {project.featured && highlights.length > 0 && (
           <ul className="mt-6 space-y-2">
-            {project.highlights.slice(0, 4).map((h) => (
+            {highlights.slice(0, 4).map((h) => (
               <li
                 key={h}
                 className="flex items-start gap-3 text-sm text-[color:var(--color-text)]"
@@ -110,14 +131,14 @@ function ProjectCard({ project }: { project: Project }) {
         ))}
       </div>
 
-      {project.metric && (
+      {project.hasMetric && (
         <div className="mt-5 flex items-center gap-3">
           <span className="mono text-[10px] uppercase tracking-[0.22em] text-[color:var(--color-text-dim)]">
-            {project.metric.label}
+            {t(`${base}.metricLabel`)}
           </span>
           <span className="h-px flex-1 bg-[color:var(--color-border)]" />
           <span className="mono text-xs font-medium text-[color:var(--color-text-bright)]">
-            {project.metric.value}
+            {t(`${base}.metricValue`)}
           </span>
         </div>
       )}
@@ -131,7 +152,7 @@ function ProjectCard({ project }: { project: Project }) {
         target="_blank"
         rel="noreferrer"
         className="block h-full"
-        aria-label={`${project.name} — abrir em nova aba`}
+        aria-label={`${name} — ${t("common.openInNewTab")}`}
       >
         {body}
       </a>

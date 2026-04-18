@@ -7,8 +7,11 @@ import { Projects } from "./components/sections/Projects";
 import { Stack } from "./components/sections/Stack";
 import { Process } from "./components/sections/Process";
 import { Contact } from "./components/sections/Contact";
+import { useDocumentMeta } from "./i18n/useDocumentMeta";
 
 export default function App() {
+  useDocumentMeta();
+
   return (
     <>
       <Navbar />

@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { Logo } from "@/components/ui/Logo";
 import { contact } from "@/data/contact";
 
 export function Footer() {
+  const { t } = useTranslation();
   const year = new Date().getFullYear();
 
   return (
@@ -14,7 +16,7 @@ export function Footer() {
               MW DEV
             </div>
             <div className="mono text-[10px] uppercase tracking-[0.22em] text-[color:var(--color-text-dim)]">
-              Full-stack Developer · Builder
+              {t("footer.role")}
             </div>
           </div>
         </div>
@@ -24,7 +26,7 @@ export function Footer() {
             href={`mailto:${contact.email}`}
             className="mono text-xs uppercase tracking-[0.22em] text-[color:var(--color-text)] transition-colors hover:text-[color:var(--color-cyan)]"
           >
-            Email
+            {t("footer.links.email")}
           </a>
           <a
             href={`https://github.com/${contact.github}`}
@@ -32,7 +34,7 @@ export function Footer() {
             rel="noreferrer"
             className="mono text-xs uppercase tracking-[0.22em] text-[color:var(--color-text)] transition-colors hover:text-[color:var(--color-cyan)]"
           >
-            GitHub
+            {t("footer.links.github")}
           </a>
           <a
             href={`https://linkedin.com/in/${contact.linkedin}`}
@@ -40,12 +42,20 @@ export function Footer() {
             rel="noreferrer"
             className="mono text-xs uppercase tracking-[0.22em] text-[color:var(--color-text)] transition-colors hover:text-[color:var(--color-cyan)]"
           >
-            LinkedIn
+            {t("footer.links.linkedin")}
+          </a>
+          <a
+            href="/cv.pdf"
+            target="_blank"
+            rel="noreferrer"
+            className="mono text-xs uppercase tracking-[0.22em] text-[color:var(--color-text)] transition-colors hover:text-[color:var(--color-cyan)]"
+          >
+            {t("footer.links.cv")}
           </a>
         </div>
 
         <div className="mono text-[10px] uppercase tracking-[0.22em] text-[color:var(--color-text-dim)]">
-          © {year} · MW Dev · Crafted with Claude Code
+          © {year} · {t("footer.copy")}
         </div>
       </div>
     </footer>

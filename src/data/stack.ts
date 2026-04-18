@@ -1,11 +1,13 @@
+export type StackGroupId = "frontend" | "backend" | "infra" | "tooling";
+
 export interface StackGroup {
-  label: string;
+  id: StackGroupId;
   items: string[];
 }
 
 export const stackGroups: StackGroup[] = [
   {
-    label: "Frontend",
+    id: "frontend",
     items: [
       "React",
       "React Native",
@@ -17,37 +19,15 @@ export const stackGroups: StackGroup[] = [
     ],
   },
   {
-    label: "Backend",
-    items: [
-      "Node.js",
-      "Express",
-      "Fastify",
-      "Prisma",
-      "PostgreSQL",
-      "Zod",
-      "JWT",
-    ],
+    id: "backend",
+    items: ["Node.js", "Express", "Fastify", "Prisma", "PostgreSQL", "Zod", "JWT"],
   },
   {
-    label: "Infra & DevOps",
-    items: [
-      "Docker",
-      "AWS EC2",
-      "Hostinger VPS",
-      "Caddy",
-      "GitHub Actions",
-      "Vercel",
-    ],
+    id: "infra",
+    items: ["Docker", "AWS EC2", "Hostinger VPS", "Caddy", "GitHub Actions", "Vercel"],
   },
   {
-    label: "Tooling & Ops",
-    items: [
-      "Claude Code",
-      "VS Code",
-      "DBeaver",
-      "Postman",
-      "Obsidian",
-      "Figma",
-    ],
+    id: "tooling",
+    items: ["Claude Code", "VS Code", "DBeaver", "Postman", "Obsidian", "Figma"],
   },
 ];

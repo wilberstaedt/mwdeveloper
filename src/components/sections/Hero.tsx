@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { ArrowUpRight, MessageCircle } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { Badge } from "@/components/ui/Badge";
@@ -6,6 +7,9 @@ import { GridBackground, GlowOrb } from "@/components/ui/GridBackground";
 import { mailto, waLink } from "@/data/contact";
 
 export function Hero() {
+  const { t } = useTranslation();
+  const stats = ["years", "products", "remote", "solo"] as const;
+
   return (
     <section
       id="top"
@@ -30,7 +34,7 @@ export function Hero() {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
           <Badge variant="blue" pulse>
-            Available · Brisbane → Valencia · Jun 2026
+            {t("hero.badge")}
           </Badge>
         </motion.div>
 
@@ -50,12 +54,12 @@ export function Hero() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           className="mt-10 max-w-4xl text-balance text-4xl font-medium leading-[1.05] tracking-tight text-[color:var(--color-text-bright)] md:text-6xl lg:text-7xl"
         >
-          Construo produtos
+          {t("hero.titleA")}
           <br className="hidden md:block" />{" "}
           <span className="bg-gradient-to-br from-[color:var(--color-text-bright)] via-[color:var(--color-cyan)] to-[color:var(--color-blue)] bg-clip-text text-transparent">
-            do primeiro commit
+            {t("hero.titleB")}
           </span>
-          <br className="hidden md:block" /> ao primeiro cliente.
+          <br className="hidden md:block" /> {t("hero.titleC")}
         </motion.h1>
 
         <motion.p
@@ -64,9 +68,7 @@ export function Hero() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
           className="mt-8 max-w-2xl text-balance text-base leading-relaxed text-[color:var(--color-text)] md:text-lg"
         >
-          Sou Matheus — dev full-stack solo. Faço back, front, infra e deploy de
-          SaaS, apps mobile e marketplaces. Produto que roda em produção, não
-          protótipo em slide.
+          {t("hero.subtitle")}
         </motion.p>
 
         <motion.div
@@ -79,7 +81,7 @@ export function Hero() {
             href="#work"
             className="group inline-flex items-center gap-2 rounded-full bg-[color:var(--color-blue)] px-6 py-3 text-sm font-medium text-white shadow-[0_8px_32px_rgba(0,102,255,0.3)] transition-all hover:bg-[color:var(--color-cyan)] hover:shadow-[0_8px_40px_rgba(0,212,255,0.35)] focus-visible:outline-offset-4"
           >
-            Ver trabalhos
+            {t("hero.ctaWork")}
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
           <a
@@ -89,13 +91,13 @@ export function Hero() {
             className="group inline-flex items-center gap-2 rounded-full border border-[color:var(--color-border-strong)] bg-white/[0.02] px-6 py-3 text-sm font-medium text-[color:var(--color-text-bright)] transition-all hover:border-[color:var(--color-cyan)] hover:bg-white/[0.05]"
           >
             <MessageCircle className="h-4 w-4" />
-            Chamar no WhatsApp
+            {t("hero.ctaWhatsapp")}
           </a>
           <a
             href={mailto("Contato via mwdeveloper.tech")}
             className="mono text-xs uppercase tracking-[0.22em] text-[color:var(--color-text-dim)] underline underline-offset-[6px] transition-colors hover:text-[color:var(--color-text)]"
           >
-            ou email
+            {t("hero.ctaEmail")}
           </a>
         </motion.div>
 
@@ -105,18 +107,13 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.7 }}
           className="mt-20 flex w-full max-w-4xl flex-wrap items-center justify-center gap-x-10 gap-y-4 border-t border-[color:var(--color-border)] pt-8 md:justify-between"
         >
-          {[
-            ["5+ anos", "desenvolvendo"],
-            ["2 produtos", "em produção"],
-            ["100% remoto", "fuso flexível"],
-            ["Solo", "a entrega é minha"],
-          ].map(([stat, label]) => (
-            <div key={stat} className="flex flex-col items-center md:items-start">
+          {stats.map((key) => (
+            <div key={key} className="flex flex-col items-center md:items-start">
               <span className="mono text-sm font-semibold text-[color:var(--color-text-bright)]">
-                {stat}
+                {t(`hero.stats.${key}.value`)}
               </span>
               <span className="mono text-[10px] uppercase tracking-[0.22em] text-[color:var(--color-text-dim)]">
-                {label}
+                {t(`hero.stats.${key}.label`)}
               </span>
             </div>
           ))}

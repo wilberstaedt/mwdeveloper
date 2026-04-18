@@ -1,0 +1,192 @@
+{
+  "common": {
+    "available": "Available",
+    "openInNewTab": "open in new tab"
+  },
+  "nav": {
+    "work": "Work",
+    "services": "Services",
+    "about": "About",
+    "contact": "Contact",
+    "cv": "CV",
+    "home": "MW Dev — home"
+  },
+  "hero": {
+    "badge": "Available · Brisbane → Valencia · Jun 2026",
+    "titleA": "I build products",
+    "titleB": "from the first commit",
+    "titleC": "to the first customer.",
+    "subtitle": "I'm Matheus — solo full-stack developer. I handle backend, frontend, infra and deploy for SaaS, mobile apps and marketplaces. Software that ships and runs in production — not a slide-deck prototype.",
+    "ctaWork": "See projects",
+    "ctaWhatsapp": "Message on WhatsApp",
+    "ctaEmail": "or email",
+    "ctaCV": "Download CV",
+    "stats": {
+      "years": { "value": "5+ years", "label": "shipping software" },
+      "products": { "value": "2 products", "label": "live in production" },
+      "remote": { "value": "100% remote", "label": "flexible timezone" },
+      "solo": { "value": "Solo", "label": "delivery is on me" }
+    }
+  },
+  "services": {
+    "eyebrow": "What I Do",
+    "headingA": "What I deliver —",
+    "headingB": "software running",
+    "headingC": ", not a promise.",
+    "intro": "Built from scratch or picking up where the team stopped. Backend, frontend, infra and deploy — shipped and used by real customers every day.",
+    "items": {
+      "saas": {
+        "title": "SaaS & Web Apps from scratch",
+        "description": "The whole product: backend, frontend, database, deploy. From first commit to paying customer using it."
+      },
+      "mobile": {
+        "title": "Mobile Apps iOS & Android",
+        "description": "Native-grade apps with React Native / Expo. Push notifications, auth, real flows that actually hit the store."
+      },
+      "whiteLabel": {
+        "title": "White-Label SaaS",
+        "description": "A management system ready to ship under your brand. Same core, your identity, your operation."
+      },
+      "consulting": {
+        "title": "Consulting & Product Review",
+        "description": "Technical audit, architecture decisions, dev unblock. When you need a serious second pair of eyes."
+      }
+    }
+  },
+  "projects": {
+    "eyebrow": "Selected Work",
+    "headingA": "Products I built —",
+    "headingB": "and maintain",
+    "intro": "Systems with real customers using them. Every project here has my code from the database schema to the button CSS.",
+    "items": {
+      "sistemaCleaning": {
+        "tagline": "White-label SaaS running in Australia.",
+        "description": "Full management platform for cleaning companies. Admin, cleaner and customer see everything in one place — with the company's brand. First customer: GlowArt, in Brisbane.",
+        "statusLabel": "Live in production",
+        "role": "Solo dev · From 1st commit to deploy",
+        "highlights": [
+          "3 portals (admin, cleaner, customer) — mobile-first",
+          "80+ endpoints, 237+ tests, audit logs on every mutation",
+          "PDF invoices, near-realtime chat, i18n EN/PT-BR",
+          "Deployed on my own VPS with Docker Compose + Caddy"
+        ],
+        "metricLabel": "Customer",
+        "metricValue": "GlowArt · Brisbane"
+      },
+      "fourhub": {
+        "tagline": "Mobile-first vehicle marketplace.",
+        "description": "App that connects private car owners with verified dealers. Owners don't set the price — they receive real bids. Initial focus: Santa Catarina, Brazil.",
+        "statusLabel": "In development · Launch Sep 2026",
+        "role": "Solo dev · CTO · 3 commercial partners",
+        "highlights": [
+          "iOS app in TestFlight with full flow",
+          "22 Prisma models · 11 route groups",
+          "Admin with audit log, beta allowlist, trade-in bidding",
+          "Public landing + web panel for dealers"
+        ],
+        "metricLabel": "Target market",
+        "metricValue": "Santa Catarina · BR"
+      },
+      "maestri": {
+        "tagline": "Multi-agent virtual office with 12 Claude agents.",
+        "description": "Virtual office built on top of Claude Code: 2 CTOs + 10 specialists (frontend, backend, design, QA, LinkedIn agent, and more). File-based async protocol, persistent memory, Telegram push, and a Second Brain vault tying it all together.",
+        "statusLabel": "Personal project · In use",
+        "role": "Builder and operator",
+        "highlights": [
+          "12 autonomous agents coordinated via async ping protocol",
+          "Sofia — LinkedIn agent applying to jobs automatically",
+          "Telegram bot with file-based architecture for push",
+          "Second Brain in Obsidian with persistent cross-session memory"
+        ]
+      }
+    }
+  },
+  "about": {
+    "eyebrow": "About",
+    "headingA": "Solo dev for 5 years.",
+    "headingB": "Founder",
+    "headingC": "since forever.",
+    "p1": "Started in Florianópolis, today I'm in Brisbane, and in June I'm moving to Valencia. Between country moves and timezones, I keep shipping — my own products, client software, and systems that stay up.",
+    "p2A": "I run the whole technical side alone: backend, frontend, infra, deploy. My edge isn't the stack — it's",
+    "p2B": "full delivery",
+    "p2C": ". You talk to me, I write the code, I ship the app, I'm on call when it breaks. No ping-pong between agency and freelancer.",
+    "p3": "I don't sell hours. I sell product. If the outcome doesn't land, the work isn't done.",
+    "quickFacts": "/ quick-facts",
+    "facts": {
+      "location": { "label": "Now / next", "value": "Brisbane · AU → Valencia · ES", "meta": "Jun 2026" },
+      "timezone": { "label": "Current timezone", "value": "AEST · UTC+10", "meta": "flexible with AU, BR, EU" },
+      "mode": { "label": "Mode", "value": "Deep work · ADHD hyperfocus", "meta": "ship fast" }
+    },
+    "terminal": {
+      "whoami": "matheus de azevedo wilberstaedt",
+      "aboutLine": "Full-stack · CEO · CTO · Founder · Builder"
+    }
+  },
+  "stack": {
+    "eyebrow": "Toolbelt",
+    "headingA": "The tools I use every day to",
+    "headingB": "ship",
+    "groups": {
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "infra": "Infra & DevOps",
+      "tooling": "Tooling & Ops"
+    }
+  },
+  "process": {
+    "eyebrow": "How I work",
+    "headingA": "Short process.",
+    "headingB": "Ship",
+    "headingC": "fast. No bureaucracy.",
+    "steps": {
+      "talk": {
+        "title": "Talk",
+        "description": "15 minutes on WhatsApp or a call. You tell me the problem, I tell you whether I can solve it — and how. If it's not a fit, I'll point you to someone who is."
+      },
+      "scope": {
+        "title": "Scope & proposal",
+        "description": "Within 48h I send a short proposal: what I'll deliver, timeline, price. No 40-page PDF built to impress."
+      },
+      "build": {
+        "title": "Build in public",
+        "description": "You follow progress in real time. Daily updates, continuous staging deploys, early wins. No 3-month black box."
+      },
+      "ship": {
+        "title": "Ship & support",
+        "description": "Product live, docs handed over, code is yours. I stay on call until you're 100% autonomous."
+      }
+    }
+  },
+  "contact": {
+    "badge": "Accepting new projects",
+    "headingA": "Let's build",
+    "headingB": "something that runs?",
+    "body": "Hit me on WhatsApp or shoot an email. I reply within 24h (business day). If it's a fit, we book a 15-min call and decide together.",
+    "whatsapp": "WhatsApp",
+    "email": "Email",
+    "cv": "Download CV",
+    "cvMeta": "PDF · 2 pages · EN"
+  },
+  "footer": {
+    "role": "Full-stack Developer · Builder",
+    "copy": "MW Dev · Crafted with Claude Code",
+    "links": {
+      "email": "Email",
+      "github": "GitHub",
+      "linkedin": "LinkedIn",
+      "cv": "CV"
+    }
+  },
+  "meta": {
+    "title": "MW Dev — I build products from the first commit to the first customer",
+    "description": "Matheus Wilberstaedt — solo full-stack developer building SaaS, mobile apps and marketplaces. Sistema Cleaning running in Australia, FourHub in development.",
+    "ogTitle": "MW Dev — Full-stack Developer",
+    "ogDescription": "I build products from the first commit to the first customer. SaaS, mobile apps and marketplaces."
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "es": "Español",
+    "pt-BR": "Português"
+  }
+}
