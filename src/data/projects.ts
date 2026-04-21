@@ -29,7 +29,6 @@ export const projects: Project[] = [
       "JWT",
       "Resend",
     ],
-    href: "https://glowartcleaning.com.au",
     featured: true,
     hasMetric: true,
   },

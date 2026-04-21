@@ -61,7 +61,7 @@
     "items": {
       "sistemaCleaning": {
         "tagline": "White-label SaaS running in Australia.",
-        "description": "Full management platform for cleaning companies. Admin, cleaner and customer see everything in one place — with the company's brand. First customer: GlowArt, in Brisbane.",
+        "description": "Full management platform for cleaning companies. Admin, cleaner and customer see everything in one place — with the company's brand. Already in use by real clients.",
         "statusLabel": "Live in production",
         "role": "Solo dev · From 1st commit to deploy",
         "highlights": [
@@ -71,7 +71,7 @@
           "Deployed on my own VPS with Docker Compose + Caddy"
         ],
         "metricLabel": "Customer",
-        "metricValue": "GlowArt · Brisbane"
+        "metricValue": "Brisbane, Australia"
       },
       "fourhub": {
         "tagline": "Mobile-first vehicle marketplace.",
