@@ -1,4 +1,4 @@
-import { Check, X, Minus, Zap, Building2, ArrowRight } from "lucide-react";
+import { Check, X, Minus, Smartphone, Building2, ArrowRight, Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Reveal } from "@/components/ui/Reveal";
 import { GlowOrb } from "@/components/ui/GridBackground";
@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 
 type CompetitorKey = "jobber" | "servicem8" | "zenmaid";
 type FeatureValue = true | false | "partial";
+type TierKey = "starter" | "professional" | "premium";
 
 interface FeatureRow {
   key: string;
@@ -27,13 +28,15 @@ const FEATURE_ROWS: FeatureRow[] = [
 ];
 
 const PRICE_ROW = {
-  sc: "A$500/mo",
+  sc: "A$597–997/mo",
   jobber: "A$40–200+",
   servicem8: "A$35–379+",
   zenmaid: "USD $49+",
 };
 
 const COMPETITORS: CompetitorKey[] = ["jobber", "servicem8", "zenmaid"];
+
+const TIERS: TierKey[] = ["starter", "professional", "premium"];
 
 function FeatureCell({ value, partialLabel, noLabel }: { value: FeatureValue; partialLabel: string; noLabel: string }) {
   if (value === true) return <Check className="h-4 w-4 text-[color:var(--color-success)]" aria-label="Yes" />;
@@ -45,22 +48,6 @@ function FeatureCell({ value, partialLabel, noLabel }: { value: FeatureValue; pa
 
 export function CSPricing() {
   const { t } = useTranslation();
-  const WA_TEXT = t("cleaning.pricing.standard.cta");
-
-  const standardFeatures = t("cleaning.pricing.standard.features", {
-    returnObjects: true,
-    defaultValue: [] as string[],
-  }) as string[];
-
-  const enterpriseFeatures = t("cleaning.pricing.enterprise.features", {
-    returnObjects: true,
-    defaultValue: [] as string[],
-  }) as string[];
-
-  const faqItems = t("cleaning.pricing.faq.items", {
-    returnObjects: true,
-    defaultValue: [] as Array<{ q: string; a: string }>,
-  }) as Array<{ q: string; a: string }>;
 
   const partialLabel = t("cleaning.pricing.comparison.partial");
   const noLabel = t("cleaning.pricing.comparison.na");
@@ -72,7 +59,7 @@ export function CSPricing() {
         size={480}
         color="rgba(0,102,255,0.08)"
       />
-      <div className="relative mx-auto max-w-5xl px-6 md:px-10">
+      <div className="relative mx-auto max-w-6xl px-6 md:px-10">
 
         {/* Header */}
         <Reveal>
@@ -90,106 +77,177 @@ export function CSPricing() {
           </p>
         </Reveal>
 
-        {/* Plan cards */}
-        <div className="mt-14 grid gap-6 md:grid-cols-2">
+        {/* 3 tier cards */}
+        <div className="mt-14 grid gap-5 md:grid-cols-3">
+          {TIERS.map((tier, idx) => {
+            const isProfessional = tier === "professional";
+            const isPremium = tier === "premium";
+            const features = t(`cleaning.pricing.tiers.${tier}.features`, {
+              returnObjects: true,
+              defaultValue: [] as string[],
+            }) as string[];
+            const ctaText = t(`cleaning.pricing.tiers.${tier}.cta`);
+            const waText = t(`cleaning.pricing.tiers.starter.cta`);
 
-          {/* White-label */}
-          <Reveal delay={0.08}>
-            <div className="glow-border relative flex flex-col rounded-2xl border border-[color:var(--color-border-strong)] bg-[color:var(--color-card)] p-8">
-              <div className="absolute -top-3 left-8">
-                <span className="mono inline-flex items-center gap-1.5 rounded-full border border-[color:var(--color-blue)]/30 bg-[color:var(--color-blue)]/15 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[color:var(--color-cyan)]">
-                  <Zap className="h-2.5 w-2.5" />
-                  {t("cleaning.pricing.planBadge")}
-                </span>
-              </div>
-              <div className="mt-2">
-                <div className="mono text-xs uppercase tracking-[0.2em] text-[color:var(--color-text-dim)]">
-                  {t("cleaning.pricing.standard.label")}
-                </div>
-                <div className="mt-3 flex items-end gap-2">
-                  <span className="text-5xl font-semibold tracking-tight text-[color:var(--color-text-bright)]">A$500</span>
-                  <span className="mono mb-1.5 text-sm text-[color:var(--color-text-dim)]">
-                    {t("cleaning.pricing.perMonth")}
-                  </span>
-                </div>
-                <p className="mt-2 text-sm text-[color:var(--color-text)]">
-                  {t("cleaning.pricing.standard.description")}
-                </p>
-              </div>
-              <ul className="mt-7 space-y-2.5 flex-1">
-                {standardFeatures.map((f) => (
-                  <li key={f} className="flex items-start gap-2.5">
-                    <Check className="h-4 w-4 shrink-0 mt-0.5 text-[color:var(--color-success)]" />
-                    <span className="text-sm text-[color:var(--color-text)]">{f}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-8 space-y-3">
-                <a
-                  href={waLink(WA_TEXT)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group flex w-full items-center justify-center gap-2 rounded-xl bg-[color:var(--color-blue)] px-6 py-3.5 text-sm font-medium text-white shadow-[0_8px_32px_rgba(0,102,255,0.25)] transition-all hover:bg-[color:var(--color-cyan)] hover:shadow-[0_8px_40px_rgba(0,212,255,0.3)]"
+            return (
+              <Reveal key={tier} delay={0.08 + idx * 0.07}>
+                <div
+                  className={cn(
+                    "relative flex flex-col rounded-2xl p-7 h-full",
+                    isProfessional
+                      ? "border-2 border-[color:var(--color-blue)] bg-[color:var(--color-blue)]/[0.07] shadow-[0_0_40px_rgba(0,102,255,0.15)]"
+                      : "border border-[color:var(--color-border-strong)] bg-[color:var(--color-card)]",
+                  )}
                 >
-                  {t("cleaning.pricing.standard.cta")}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </a>
-                <p className="mono text-center text-[10px] uppercase tracking-[0.15em] text-[color:var(--color-text-dim)]">
-                  {t("cleaning.pricing.standard.footnote")}
-                </p>
-              </div>
-            </div>
-          </Reveal>
+                  {/* Badge */}
+                  {isProfessional && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                      <span className="mono inline-flex items-center gap-1.5 rounded-full border border-[color:var(--color-blue)]/40 bg-[color:var(--color-blue)] px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white shadow-[0_4px_16px_rgba(0,102,255,0.4)]">
+                        <Star className="h-2.5 w-2.5 fill-current" />
+                        {t("cleaning.pricing.mostPopular")}
+                      </span>
+                    </div>
+                  )}
+                  {isPremium && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                      <span className="mono inline-flex items-center gap-1.5 rounded-full border border-[color:var(--color-cyan)]/30 bg-[color:var(--color-cyan)]/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[color:var(--color-cyan)]">
+                        <Smartphone className="h-2.5 w-2.5" />
+                        {t("cleaning.pricing.appIncluded")}
+                      </span>
+                    </div>
+                  )}
 
-          {/* Enterprise */}
-          <Reveal delay={0.13}>
-            <div className="flex flex-col rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-card)] p-8">
+                  <div className={cn("flex-1", (isProfessional || isPremium) && "mt-2")}>
+                    <div className="mono text-xs uppercase tracking-[0.2em] text-[color:var(--color-text-dim)]">
+                      {t(`cleaning.pricing.tiers.${tier}.label`)}
+                    </div>
+                    <div className="mt-3 flex items-end gap-2">
+                      <span className={cn(
+                        "text-4xl font-semibold tracking-tight",
+                        isProfessional
+                          ? "text-[color:var(--color-text-bright)]"
+                          : "text-[color:var(--color-text-bright)]",
+                      )}>
+                        {t(`cleaning.pricing.tiers.${tier}.price`)}
+                      </span>
+                      <span className="mono mb-1 text-sm text-[color:var(--color-text-dim)]">
+                        {t("cleaning.pricing.perMonth")}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-sm leading-relaxed text-[color:var(--color-text)]">
+                      {t(`cleaning.pricing.tiers.${tier}.description`)}
+                    </p>
+
+                    <ul className="mt-6 space-y-2.5">
+                      {features.map((f, i) => (
+                        <li key={f} className="flex items-start gap-2.5">
+                          <Check className={cn(
+                            "h-4 w-4 shrink-0 mt-0.5",
+                            i === 0 && tier !== "starter"
+                              ? "text-[color:var(--color-text-dim)]"
+                              : isProfessional
+                              ? "text-[color:var(--color-cyan)]"
+                              : "text-[color:var(--color-success)]",
+                          )} />
+                          <span className={cn(
+                            "text-sm",
+                            i === 0 && tier !== "starter"
+                              ? "text-[color:var(--color-text-dim)]"
+                              : "text-[color:var(--color-text)]",
+                          )}>
+                            {f}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-8 space-y-2">
+                    {tier === "premium" ? (
+                      <a
+                        href={mailto(`Sistema Cleaning — ${t(`cleaning.pricing.tiers.${tier}.label`)}`)}
+                        className={cn(
+                          "group flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-medium transition-all",
+                          "border border-[color:var(--color-cyan)]/40 bg-[color:var(--color-cyan)]/5 text-[color:var(--color-text-bright)] hover:border-[color:var(--color-cyan)] hover:bg-[color:var(--color-cyan)]/10",
+                        )}
+                      >
+                        {ctaText}
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                      </a>
+                    ) : (
+                      <a
+                        href={waLink(waText)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={cn(
+                          "group flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-medium transition-all",
+                          isProfessional
+                            ? "bg-[color:var(--color-blue)] text-white shadow-[0_8px_32px_rgba(0,102,255,0.3)] hover:bg-[color:var(--color-cyan)] hover:shadow-[0_8px_40px_rgba(0,212,255,0.35)]"
+                            : "border border-[color:var(--color-border-strong)] bg-white/[0.02] text-[color:var(--color-text-bright)] hover:border-[color:var(--color-blue)]/50 hover:bg-white/[0.05]",
+                        )}
+                      >
+                        {ctaText}
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                      </a>
+                    )}
+                    <p className="mono text-center text-[10px] uppercase tracking-[0.15em] text-[color:var(--color-text-dim)]">
+                      {t(`cleaning.pricing.tiers.${tier}.footnote`)}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+
+        {/* Enterprise — full-width card below */}
+        <Reveal delay={0.28}>
+          <div className="mt-4 flex flex-col gap-5 rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-card)] p-7 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-start gap-4">
+              <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[color:var(--color-border)] bg-white/[0.03]">
+                <Building2 className="h-4 w-4 text-[color:var(--color-text-dim)]" strokeWidth={1.5} />
+              </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <Building2 className="h-4 w-4 text-[color:var(--color-text-dim)]" strokeWidth={1.5} />
+                <div className="flex items-center gap-3">
                   <span className="mono text-xs uppercase tracking-[0.2em] text-[color:var(--color-text-dim)]">
                     {t("cleaning.pricing.enterprise.label")}
                   </span>
-                </div>
-                <div className="mt-3">
-                  <span className="text-5xl font-semibold tracking-tight text-[color:var(--color-text-bright)]">
+                  <span className="text-lg font-semibold text-[color:var(--color-text-bright)]">
                     {t("cleaning.pricing.enterprise.priceLabel")}
                   </span>
                 </div>
-                <p className="mt-2 text-sm text-[color:var(--color-text)]">
+                <p className="mt-1 text-sm text-[color:var(--color-text)]">
                   {t("cleaning.pricing.enterprise.description")}
                 </p>
-              </div>
-              <ul className="mt-7 space-y-2.5 flex-1">
-                {enterpriseFeatures.map((f, i) => (
-                  <li key={f} className="flex items-start gap-2.5">
-                    <Check className={cn(
-                      "h-4 w-4 shrink-0 mt-0.5",
-                      i === 0 ? "text-[color:var(--color-text-dim)]" : "text-[color:var(--color-cyan)]",
-                    )} />
-                    <span className={cn(
-                      "text-sm",
-                      i === 0 ? "text-[color:var(--color-text-dim)]" : "text-[color:var(--color-text)]",
-                    )}>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {(t("cleaning.pricing.enterprise.features", {
+                    returnObjects: true,
+                    defaultValue: [] as string[],
+                  }) as string[]).map((f) => (
+                    <span
+                      key={f}
+                      className="mono rounded-md border border-[color:var(--color-border)] bg-white/[0.02] px-2.5 py-1 text-[10px] uppercase tracking-[0.1em] text-[color:var(--color-text-dim)]"
+                    >
                       {f}
                     </span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-8 space-y-3">
-                <a
-                  href={mailto("Sistema Cleaning — Enterprise")}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-[color:var(--color-border-strong)] bg-white/[0.02] px-6 py-3.5 text-sm font-medium text-[color:var(--color-text-bright)] transition-all hover:border-[color:var(--color-cyan)] hover:bg-white/[0.05]"
-                >
-                  {t("cleaning.pricing.enterprise.cta")}
-                </a>
-                <p className="mono text-center text-[10px] uppercase tracking-[0.15em] text-[color:var(--color-text-dim)]">
-                  {t("cleaning.pricing.enterprise.footnote")}
-                </p>
+                  ))}
+                </div>
               </div>
             </div>
-          </Reveal>
-        </div>
+            <div className="shrink-0">
+              <a
+                href={mailto("Sistema Cleaning — Enterprise")}
+                className="flex items-center gap-2 rounded-xl border border-[color:var(--color-border-strong)] bg-white/[0.02] px-6 py-3 text-sm font-medium text-[color:var(--color-text-bright)] transition-all hover:border-[color:var(--color-cyan)] hover:bg-white/[0.05] whitespace-nowrap"
+              >
+                {t("cleaning.pricing.enterprise.cta")}
+                <ArrowRight className="h-4 w-4" />
+              </a>
+              <p className="mono mt-2 text-center text-[10px] uppercase tracking-[0.15em] text-[color:var(--color-text-dim)]">
+                {t("cleaning.pricing.enterprise.footnote")}
+              </p>
+            </div>
+          </div>
+        </Reveal>
 
         {/* Comparison table */}
         <Reveal delay={0.1}>
@@ -208,7 +266,6 @@ export function CSPricing() {
                     <th className="px-5 py-4 text-left mono text-xs uppercase tracking-[0.15em] text-[color:var(--color-text-dim)] w-1/2">
                       {/* feature label col */}
                     </th>
-                    {/* Sistema Cleaning — highlighted */}
                     <th className="px-5 py-4 text-center bg-[color:var(--color-blue)]/[0.06] border-x border-[color:var(--color-blue)]/20">
                       <span className="mono text-xs font-semibold text-[color:var(--color-cyan)] uppercase tracking-[0.12em]">
                         {t("cleaning.pricing.comparison.ourProduct")}
@@ -284,7 +341,10 @@ export function CSPricing() {
               {t("cleaning.pricing.faq.label")}
             </p>
             <div className="grid gap-4 md:grid-cols-2">
-              {faqItems.map((item) => (
+              {(t("cleaning.pricing.faq.items", {
+                returnObjects: true,
+                defaultValue: [] as Array<{ q: string; a: string }>,
+              }) as Array<{ q: string; a: string }>).map((item) => (
                 <div
                   key={item.q}
                   className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-card)] p-5"

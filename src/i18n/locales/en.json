@@ -337,37 +337,67 @@
       "heading1": "One price.",
       "heading2": "Full access. No surprises at end of month.",
       "body": "Flat monthly fee — no charge per cleaner, per job, or per feature. The bigger your team, the more value you get for the same price.",
-      "planBadge": "Current plan",
+      "mostPopular": "Most Popular",
+      "appIncluded": "App Included",
       "perMonth": "/ month",
-      "standard": {
-        "label": "White-label",
-        "description": "For cleaning businesses that want their own system running under their brand, on their own domain.",
-        "features": [
-          "Full setup included in the first month",
-          "Unlimited cleaners — no per-seat fees",
-          "3 portals: admin, cleaner and client",
-          "PDF invoices, real-time chat, full activity history",
-          "Full white-label: logo, colours, your domain",
-          "Dedicated server for your business only",
-          "English and Portuguese out of the box",
-          "Direct support — no tickets, no queues",
-          "All updates and new features included",
-          "Team training for admin and cleaners"
-        ],
-        "cta": "Get started",
-        "footnote": "3-month initial contract · no setup fee"
+      "tiers": {
+        "starter": {
+          "label": "Starter",
+          "price": "A$597",
+          "description": "For cleaning businesses starting with a professional system under their own brand and domain.",
+          "features": [
+            "Full setup in the first month",
+            "Unlimited cleaners — no per-seat fees",
+            "3 portals: admin, cleaner and client",
+            "PDF invoices, real-time chat, full activity history",
+            "White-label: logo, colours, your domain",
+            "Dedicated server for your business",
+            "English and Portuguese",
+            "Direct support — no tickets, no queues",
+            "All future updates included"
+          ],
+          "cta": "Get started",
+          "footnote": "3-month initial contract · no setup fee"
+        },
+        "professional": {
+          "label": "Professional",
+          "price": "A$747",
+          "description": "For businesses scaling to multiple locations or needing deeper reporting and dedicated backups.",
+          "features": [
+            "Everything in Starter",
+            "Multiple branches / locations",
+            "Advanced custom reports",
+            "Dedicated backups with retention",
+            "Guaranteed response SLA"
+          ],
+          "cta": "Get started",
+          "footnote": "3-month initial contract · no setup fee"
+        },
+        "premium": {
+          "label": "Premium",
+          "price": "A$997",
+          "description": "For businesses that want their own branded native app on the App Store and Play Store.",
+          "features": [
+            "Everything in Professional",
+            "Native mobile app with your brand",
+            "Published on iOS App Store + Android Play Store",
+            "Cleaner app + Client app, your visual identity",
+            "Push notifications for jobs and schedules"
+          ],
+          "cta": "Talk about Premium",
+          "footnote": "Includes app development and publishing"
+        }
       },
       "enterprise": {
         "label": "Enterprise",
         "priceLabel": "Custom",
-        "description": "For larger businesses with specific needs: multiple locations, custom integrations or tailored modules.",
+        "description": "For larger businesses with specific needs: multiple locations, custom integrations, or tailored modules.",
         "features": [
-          "Everything in White-label",
-          "Custom module development",
-          "Integration with existing systems",
-          "Multiple locations or branches",
-          "Dedicated SLA with guaranteed response time",
-          "Advanced custom reports"
+          "Custom modules",
+          "System integrations",
+          "Multiple locations",
+          "Dedicated SLA",
+          "Advanced reports"
         ],
         "cta": "Talk about Enterprise",
         "footnote": "Proposal within 48 hours"
@@ -399,7 +429,7 @@
         "items": [
           {
             "q": "Does the price change as my business grows?",
-            "a": "No. Whether you have 5 or 50 cleaners, it's the same A$500/month. Tools like Jobber and ServiceM8 charge per user — your costs rise as you grow. Not here."
+            "a": "No. Whether you have 5 or 50 cleaners, you pay the same monthly fee. Tools like Jobber and ServiceM8 charge per user — your costs rise as you grow. Not here."
           },
           {
             "q": "Is setup charged separately?",

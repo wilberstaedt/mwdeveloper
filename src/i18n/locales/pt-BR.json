@@ -337,37 +337,67 @@
       "heading1": "Um preço.",
       "heading2": "Acesso total. Sem surpresa no fim do mês.",
       "body": "Mensalidade fixa — sem cobrança por cleaner, por job ou por funcionalidade. Quanto maior sua equipe, mais valor você extrai pelo mesmo preço.",
-      "planBadge": "Plano atual",
+      "mostPopular": "Mais popular",
+      "appIncluded": "App incluído",
       "perMonth": "/ mês",
-      "standard": {
-        "label": "White-label",
-        "description": "Para empresas de limpeza que querem sistema próprio rodando com sua marca, no seu domínio.",
-        "features": [
-          "Setup completo incluído no primeiro mês",
-          "Cleaners ilimitados — sem cobrança por pessoa",
-          "3 portais: admin, cleaner e cliente",
-          "Invoices em PDF, chat em tempo real, histórico completo",
-          "White-label completo: logo, cores, seu domínio",
-          "Servidor dedicado exclusivo para sua empresa",
-          "Português e inglês desde o dia 1",
-          "Suporte direto — sem ticket, sem fila",
-          "Todas as atualizações e novas funcionalidades",
-          "Treinamento da equipe admin + cleaners"
-        ],
-        "cta": "Começar agora",
-        "footnote": "3 meses iniciais · sem custo de setup"
+      "tiers": {
+        "starter": {
+          "label": "Starter",
+          "price": "A$597",
+          "description": "Para empresas de limpeza começando com um sistema profissional com sua marca e domínio.",
+          "features": [
+            "Setup completo no primeiro mês",
+            "Cleaners ilimitados — sem cobrança por pessoa",
+            "3 portais: admin, cleaner e cliente",
+            "Invoices em PDF, chat em tempo real, histórico completo",
+            "White-label: logo, cores, seu domínio",
+            "Servidor dedicado para sua empresa",
+            "Português e inglês",
+            "Suporte direto — sem ticket, sem fila",
+            "Todas as atualizações inclusas"
+          ],
+          "cta": "Começar agora",
+          "footnote": "3 meses iniciais · sem custo de setup"
+        },
+        "professional": {
+          "label": "Professional",
+          "price": "A$747",
+          "description": "Para empresas escalando para múltiplas unidades ou que precisam de relatórios avançados e backups dedicados.",
+          "features": [
+            "Tudo do Starter",
+            "Múltiplas filiais / unidades",
+            "Relatórios avançados personalizados",
+            "Backups dedicados com retenção",
+            "SLA com tempo de resposta garantido"
+          ],
+          "cta": "Começar agora",
+          "footnote": "3 meses iniciais · sem custo de setup"
+        },
+        "premium": {
+          "label": "Premium",
+          "price": "A$997",
+          "description": "Para empresas que querem app nativo com sua marca na App Store e Play Store.",
+          "features": [
+            "Tudo do Professional",
+            "App mobile nativo com sua marca",
+            "Publicado na iOS App Store + Android Play Store",
+            "App cleaner + App cliente com sua identidade visual",
+            "Push notifications para jobs e agendamentos"
+          ],
+          "cta": "Falar sobre Premium",
+          "footnote": "Inclui desenvolvimento e publicação do app"
+        }
       },
       "enterprise": {
         "label": "Enterprise",
         "priceLabel": "Sob consulta",
         "description": "Para empresas maiores com necessidades específicas: múltiplas unidades, integrações ou módulos customizados.",
         "features": [
-          "Tudo do plano White-label",
-          "Desenvolvimento de módulos customizados",
-          "Integração com sistemas existentes",
-          "Múltiplas unidades ou filiais",
-          "SLA dedicado com tempo de resposta garantido",
-          "Relatórios avançados personalizados"
+          "Módulos customizados",
+          "Integração com sistemas",
+          "Múltiplas unidades",
+          "SLA dedicado",
+          "Relatórios avançados"
         ],
         "cta": "Falar sobre Enterprise",
         "footnote": "Proposta em até 48h"
@@ -399,7 +429,7 @@
         "items": [
           {
             "q": "O preço muda se minha empresa crescer?",
-            "a": "Não. 5 ou 50 cleaners, mesmo A$500/mês. Ferramentas como Jobber e ServiceM8 cobram por usuário — seu custo sobe conforme cresce. Aqui não."
+            "a": "Não. 5 ou 50 cleaners, você paga a mesma mensalidade. Ferramentas como Jobber e ServiceM8 cobram por usuário — seu custo sobe conforme cresce. Aqui não."
           },
           {
             "q": "O setup tem custo separado?",
