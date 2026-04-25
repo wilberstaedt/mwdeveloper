@@ -44,6 +44,7 @@ export function CSNavbar() {
               { label: "Módulos", href: "#portals" },
               { label: "Funcionalidades", href: "#features" },
               { label: "White-label", href: "#white-label" },
+              { label: "Preços", href: "#pricing" },
             ].map(({ label, href }) => (
               <a
                 key={href}

@@ -5,6 +5,7 @@ import { CSPortals } from "./cleaning-system/CSPortals";
 import { CSFeatures } from "./cleaning-system/CSFeatures";
 import { CSStats } from "./cleaning-system/CSStats";
 import { CSWhiteLabel } from "./cleaning-system/CSWhiteLabel";
+import { CSPricing } from "./cleaning-system/CSPricing";
 import { CSContact } from "./cleaning-system/CSContact";
 import { CSFooter } from "./cleaning-system/CSFooter";
 
@@ -32,6 +33,7 @@ export default function CleaningSystem() {
         <CSFeatures />
         <CSStats />
         <CSWhiteLabel />
+        <CSPricing />
         <CSContact />
       </main>
       <CSFooter />
