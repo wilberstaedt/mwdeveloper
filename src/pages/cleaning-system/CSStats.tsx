@@ -1,29 +1,21 @@
+import { useTranslation } from "react-i18next";
 import { Reveal } from "@/components/ui/Reveal";
 import { GlowOrb } from "@/components/ui/GridBackground";
 
-const numbers = [
-  { value: "3", label: "portais independentes", sub: "admin · cleaner · cliente" },
-  { value: "80+", label: "endpoints REST", sub: "documentados e testados" },
-  { value: "237+", label: "testes automatizados", sub: "unit + integration" },
-  { value: "1", label: "empresa live", sub: "GlowArt · Brisbane, AU" },
-];
-
 const stack = [
-  "React 18",
-  "TypeScript",
-  "Vite",
-  "Tailwind CSS",
-  "Express.js",
-  "Prisma ORM",
-  "PostgreSQL",
-  "Docker Compose",
-  "Caddy",
-  "JWT",
-  "Resend",
-  "i18next",
+  "React 18", "TypeScript", "Vite", "Tailwind CSS",
+  "Express.js", "Prisma ORM", "PostgreSQL",
+  "Docker Compose", "Caddy", "JWT", "Resend", "i18next",
 ];
 
 export function CSStats() {
+  const { t } = useTranslation();
+
+  const numbers = t("cleaning.stats.numbers", {
+    returnObjects: true,
+    defaultValue: [] as Array<{ value: string; label: string; sub: string }>,
+  }) as Array<{ value: string; label: string; sub: string }>;
+
   return (
     <section className="relative py-24 md:py-32 overflow-hidden">
       <GlowOrb
@@ -33,12 +25,12 @@ export function CSStats() {
       />
       <div className="relative mx-auto max-w-5xl px-6 md:px-10">
         <Reveal>
-          <p className="text-eyebrow">Por dentro</p>
+          <p className="text-eyebrow">{t("cleaning.stats.eyebrow")}</p>
         </Reveal>
         <Reveal delay={0.05}>
           <h2 className="mt-4 max-w-xl text-3xl font-medium leading-tight tracking-tight text-[color:var(--color-text-bright)] md:text-4xl">
-            Número que rodou em produção,{" "}
-            <span className="text-[color:var(--color-text)]">não em slide.</span>
+            {t("cleaning.stats.heading1")}{" "}
+            <span className="text-[color:var(--color-text)]">{t("cleaning.stats.heading2")}</span>
           </h2>
         </Reveal>
 
@@ -63,15 +55,15 @@ export function CSStats() {
         <Reveal delay={0.1}>
           <div className="mt-14 rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-card)] p-6 md:p-8">
             <p className="mono text-xs uppercase tracking-[0.2em] text-[color:var(--color-text-dim)] mb-5">
-              Stack completa
+              {t("cleaning.stats.stackLabel")}
             </p>
             <div className="flex flex-wrap gap-2">
-              {stack.map((t) => (
+              {stack.map((tech) => (
                 <span
-                  key={t}
+                  key={tech}
                   className="mono rounded-md border border-[color:var(--color-border-strong)] bg-white/[0.03] px-3 py-1.5 text-xs text-[color:var(--color-text)]"
                 >
-                  {t}
+                  {tech}
                 </span>
               ))}
             </div>

@@ -168,8 +168,9 @@
 
 ### Próximo passo
 
-- **Matheus revisar** `/cleaning-system` no browser (localhost:3333/cleaning-system).
-- **Commit + push** para Vercel auto-deploy após aprovação visual.
+- ~~Matheus revisar `/cleaning-system` no browser~~ — aprovado via Telegram
+- ~~Commit + push para Vercel~~ — **live em https://mwdeveloper.tech/cleaning-system**
+- `vercel.json` adicionado (`rewrites` SPA fallback) — sem ele Vercel dava 404 em rotas client-side. Commit `76e5a4c`.
 - Pendências herdadas: atualizar CLAUDE.md local (deploy Vercel, i18n, CV multi-idioma) — item recorrente desde 2026-04-18.
 
 ---

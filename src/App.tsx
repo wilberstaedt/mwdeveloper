@@ -7,6 +7,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/cleaning-system" element={<CleaningSystem />} />
+      <Route path="/system" element={<CleaningSystem />} />
     </Routes>
   );
 }

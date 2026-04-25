@@ -29,6 +29,7 @@ export const projects: Project[] = [
       "JWT",
       "Resend",
     ],
+    href: "/cleaning-system",
     featured: true,
     hasMetric: true,
   },
@@ -46,6 +47,7 @@ export const projects: Project[] = [
       "AWS EC2",
       "Push Notifications",
     ],
+    href: "https://fourhub.com.br",
     hasMetric: true,
   },
   {

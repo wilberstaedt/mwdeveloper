@@ -1,54 +1,70 @@
-import { Check, Zap, Building2, ArrowRight } from "lucide-react";
+import { Check, X, Minus, Zap, Building2, ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Reveal } from "@/components/ui/Reveal";
 import { GlowOrb } from "@/components/ui/GridBackground";
 import { waLink, mailto } from "@/data/contact";
 import { cn } from "@/lib/utils";
 
-const WA_TEXT =
-  "Oi Matheus, quero saber mais sobre o Sistema Cleaning white-label.";
+type CompetitorKey = "jobber" | "servicem8" | "zenmaid";
+type FeatureValue = true | false | "partial";
 
-const STANDARD_FEATURES = [
-  "Setup completo incluído no primeiro mês",
-  "Cleaners ilimitados — sem cobrança por seat",
-  "3 portais: admin, cleaner e cliente",
-  "Invoices em PDF, chat integrado, audit logs",
-  "White-label completo: logo, cores, domínio",
-  "Deploy em VPS dedicado com Docker + Caddy",
-  "Bilíngue EN/PT-BR desde o dia 1",
-  "Suporte direto — sem ticket, sem fila",
-  "Todas as atualizações e novas features",
-  "Treinamento da equipe admin + cleaners",
+interface FeatureRow {
+  key: string;
+  sc: FeatureValue;
+  jobber: FeatureValue;
+  servicem8: FeatureValue;
+  zenmaid: FeatureValue;
+}
+
+const FEATURE_ROWS: FeatureRow[] = [
+  { key: "unlimitedCleaners", sc: true,      jobber: false,     servicem8: false,     zenmaid: false },
+  { key: "whiteLabel",        sc: true,      jobber: false,     servicem8: false,     zenmaid: false },
+  { key: "clientPortal",      sc: true,      jobber: "partial", servicem8: "partial", zenmaid: true  },
+  { key: "cleanerApp",        sc: true,      jobber: true,      servicem8: true,      zenmaid: true  },
+  { key: "setupIncluded",     sc: true,      jobber: false,     servicem8: false,     zenmaid: false },
+  { key: "directSupport",     sc: true,      jobber: false,     servicem8: false,     zenmaid: false },
+  { key: "pdfInvoices",       sc: true,      jobber: true,      servicem8: true,      zenmaid: true  },
 ];
 
-const ENTERPRISE_FEATURES = [
-  "Tudo do plano White-label",
-  "Customizações de módulo sob demanda",
-  "Integrações com sistemas existentes",
-  "Múltiplas unidades ou filiais",
-  "SLA dedicado com tempo de resposta garantido",
-  "Relatórios avançados personalizados",
-];
+const PRICE_ROW = {
+  sc: "A$500/mo",
+  jobber: "A$40–200+",
+  servicem8: "A$35–379+",
+  zenmaid: "USD $49+",
+};
 
-const FAQ = [
-  {
-    q: "O preço muda se minha empresa crescer?",
-    a: "Não. 5 ou 50 cleaners, mesmo AUD $500/mês. Concorrentes como Jobber e ServiceM8 cobram por usuário — você acaba pagando mais conforme cresce. Aqui não.",
-  },
-  {
-    q: "O setup tem custo separado?",
-    a: "Não. Configuração, branding white-label, domínio customizado e treinamento da equipe estão incluídos no primeiro mês.",
-  },
-  {
-    q: "Tem contrato de fidelidade?",
-    a: "3 meses de contrato inicial. Depois, renovação mensal automática com aviso de 30 dias para cancelar. Código e dados são seus — zero vendor lock-in.",
-  },
-  {
-    q: "Como é feito o pagamento?",
-    a: "Transferência bancária (Austrália) ou Wise. Stripe para cobrança recorrente automática disponível quando preferir.",
-  },
-];
+const COMPETITORS: CompetitorKey[] = ["jobber", "servicem8", "zenmaid"];
+
+function FeatureCell({ value, partialLabel, noLabel }: { value: FeatureValue; partialLabel: string; noLabel: string }) {
+  if (value === true) return <Check className="h-4 w-4 text-[color:var(--color-success)]" aria-label="Yes" />;
+  if (value === "partial") return (
+    <span className="mono text-[10px] text-[color:var(--color-text-dim)]">{partialLabel}</span>
+  );
+  return <X className="h-4 w-4 text-[color:var(--color-text-dim)]/50" aria-label={noLabel} />;
+}
 
 export function CSPricing() {
+  const { t } = useTranslation();
+  const WA_TEXT = t("cleaning.pricing.standard.cta");
+
+  const standardFeatures = t("cleaning.pricing.standard.features", {
+    returnObjects: true,
+    defaultValue: [] as string[],
+  }) as string[];
+
+  const enterpriseFeatures = t("cleaning.pricing.enterprise.features", {
+    returnObjects: true,
+    defaultValue: [] as string[],
+  }) as string[];
+
+  const faqItems = t("cleaning.pricing.faq.items", {
+    returnObjects: true,
+    defaultValue: [] as Array<{ q: string; a: string }>,
+  }) as Array<{ q: string; a: string }>;
+
+  const partialLabel = t("cleaning.pricing.comparison.partial");
+  const noLabel = t("cleaning.pricing.comparison.na");
+
   return (
     <section id="pricing" className="relative py-24 md:py-32 overflow-hidden">
       <GlowOrb
@@ -56,69 +72,58 @@ export function CSPricing() {
         size={480}
         color="rgba(0,102,255,0.08)"
       />
-
       <div className="relative mx-auto max-w-5xl px-6 md:px-10">
+
         {/* Header */}
         <Reveal>
-          <p className="text-eyebrow">Preços</p>
+          <p className="text-eyebrow">{t("cleaning.pricing.eyebrow")}</p>
         </Reveal>
         <Reveal delay={0.05}>
           <h2 className="mt-4 max-w-2xl text-3xl font-medium leading-tight tracking-tight text-[color:var(--color-text-bright)] md:text-4xl">
-            Um preço.{" "}
-            <span className="text-[color:var(--color-text)]">
-              Acesso total. Sem surpresa no fim do mês.
-            </span>
+            {t("cleaning.pricing.heading1")}{" "}
+            <span className="text-[color:var(--color-text)]">{t("cleaning.pricing.heading2")}</span>
           </h2>
         </Reveal>
         <Reveal delay={0.1}>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-[color:var(--color-text)]">
-            Flat fee mensal — sem cobrança por cleaner, por job ou por feature.
-            Quanto maior sua equipe, mais valor você extrai pelo mesmo preço.
+            {t("cleaning.pricing.body")}
           </p>
         </Reveal>
 
-        {/* Cards */}
+        {/* Plan cards */}
         <div className="mt-14 grid gap-6 md:grid-cols-2">
-          {/* White-label plan */}
+
+          {/* White-label */}
           <Reveal delay={0.08}>
             <div className="glow-border relative flex flex-col rounded-2xl border border-[color:var(--color-border-strong)] bg-[color:var(--color-card)] p-8">
-              {/* Popular badge */}
               <div className="absolute -top-3 left-8">
                 <span className="mono inline-flex items-center gap-1.5 rounded-full border border-[color:var(--color-blue)]/30 bg-[color:var(--color-blue)]/15 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[color:var(--color-cyan)]">
                   <Zap className="h-2.5 w-2.5" />
-                  Plano atual
+                  {t("cleaning.pricing.planBadge")}
                 </span>
               </div>
-
               <div className="mt-2">
                 <div className="mono text-xs uppercase tracking-[0.2em] text-[color:var(--color-text-dim)]">
-                  White-label
+                  {t("cleaning.pricing.standard.label")}
                 </div>
                 <div className="mt-3 flex items-end gap-2">
-                  <span className="text-5xl font-semibold tracking-tight text-[color:var(--color-text-bright)]">
-                    A$500
-                  </span>
+                  <span className="text-5xl font-semibold tracking-tight text-[color:var(--color-text-bright)]">A$500</span>
                   <span className="mono mb-1.5 text-sm text-[color:var(--color-text-dim)]">
-                    / mês
+                    {t("cleaning.pricing.perMonth")}
                   </span>
                 </div>
                 <p className="mt-2 text-sm text-[color:var(--color-text)]">
-                  Para empresas de limpeza que querem sistema próprio rodando
-                  com sua marca, no seu domínio.
+                  {t("cleaning.pricing.standard.description")}
                 </p>
               </div>
-
               <ul className="mt-7 space-y-2.5 flex-1">
-                {STANDARD_FEATURES.map((f) => (
+                {standardFeatures.map((f) => (
                   <li key={f} className="flex items-start gap-2.5">
                     <Check className="h-4 w-4 shrink-0 mt-0.5 text-[color:var(--color-success)]" />
-                    <span className="text-sm text-[color:var(--color-text)]">
-                      {f}
-                    </span>
+                    <span className="text-sm text-[color:var(--color-text)]">{f}</span>
                   </li>
                 ))}
               </ul>
-
               <div className="mt-8 space-y-3">
                 <a
                   href={waLink(WA_TEXT)}
@@ -126,156 +131,166 @@ export function CSPricing() {
                   rel="noreferrer"
                   className="group flex w-full items-center justify-center gap-2 rounded-xl bg-[color:var(--color-blue)] px-6 py-3.5 text-sm font-medium text-white shadow-[0_8px_32px_rgba(0,102,255,0.25)] transition-all hover:bg-[color:var(--color-cyan)] hover:shadow-[0_8px_40px_rgba(0,212,255,0.3)]"
                 >
-                  Começar agora
+                  {t("cleaning.pricing.standard.cta")}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </a>
                 <p className="mono text-center text-[10px] uppercase tracking-[0.15em] text-[color:var(--color-text-dim)]">
-                  3 meses iniciais · sem setup extra
+                  {t("cleaning.pricing.standard.footnote")}
                 </p>
               </div>
             </div>
           </Reveal>
 
-          {/* Enterprise plan */}
+          {/* Enterprise */}
           <Reveal delay={0.13}>
             <div className="flex flex-col rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-card)] p-8">
               <div>
                 <div className="flex items-center gap-2">
                   <Building2 className="h-4 w-4 text-[color:var(--color-text-dim)]" strokeWidth={1.5} />
                   <span className="mono text-xs uppercase tracking-[0.2em] text-[color:var(--color-text-dim)]">
-                    Enterprise
+                    {t("cleaning.pricing.enterprise.label")}
                   </span>
                 </div>
-                <div className="mt-3 flex items-end gap-2">
+                <div className="mt-3">
                   <span className="text-5xl font-semibold tracking-tight text-[color:var(--color-text-bright)]">
-                    Custom
+                    {t("cleaning.pricing.enterprise.priceLabel")}
                   </span>
                 </div>
                 <p className="mt-2 text-sm text-[color:var(--color-text)]">
-                  Para empresas maiores com necessidades específicas: múltiplas
-                  unidades, integrações ou módulos customizados.
+                  {t("cleaning.pricing.enterprise.description")}
                 </p>
               </div>
-
               <ul className="mt-7 space-y-2.5 flex-1">
-                {ENTERPRISE_FEATURES.map((f) => (
+                {enterpriseFeatures.map((f, i) => (
                   <li key={f} className="flex items-start gap-2.5">
-                    <Check
-                      className={cn(
-                        "h-4 w-4 shrink-0 mt-0.5",
-                        f.startsWith("Tudo")
-                          ? "text-[color:var(--color-text-dim)]"
-                          : "text-[color:var(--color-cyan)]",
-                      )}
-                    />
-                    <span
-                      className={cn(
-                        "text-sm",
-                        f.startsWith("Tudo")
-                          ? "text-[color:var(--color-text-dim)]"
-                          : "text-[color:var(--color-text)]",
-                      )}
-                    >
+                    <Check className={cn(
+                      "h-4 w-4 shrink-0 mt-0.5",
+                      i === 0 ? "text-[color:var(--color-text-dim)]" : "text-[color:var(--color-cyan)]",
+                    )} />
+                    <span className={cn(
+                      "text-sm",
+                      i === 0 ? "text-[color:var(--color-text-dim)]" : "text-[color:var(--color-text)]",
+                    )}>
                       {f}
                     </span>
                   </li>
                 ))}
               </ul>
-
               <div className="mt-8 space-y-3">
                 <a
                   href={mailto("Sistema Cleaning — Enterprise")}
                   className="flex w-full items-center justify-center gap-2 rounded-xl border border-[color:var(--color-border-strong)] bg-white/[0.02] px-6 py-3.5 text-sm font-medium text-[color:var(--color-text-bright)] transition-all hover:border-[color:var(--color-cyan)] hover:bg-white/[0.05]"
                 >
-                  Falar sobre Enterprise
+                  {t("cleaning.pricing.enterprise.cta")}
                 </a>
                 <p className="mono text-center text-[10px] uppercase tracking-[0.15em] text-[color:var(--color-text-dim)]">
-                  Proposta em até 48h
+                  {t("cleaning.pricing.enterprise.footnote")}
                 </p>
               </div>
             </div>
           </Reveal>
         </div>
 
-        {/* Competitive callout */}
-        <Reveal delay={0.15}>
-          <div className="mt-8 rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-void)] p-5 md:p-6">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <p className="mono text-xs uppercase tracking-[0.18em] text-[color:var(--color-text-dim)]">
-                  Por que flat fee?
-                </p>
-                <p className="mt-1.5 text-sm text-[color:var(--color-text)]">
-                  Com Jobber ou ServiceM8 você paga por usuário ou por job —{" "}
-                  <span className="text-[color:var(--color-text-bright)]">
-                    o custo sobe conforme a empresa cresce.
-                  </span>{" "}
-                  Aqui não. 5 ou 50 cleaners: mesmo A$500.
-                </p>
-              </div>
-              <div className="shrink-0">
-                <table className="mono text-[10px]">
-                  <thead>
-                    <tr className="text-[color:var(--color-text-dim)]">
-                      <th className="pr-6 pb-1.5 text-left font-medium uppercase tracking-[0.15em]">Sistema</th>
-                      <th className="pb-1.5 text-right font-medium uppercase tracking-[0.15em]">10 cleaners</th>
-                    </tr>
-                  </thead>
-                  <tbody className="space-y-1">
-                    {[
-                      { name: "Sistema Cleaning", price: "A$500", highlight: true },
-                      { name: "Jobber (Grow)", price: "A$230+", highlight: false },
-                      { name: "ServiceM8", price: "A$379+", highlight: false },
-                      { name: "ZenMaid", price: "USD $120+", highlight: false },
-                    ].map((row) => (
-                      <tr key={row.name}>
-                        <td
-                          className={cn(
-                            "pr-6 py-0.5",
-                            row.highlight
-                              ? "text-[color:var(--color-cyan)]"
-                              : "text-[color:var(--color-text-dim)]",
-                          )}
-                        >
-                          {row.name}
-                        </td>
-                        <td
-                          className={cn(
-                            "text-right py-0.5",
-                            row.highlight
-                              ? "font-semibold text-[color:var(--color-text-bright)]"
-                              : "text-[color:var(--color-text-dim)]",
-                          )}
-                        >
-                          {row.price}
-                        </td>
-                      </tr>
+        {/* Comparison table */}
+        <Reveal delay={0.1}>
+          <div className="mt-16">
+            <h3 className="text-xl font-medium text-[color:var(--color-text-bright)]">
+              {t("cleaning.pricing.comparison.heading")}
+            </h3>
+            <p className="mt-2 text-sm text-[color:var(--color-text)] leading-relaxed max-w-xl">
+              {t("cleaning.pricing.comparison.subheading")}
+            </p>
+
+            <div className="mt-8 overflow-x-auto rounded-2xl border border-[color:var(--color-border)]">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-[color:var(--color-border)]">
+                    <th className="px-5 py-4 text-left mono text-xs uppercase tracking-[0.15em] text-[color:var(--color-text-dim)] w-1/2">
+                      {/* feature label col */}
+                    </th>
+                    {/* Sistema Cleaning — highlighted */}
+                    <th className="px-5 py-4 text-center bg-[color:var(--color-blue)]/[0.06] border-x border-[color:var(--color-blue)]/20">
+                      <span className="mono text-xs font-semibold text-[color:var(--color-cyan)] uppercase tracking-[0.12em]">
+                        {t("cleaning.pricing.comparison.ourProduct")}
+                      </span>
+                    </th>
+                    {COMPETITORS.map((comp) => (
+                      <th key={comp} className="px-5 py-4 text-center">
+                        <span className="mono text-xs text-[color:var(--color-text-dim)] uppercase tracking-[0.12em]">
+                          {t(`cleaning.pricing.comparison.competitors.${comp}`)}
+                        </span>
+                      </th>
                     ))}
-                  </tbody>
-                </table>
-              </div>
+                  </tr>
+                </thead>
+                <tbody>
+                  {FEATURE_ROWS.map((row, i) => (
+                    <tr
+                      key={row.key}
+                      className={cn(
+                        "border-b border-[color:var(--color-border)] last:border-0 transition-colors hover:bg-white/[0.02]",
+                        i % 2 === 0 ? "bg-[color:var(--color-card)]" : "bg-[color:var(--color-void)]",
+                      )}
+                    >
+                      <td className="px-5 py-3.5 text-sm text-[color:var(--color-text)]">
+                        {t(`cleaning.pricing.comparison.features.${row.key}`)}
+                      </td>
+                      <td className="px-5 py-3.5 text-center bg-[color:var(--color-blue)]/[0.04] border-x border-[color:var(--color-blue)]/10">
+                        <div className="flex justify-center">
+                          <FeatureCell value={row.sc} partialLabel={partialLabel} noLabel={noLabel} />
+                        </div>
+                      </td>
+                      {COMPETITORS.map((comp) => (
+                        <td key={comp} className="px-5 py-3.5 text-center">
+                          <div className="flex justify-center">
+                            <FeatureCell value={row[comp]} partialLabel={partialLabel} noLabel={noLabel} />
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                  {/* Price row */}
+                  <tr className="bg-[color:var(--color-card)] border-t-2 border-[color:var(--color-border-strong)]">
+                    <td className="px-5 py-4 mono text-xs uppercase tracking-[0.15em] text-[color:var(--color-text-dim)]">
+                      {t("cleaning.pricing.comparison.features.basePrice")}
+                    </td>
+                    <td className="px-5 py-4 text-center bg-[color:var(--color-blue)]/[0.06] border-x border-[color:var(--color-blue)]/20">
+                      <span className="mono text-sm font-semibold text-[color:var(--color-text-bright)]">
+                        {PRICE_ROW.sc}
+                      </span>
+                    </td>
+                    {COMPETITORS.map((comp) => (
+                      <td key={comp} className="px-5 py-4 text-center">
+                        <span className="mono text-xs text-[color:var(--color-text-dim)]">
+                          {PRICE_ROW[comp]}
+                        </span>
+                      </td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
             </div>
+            <p className="mt-3 mono text-[10px] uppercase tracking-[0.15em] text-[color:var(--color-text-dim)]">
+              <Minus className="inline h-3 w-3 mr-1 opacity-50" />
+              {t("cleaning.pricing.comparison.partial")} = portal without full feature parity
+            </p>
           </div>
         </Reveal>
 
         {/* FAQ */}
         <Reveal delay={0.1}>
-          <div className="mt-14">
+          <div className="mt-16">
             <p className="mono text-xs uppercase tracking-[0.2em] text-[color:var(--color-text-dim)] mb-6">
-              Perguntas frequentes
+              {t("cleaning.pricing.faq.label")}
             </p>
             <div className="grid gap-4 md:grid-cols-2">
-              {FAQ.map((item) => (
+              {faqItems.map((item) => (
                 <div
                   key={item.q}
                   className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-card)] p-5"
                 >
-                  <p className="text-sm font-medium text-[color:var(--color-text-bright)]">
-                    {item.q}
-                  </p>
-                  <p className="mt-2 text-sm leading-relaxed text-[color:var(--color-text)]">
-                    {item.a}
-                  </p>
+                  <p className="text-sm font-medium text-[color:var(--color-text-bright)]">{item.q}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-[color:var(--color-text)]">{item.a}</p>
                 </div>
               ))}
             </div>

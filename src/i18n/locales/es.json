@@ -188,5 +188,237 @@
     "en": "English",
     "es": "Español",
     "pt-BR": "Português"
+  },
+  "cleaning": {
+    "nav": {
+      "modules": "Módulos",
+      "features": "Funciones",
+      "whiteLabel": "White-label",
+      "pricing": "Precios",
+      "cta": "Hablar de white-label",
+      "back": "Volver al sitio"
+    },
+    "hero": {
+      "badge": "En producción",
+      "location": "Brisbane, Australia · GlowArt",
+      "heading1": "Gestión completa para",
+      "heading2": "empresas de limpieza.",
+      "body": "Un sistema para toda la operación — programación de trabajos, facturación, coordinación de cleaners y comunicación con clientes. Bajo tu marca, en tu propio servidor. Hoy en producción en GlowArt, Brisbane, Australia.",
+      "ctaModules": "Ver los módulos",
+      "ctaWhiteLabel": "Hablar de white-label",
+      "ctaEmail": "o email",
+      "stats": {
+        "portals": { "value": "3 portales", "label": "admin · cleaner · cliente" },
+        "stable": { "value": "Estable", "label": "probado, sin sorpresas" },
+        "live": { "value": "Live en AU", "label": "en producción desde 2026" },
+        "support": { "value": "Directo", "label": "soporte — sin cola de tickets" }
+      }
+    },
+    "portals": {
+      "eyebrow": "3 módulos integrados",
+      "heading1": "Admin, cleaner y cliente —",
+      "heading2": "cada uno en su portal.",
+      "intro": "Sin confusión de acceso. Cada rol ve solo lo que necesita, con la interfaz adecuada para cada dispositivo.",
+      "admin": {
+        "label": "Panel Admin",
+        "tag": "Web · Desktop-first",
+        "description": "Visión completa de la operación. Trabajos, horarios, cleaners, clientes, facturas e historial de actividad — todo en un solo lugar.",
+        "features": [
+          "Dashboard en tiempo real con métricas clave",
+          "Crear y gestionar trabajos con reprogramación por arrastre",
+          "Historial completo — quién hizo qué, cuándo",
+          "Generación automática de facturas PDF por trabajo",
+          "Informes de ingresos por período"
+        ]
+      },
+      "cleaner": {
+        "label": "App Cleaner",
+        "tag": "Web · Mobile-first",
+        "description": "Diseñado para cleaners en campo. Agenda diaria, entrada/salida, fotos y chat — desde el navegador del móvil, sin instalar nada.",
+        "features": [
+          "Agenda diaria con direcciones de trabajos",
+          "Entrada y salida con registro de tiempo",
+          "Fotos de antes y después por trabajo",
+          "Chat con admin y clientes",
+          "Historial completo de trabajos"
+        ]
+      },
+      "client": {
+        "label": "Portal del Cliente",
+        "tag": "Web · Mobile-first",
+        "description": "Los clientes ven sus reservas, facturas e historial sin llamar. Sencillo, autoservicio, disponible 24/7.",
+        "features": [
+          "Próximas limpiezas con estado en tiempo real",
+          "Historial completo con fechas y cleaners",
+          "Descargar facturas PDF en cualquier momento",
+          "Chat con el equipo para consultas",
+          "Valoración post-servicio"
+        ]
+      }
+    },
+    "features": {
+      "eyebrow": "Funciones",
+      "heading1": "Todo incluido —",
+      "heading2": "listo desde el primer día.",
+      "items": {
+        "invoices": {
+          "title": "Facturas PDF",
+          "description": "Generación automática de factura por trabajo. El admin aprueba, el cliente descarga. Diseño profesional con los datos de tu empresa."
+        },
+        "chat": {
+          "title": "Chat integrado",
+          "description": "Mensajes entre admin, cleaner y cliente en tiempo real. Todo dentro del sistema — sin grupos de WhatsApp."
+        },
+        "history": {
+          "title": "Historial completo",
+          "description": "Todo queda registrado: quién lo hizo, cuándo, qué cambió. Visibilidad total para el admin en cualquier momento."
+        },
+        "bilingual": {
+          "title": "Inglés y portugués",
+          "description": "Interfaz completa en ambos idiomas. Cambio en tiempo real — útil para equipos con hablantes de EN y PT."
+        },
+        "mobile": {
+          "title": "Funciona en cualquier móvil",
+          "description": "Los 3 portales funcionan en móvil. Los cleaners usan el navegador — sin instalar nada, sin tiendas de apps."
+        },
+        "auth": {
+          "title": "Acceso seguro",
+          "description": "Cada usuario tiene su propio acceso con el nivel correcto. Admin, cleaner y cliente nunca ven los datos de los otros."
+        }
+      }
+    },
+    "stats": {
+      "eyebrow": "Por dentro",
+      "heading1": "Construido para funcionar.",
+      "heading2": "No solo para verse bien.",
+      "numbers": [
+        { "value": "3", "label": "portales independientes", "sub": "admin · cleaner · cliente" },
+        { "value": "Estable", "label": "sistema en producción", "sub": "probado, sin sorpresas" },
+        { "value": "Rápido", "label": "configuración en días", "sub": "no en semanas" },
+        { "value": "Live AU", "label": "en producción desde 2026", "sub": "GlowArt · Brisbane" }
+      ],
+      "stackLabel": "Stack tecnológico"
+    },
+    "whiteLabel": {
+      "eyebrow": "White-label",
+      "heading1": "Tu sistema.",
+      "heading2": "Nuestro código.",
+      "body1": "Sistema Cleaning ya existe, ha sido probado con una empresa real y ya pasó por un deploy en producción. No pagas para construir desde cero — pagas para tenerlo funcionando bajo tu marca, en tu dominio, con tus datos.",
+      "body2": "Hoy en producción en GlowArt, Brisbane, AU. Disponible para empresas en cualquier país con equipo bilingüe (inglés/portugués).",
+      "checkList": [
+        "Listo para producción — menos riesgo, lanzamiento más rápido",
+        "Tus datos, en tu servidor — sin vendor lock-in",
+        "Personalización de marca completa antes del lanzamiento",
+        "Mucho más asequible que construir desde cero"
+      ],
+      "includes": {
+        "server": {
+          "title": "Tu propio servidor dedicado",
+          "description": "Configuración completa en un servidor dedicado a tu negocio. Tu dominio. Tus datos siempre contigo — sin infraestructura compartida."
+        },
+        "brand": {
+          "title": "Tu marca",
+          "description": "Tu logo, colores y nombre en todo el sistema. Tus clientes ven solo tu identidad."
+        },
+        "training": {
+          "title": "Onboarding del equipo",
+          "description": "Sesión de formación para admin y cleaners. Documentación en inglés y portugués."
+        },
+        "support": {
+          "title": "Soporte técnico",
+          "description": "Soporte dedicado durante el período de estabilización. Problemas críticos resueltos con prioridad — contacto directo con el dev."
+        }
+      },
+      "ctaWhatsApp": "Hablar de white-label",
+      "ctaEmail": "Enviar email"
+    },
+    "pricing": {
+      "eyebrow": "Precios",
+      "heading1": "Un precio.",
+      "heading2": "Acceso total. Sin sorpresas a fin de mes.",
+      "body": "Cuota mensual fija — sin cobro por cleaner, por trabajo ni por función. Cuanto mayor sea tu equipo, más valor obtienes por el mismo precio.",
+      "planBadge": "Plan actual",
+      "perMonth": "/ mes",
+      "standard": {
+        "label": "White-label",
+        "description": "Para empresas de limpieza que quieren su propio sistema bajo su marca, en su dominio.",
+        "features": [
+          "Configuración completa incluida en el primer mes",
+          "Cleaners ilimitados — sin cargos por usuario",
+          "3 portales: admin, cleaner y cliente",
+          "Facturas PDF, chat en tiempo real, historial completo",
+          "White-label completo: logo, colores, tu dominio",
+          "Servidor dedicado exclusivo para tu empresa",
+          "Inglés y portugués desde el primer día",
+          "Soporte directo — sin tickets, sin colas",
+          "Todas las actualizaciones y nuevas funciones incluidas",
+          "Formación del equipo admin + cleaners"
+        ],
+        "cta": "Empezar ahora",
+        "footnote": "Contrato inicial de 3 meses · sin coste de configuración"
+      },
+      "enterprise": {
+        "label": "Enterprise",
+        "priceLabel": "A medida",
+        "description": "Para empresas más grandes con necesidades específicas: múltiples sedes, integraciones o módulos personalizados.",
+        "features": [
+          "Todo del plan White-label",
+          "Desarrollo de módulos personalizados",
+          "Integración con sistemas existentes",
+          "Múltiples sedes o sucursales",
+          "SLA dedicado con tiempo de respuesta garantizado",
+          "Informes avanzados personalizados"
+        ],
+        "cta": "Hablar de Enterprise",
+        "footnote": "Propuesta en 48 horas"
+      },
+      "comparison": {
+        "heading": "Cómo se compara",
+        "subheading": "Las herramientas de la competencia cobran por usuario o por trabajo — los costes crecen con tu equipo. Aquí no.",
+        "ourProduct": "Sistema Cleaning",
+        "features": {
+          "unlimitedCleaners": "Cleaners ilimitados",
+          "whiteLabel": "White-label (tu marca)",
+          "clientPortal": "Portal del cliente",
+          "cleanerApp": "App para cleaners",
+          "setupIncluded": "Configuración incluida",
+          "directSupport": "Soporte directo",
+          "pdfInvoices": "Facturas PDF",
+          "basePrice": "Precio base"
+        },
+        "partial": "Limitado",
+        "na": "No"
+      },
+      "faq": {
+        "label": "Preguntas frecuentes",
+        "items": [
+          {
+            "q": "¿El precio cambia si mi empresa crece?",
+            "a": "No. Con 5 o 50 cleaners, son los mismos A$500/mes. Herramientas como Jobber o ServiceM8 cobran por usuario — tus costes suben al crecer. Aquí no."
+          },
+          {
+            "q": "¿La configuración tiene coste aparte?",
+            "a": "No. La configuración, el branding white-label, el dominio personalizado y la formación del equipo están incluidos en el primer mes."
+          },
+          {
+            "q": "¿Hay contrato de permanencia?",
+            "a": "Contrato inicial de 3 meses. Después, renovación mensual con 30 días de aviso para cancelar. El código y los datos son siempre tuyos — sin lock-in."
+          },
+          {
+            "q": "¿Cómo se realiza el pago?",
+            "a": "Transferencia bancaria (Australia) o Wise. Stripe para facturación recurrente automatizada disponible si lo prefieres."
+          }
+        ]
+      }
+    },
+    "contact": {
+      "badge": "Aceptando nuevos clientes",
+      "heading1": "¿Listo para poner orden en",
+      "heading2": "tu empresa de limpieza?",
+      "body": "Escríbeme por WhatsApp o envía un email. Respondo en 24 horas (día hábil). Si encaja, hacemos una llamada de 15 min y te muestro el sistema en directo.",
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "timezone": "AEST · UTC+10 · respuesta en 24h (día hábil)"
+    }
   }
 }

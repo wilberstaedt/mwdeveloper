@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { Reveal } from "@/components/ui/Reveal";
 import { cn } from "@/lib/utils";
 
@@ -145,108 +146,76 @@ function ClientMockup() {
   );
 }
 
-const portals = [
-  {
-    id: "admin",
-    label: "Painel Admin",
-    tag: "Web · Desktop-first",
-    description:
-      "Visão completa da operação. Jobs, agendamentos, cleaners, clientes, invoices e audit log centralizado.",
-    features: [
-      "Dashboard com métricas em tempo real",
-      "Criação e gestão de jobs com drag-reschedule",
-      "Audit log em toda mutação — quem fez, quando, o quê",
-      "Geração de invoices em PDF por serviço",
-      "Relatórios de receita por período",
-    ],
-    mockup: <AdminMockup />,
-  },
-  {
-    id: "cleaner",
-    label: "App Cleaner",
-    tag: "Web · Mobile-first",
-    description:
-      "Interface focada para cleaners no campo. Agenda do dia, check-in/check-out por GPS, fotos e chat.",
-    features: [
-      "Agenda do dia com mapa de endereços",
-      "Check-in e check-out com registro de horário",
-      "Fotos de before/after por job",
-      "Chat com admin e cliente",
-      "Histórico de jobs realizados",
-    ],
-    mockup: <CleanerMockup />,
-  },
-  {
-    id: "client",
-    label: "Portal do Cliente",
-    tag: "Web · Mobile-first",
-    description:
-      "Acesso do cliente a agendamentos, histórico e faturas. Clean e self-service, sem precisar ligar.",
-    features: [
-      "Próximas limpezas com status em tempo real",
-      "Histórico completo com datas e cleaners",
-      "Download de invoices em PDF",
-      "Chat com o time para dúvidas",
-      "Feedback pós-serviço",
-    ],
-    mockup: <ClientMockup />,
-  },
-];
+type PortalKey = "admin" | "cleaner" | "client";
+const PORTAL_KEYS: PortalKey[] = ["admin", "cleaner", "client"];
+const MOCKUPS: Record<PortalKey, ReactNode> = {
+  admin: <AdminMockup />,
+  cleaner: <CleanerMockup />,
+  client: <ClientMockup />,
+};
 
 export function CSPortals() {
+  const { t } = useTranslation();
+
   return (
     <section id="portals" className="relative py-24 md:py-32">
       <div className="mx-auto max-w-5xl px-6 md:px-10">
         <Reveal>
-          <p className="text-eyebrow">3 módulos integrados</p>
+          <p className="text-eyebrow">{t("cleaning.portals.eyebrow")}</p>
         </Reveal>
         <Reveal delay={0.05}>
           <h2 className="mt-4 max-w-2xl text-3xl font-medium leading-tight tracking-tight text-[color:var(--color-text-bright)] md:text-4xl">
-            Admin, cleaner e cliente —{" "}
-            <span className="text-[color:var(--color-text)]">cada um no seu portal.</span>
+            {t("cleaning.portals.heading1")}{" "}
+            <span className="text-[color:var(--color-text)]">{t("cleaning.portals.heading2")}</span>
           </h2>
         </Reveal>
         <Reveal delay={0.1}>
           <p className="mt-4 max-w-xl text-base text-[color:var(--color-text)] leading-relaxed">
-            Sem confusão de acesso. Cada perfil vê só o que precisa, com a
-            interface certa para o dispositivo certo.
+            {t("cleaning.portals.intro")}
           </p>
         </Reveal>
 
         <div className="mt-16 space-y-16">
-          {portals.map((portal, i) => (
-            <Reveal key={portal.id} delay={0.05 * i}>
-              <div
-                className={cn(
-                  "grid gap-8 md:grid-cols-2 md:items-start",
-                  i % 2 === 1 && "md:[direction:rtl] [&>*]:[direction:ltr]",
-                )}
-              >
-                <div className="space-y-5">
-                  <div className="flex items-center gap-3">
-                    <span className="mono text-xs font-semibold text-[color:var(--color-text-bright)]">
-                      {portal.label}
-                    </span>
-                    <span className="mono text-[10px] uppercase tracking-[0.15em] text-[color:var(--color-text-dim)] border border-[color:var(--color-border)] rounded px-2 py-0.5">
-                      {portal.tag}
-                    </span>
+          {PORTAL_KEYS.map((key, i) => {
+            const features = t(`cleaning.portals.${key}.features`, {
+              returnObjects: true,
+              defaultValue: [] as string[],
+            }) as string[];
+
+            return (
+              <Reveal key={key} delay={0.05 * i}>
+                <div
+                  className={cn(
+                    "grid gap-8 md:grid-cols-2 md:items-start",
+                    i % 2 === 1 && "md:[direction:rtl] [&>*]:[direction:ltr]",
+                  )}
+                >
+                  <div className="space-y-5">
+                    <div className="flex items-center gap-3">
+                      <span className="mono text-xs font-semibold text-[color:var(--color-text-bright)]">
+                        {t(`cleaning.portals.${key}.label`)}
+                      </span>
+                      <span className="mono text-[10px] uppercase tracking-[0.15em] text-[color:var(--color-text-dim)] border border-[color:var(--color-border)] rounded px-2 py-0.5">
+                        {t(`cleaning.portals.${key}.tag`)}
+                      </span>
+                    </div>
+                    <p className="text-[color:var(--color-text)] leading-relaxed">
+                      {t(`cleaning.portals.${key}.description`)}
+                    </p>
+                    <ul className="space-y-2">
+                      {features.map((f) => (
+                        <li key={f} className="flex items-start gap-2.5 text-sm text-[color:var(--color-text)]">
+                          <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[color:var(--color-cyan)]" />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <p className="text-[color:var(--color-text)] leading-relaxed">
-                    {portal.description}
-                  </p>
-                  <ul className="space-y-2">
-                    {portal.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2.5 text-sm text-[color:var(--color-text)]">
-                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[color:var(--color-cyan)]" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
+                  <div>{MOCKUPS[key]}</div>
                 </div>
-                <div>{portal.mockup}</div>
-              </div>
-            </Reveal>
-          ))}
+              </Reveal>
+            );
+          })}
         </div>
       </div>
     </section>

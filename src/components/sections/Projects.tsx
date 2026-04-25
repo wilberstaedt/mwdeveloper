@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 import { StatusDot } from "@/components/ui/StatusDot";
@@ -146,16 +147,28 @@ function ProjectCard({ project }: { project: Project }) {
   );
 
   if (project.href) {
+    const isExternal = /^https?:\/\//.test(project.href);
+    if (isExternal) {
+      return (
+        <a
+          href={project.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block h-full cursor-pointer"
+          aria-label={`${name} — ${t("common.openInNewTab")}`}
+        >
+          {body}
+        </a>
+      );
+    }
     return (
-      <a
-        href={project.href}
-        target="_blank"
-        rel="noreferrer"
-        className="block h-full"
-        aria-label={`${name} — ${t("common.openInNewTab")}`}
+      <Link
+        to={project.href}
+        className="block h-full cursor-pointer"
+        aria-label={name}
       >
         {body}
-      </a>
+      </Link>
     );
   }
 
