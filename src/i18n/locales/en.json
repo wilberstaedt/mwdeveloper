@@ -65,10 +65,10 @@
         "statusLabel": "Live in production",
         "role": "Solo dev · From 1st commit to deploy",
         "highlights": [
-          "3 portals (admin, cleaner, customer) — mobile-first",
-          "80+ endpoints, 237+ tests, audit logs on every mutation",
-          "PDF invoices, near-realtime chat, i18n EN/PT-BR",
-          "Deployed on my own VPS with Docker Compose + Caddy"
+          "3 portals: admin dashboard, cleaner app and client portal",
+          "Stable, fully tested system — complete activity history included",
+          "PDF invoices, real-time chat, bilingual (English & Portuguese)",
+          "Dedicated server for your business — your data, your domain"
         ],
         "metricLabel": "Customer",
         "metricValue": "Brisbane, Australia"
@@ -387,7 +387,12 @@
           "basePrice": "Base price"
         },
         "partial": "Limited",
-        "na": "No"
+        "na": "No",
+        "competitors": {
+          "jobber": "Jobber",
+          "servicem8": "ServiceM8",
+          "zenmaid": "ZenMaid"
+        }
       },
       "faq": {
         "label": "Common questions",
