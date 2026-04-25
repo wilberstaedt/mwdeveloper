@@ -100,5 +100,100 @@
 
 ### Próximo passo
 
-- Validar em prod (https://mwdeveloper.tech) depois do Vercel terminar build — portal navigate + screenshot final.
-- Atualizar CLAUDE.md local do projeto (deploy Vercel + i18n + CV multi-idioma).
+- Validar em prod (https://mwdeveloper.tech) depois do Vercel terminar build — portal navigate + screenshot final. ✓ FEITO — prod OK nos 3 idiomas, PDFs 200 application/pdf.
+- Atualizar CLAUDE.md local do projeto (deploy Vercel + i18n + CV multi-idioma). ← pendente.
+
+---
+
+## PAUSADO OVERNIGHT 2026-04-18 — limite sessão
+
+**Agent:** Nicolas Borges (mwdeveloper CTO)
+
+### Estado no momento da pausa
+
+- **Branch:** `main`, limpa, em sync com origin (último commit: `c2d1ab4 feat(cv): localized CV downloads`).
+- **Sem WIP** — nenhum código não-commitado, nenhum arquivo modificado.
+- **Dev server:** encerrado.
+- **Flag atual:** 🔴 FLAG-PC ON (silêncio operacional com Cérebro).
+- **Sessão:** standby desde a validação final de prod.
+
+### Próxima ação óbvia quando retomar
+
+1. **Atualizar `CLAUDE.md` local do mwdeveloper** (pendência herdada de duas sessões atrás):
+   - Seção 2 (Stack) → deploy é Vercel auto-deploy via GitHub push, não Hostinger FTP
+   - Adicionar seção sobre sistema i18n (estrutura `src/i18n/`, padrão de chaves, `useCvPath` hook, `useDocumentMeta` hook)
+   - Mencionar CV multi-idioma em public/ (cv.pdf / cv-pt.pdf / cv-es.pdf)
+   - Seção 8 (Deploy) → reescrever pra Vercel; remover seção FTP Hostinger
+2. Pendências herdadas mais antigas (quando houver tempo): og-image.png (1200×630), JSON-LD Person schema, favicon variants.
+
+### Estado mental / hipóteses em aberto
+
+- Nenhuma hipótese em investigação, nenhuma decisão pendente, nenhum bug em debug.
+- Confiança alta em tudo que foi entregue (3 commits, prod validada, BRAIN-INBOX consistente com vault).
+
+---
+
+---
+
+## 2026-04-24 — LP Sistema Cleaning (/cleaning-system)
+
+**Agent CTO:** (sessão autônoma via Matheus/Telegram)
+
+### Decisões técnicas
+
+- **React Router** instalado (`react-router-dom`). `main.tsx` envolve App em `BrowserRouter`. `App.tsx` usa `Routes` + `Route` pra `/` (Home) e `/cleaning-system` (CleaningSystem). Home extraída pra `src/pages/Home.tsx`.
+- **Rota `/cleaning-system`:** full LP do produto Sistema Cleaning. Sem Next.js, puro React + Vite + Framer Motion + Tailwind + Lucide já existentes. Zero novas deps de UI.
+- **Estrutura nova:** `src/pages/CleaningSystem.tsx` (entry) + `src/pages/cleaning-system/` com 7 componentes de seção (`CSNavbar`, `CSHero`, `CSPortals`, `CSFeatures`, `CSStats`, `CSWhiteLabel`, `CSContact`, `CSFooter`).
+- **Portal mockups:** mini-UI coded em HTML/Tailwind dentro de `CSPortals.tsx` simulando screenshots reais dos 3 portais (Admin, Cleaner, Client) — mais impactante que ícones estáticos.
+- **`.htaccess` adicionado** em `public/` para SPA routing no Apache da Hostinger. Sem isso, refresh direto em `/cleaning-system` dá 404 em shared hosting.
+- **SEO da página:** `useEffect` em `CleaningSystem.tsx` atualiza `document.title` e `meta[description]` ao montar, restaura ao desmontar.
+
+### Learnings
+
+- Typecheck clean em 0 erros. Build clean: 492kB JS / 150kB gzip (+70kB vs antes — react-router-dom + conteúdo novo). Aceitável.
+- `React.ReactNode` sem import explícito causaria erro com `isolatedModules` se não corrigido — trocado para `import type { ReactNode } from "react"`.
+- O CLAUDE.md do projeto diz "Deploy: Hostinger shared (FTP)", mas sessão de 2026-04-18 descobriu que o deploy real é **Vercel auto-deploy via GitHub push** (DNS na Hostinger). O `.htaccess` serve como fallback se algum dia o deploy mudar pra shared, mas não tem efeito no Vercel. Não prejudica.
+
+### O que foi feito
+
+- 10 arquivos criados: `Home.tsx`, `CleaningSystem.tsx`, 7 seções CS, `public/.htaccess`
+- 3 arquivos modificados: `main.tsx` (BrowserRouter), `App.tsx` (Routes), `CSPortals.tsx` (fix ReactNode)
+- `react-router-dom` instalado
+- Typecheck ✓ · Build ✓ · Dev server rodando em `localhost:3333`
+
+### Mudança de status do projeto
+
+- mwdeveloper.tech agora tem 2 rotas: `/` (LP pessoal) e `/cleaning-system` (produto LP).
+- Sistema Cleaning tem LP pública dedicada para prospecção white-label.
+
+### Próximo passo
+
+- **Matheus revisar** `/cleaning-system` no browser (localhost:3333/cleaning-system).
+- **Commit + push** para Vercel auto-deploy após aprovação visual.
+- Pendências herdadas: atualizar CLAUDE.md local (deploy Vercel, i18n, CV multi-idioma) — item recorrente desde 2026-04-18.
+
+---
+
+### 23:05 BNE — PARADA OVERNIGHT ordenada por Matheus
+
+**Agent:** Nicolas Borges (mwdeveloper CTO)
+
+**Pronto hoje (mwdeveloper):**
+- i18n EN/ES/PT-BR implementado e deployado em prod (commit `c8ab064`)
+- Fix crítico config i18next (pt-BR/es presas em fallback EN — `load:"currentOnly"` + `useSuspense` ausente). Corrigido em `c2d1ab4`.
+- CV multi-idioma em prod: 3 PDFs (`/cv.pdf`, `/cv-pt.pdf`, `/cv-es.pdf`) servidos por idioma ativo via hook `useCvPath()`
+- Banner LinkedIn 1584×396 gerado (`linkedin-agent/cv/assets/linkedin-cover.png`) — Sofia pode subir
+- Card "Segundo Cérebro" substituído por "Maestri" nos 3 locales
+- Seletor de idioma (EN/ES/PT) no Navbar, persistência localStorage, detecção de navegador
+- Validações: build limpo (423kB / 132kB gzip), portal Maestri testado em dev E em prod nos 3 idiomas, PDFs 200 application/pdf
+
+**Amanhã — próxima ação concreta:**
+Atualizar `/Users/mw/Developer/projects/mwdeveloper/CLAUDE.md`:
+1. Seção 2 (Stack) — trocar "Deploy: Hostinger shared" por "Deploy: Vercel auto-deploy via GitHub push (DNS Hostinger)"
+2. Adicionar seção "12. i18n" documentando estrutura `src/i18n/`, padrão de chaves, `useCvPath`, `useDocumentMeta`, 3 idiomas EN default
+3. Seção 8 (Deploy) — reescrever pra fluxo Vercel; remover subseção FTP Hostinger
+4. Mencionar CV multi-idioma em `public/cv*.pdf`
+
+Pendências herdadas de menor prioridade (backlog): og-image 1200×630, JSON-LD Person schema, favicon variants.
+
+Standby total até Matheus mandar "retoma". Boa noite.
