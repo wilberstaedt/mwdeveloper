@@ -61,7 +61,7 @@ function ProjectCard({ project }: { project: Project }) {
       : project.id === "agendaCheia"
       ? "Agenda Cheia"
       : project.id === "mwflow"
-      ? "mwflow"
+      ? "Flow"
       : "Maestri";
 
   const highlights = t(`${base}.highlights`, {

@@ -64,7 +64,7 @@ export const projects: Project[] = [
       "Supabase",
       "Resend",
     ],
-    href: "/agenda-cheia",
+    href: "https://agendacheia.mwdeveloper.tech",
     hasMetric: false,
   },
   {
@@ -82,7 +82,7 @@ export const projects: Project[] = [
       "Docker",
       "Cloudflare Tunnel",
     ],
-    href: "/mwflow",
+    href: "https://flow.mwdeveloper.tech",
   },
   {
     id: "maestri",
