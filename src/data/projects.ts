@@ -1,6 +1,6 @@
 export type ProjectStatus = "live" | "in-development" | "personal" | "planning";
 
-export type ProjectId = "sistemaCleaning" | "fourhub" | "maestri";
+export type ProjectId = "sistemaCleaning" | "fourhub" | "agendaCheia" | "mwflow" | "maestri";
 
 export interface Project {
   id: ProjectId;
@@ -49,6 +49,40 @@ export const projects: Project[] = [
     ],
     href: "https://fourhub.com.br",
     hasMetric: true,
+  },
+  {
+    id: "agendaCheia",
+    status: "live",
+    year: "2026",
+    stack: [
+      "React 19",
+      "Vite",
+      "TypeScript",
+      "Tailwind 4",
+      "shadcn/ui",
+      "Vercel Serverless",
+      "Supabase",
+      "Resend",
+    ],
+    href: "/agenda-cheia",
+    hasMetric: false,
+  },
+  {
+    id: "mwflow",
+    status: "personal",
+    year: "2026",
+    stack: [
+      "React 19",
+      "Vite",
+      "TypeScript",
+      "Tailwind",
+      "Express",
+      "Prisma",
+      "PostgreSQL",
+      "Docker",
+      "Cloudflare Tunnel",
+    ],
+    href: "/mwflow",
   },
   {
     id: "maestri",

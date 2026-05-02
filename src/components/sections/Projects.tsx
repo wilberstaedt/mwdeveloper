@@ -58,6 +58,10 @@ function ProjectCard({ project }: { project: Project }) {
       ? "Sistema Cleaning"
       : project.id === "fourhub"
       ? "FourHub"
+      : project.id === "agendaCheia"
+      ? "Agenda Cheia"
+      : project.id === "mwflow"
+      ? "mwflow"
       : "Maestri";
 
   const highlights = t(`${base}.highlights`, {

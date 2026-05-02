@@ -22,10 +22,22 @@
     "ctaEmail": "ou email",
     "ctaCV": "Baixar CV",
     "stats": {
-      "years": { "value": "5+ anos", "label": "desenvolvendo" },
-      "products": { "value": "2 produtos", "label": "em produção" },
-      "remote": { "value": "100% remoto", "label": "fuso flexível" },
-      "solo": { "value": "Solo", "label": "a entrega é minha" }
+      "years": {
+        "value": "5+ anos",
+        "label": "desenvolvendo"
+      },
+      "products": {
+        "value": "2 produtos",
+        "label": "em produção"
+      },
+      "remote": {
+        "value": "100% remoto",
+        "label": "fuso flexível"
+      },
+      "solo": {
+        "value": "Solo",
+        "label": "a entrega é minha"
+      }
     }
   },
   "services": {
@@ -87,6 +99,30 @@
         "metricLabel": "Mercado alvo",
         "metricValue": "Santa Catarina · BR"
       },
+      "agendaCheia": {
+        "tagline": "Captação de leads pra clínicas de estética via Google Ads.",
+        "description": "Plataforma multi-tenant que entrega landing de alta conversão + gestão de Google Ads + dashboard de leads. Foco em harmonização facial em cidades médias.",
+        "statusLabel": "Live · Aceitando clientes",
+        "role": "Operação comercial própria · Time de 4",
+        "highlights": [
+          "Landing personalizada por clínica em <slug>.agendacheia",
+          "Form → Supabase → email Resend → conversão Google Ads → WhatsApp",
+          "Multi-tenant com config_json por cliente, dashboard semanal automático",
+          "Pacote setup + mensalidade · Ticket-alvo R$2.000-5.000/mês"
+        ]
+      },
+      "mwflow": {
+        "tagline": "Finanças pessoais multi-moeda do Matheus + Nathalia.",
+        "description": "Tracker pessoal pra gerenciar dinheiro entre BRL/AUD/EUR durante a mudança Brisbane → Valencia. Cotações ECB ao vivo, transferências entre carteiras com conversão automática, metas e itens de viagem linkados.",
+        "statusLabel": "Live · Uso pessoal",
+        "role": "Dev solo · Do schema ao deploy em 2 dias",
+        "highlights": [
+          "Multi-moeda real (BRL/AUD/EUR) com cotação ECB via Frankfurter",
+          "Transferências entre contas com conversão automática",
+          "Metas e itens de viagem linkados a transações (atualização atômica)",
+          "Back roda 24/7 no laptop Linux de casa via Cloudflare Tunnel"
+        ]
+      },
       "maestri": {
         "tagline": "Escritório virtual multi-agente com 12 agentes Claude.",
         "description": "Escritório virtual construído em cima do Claude Code: 2 CTOs + 10 funcionários especializados (frontend, backend, design, QA, LinkedIn agent e mais). Protocolo async baseado em arquivos, memória persistente, push via Telegram e um Segundo Cérebro em Obsidian conectando tudo.",
@@ -113,9 +149,21 @@
     "p3": "Não vendo hora. Vendo produto. Se o resultado não chega, o trabalho não acabou.",
     "quickFacts": "/ quick-facts",
     "facts": {
-      "location": { "label": "Agora / depois", "value": "Brisbane · AU → Valencia · ES", "meta": "jun 2026" },
-      "timezone": { "label": "Fuso atual", "value": "AEST · UTC+10", "meta": "flexível com AU, BR, EU" },
-      "mode": { "label": "Modo", "value": "Deep work · TDAH hyperfocus", "meta": "ship rápido" }
+      "location": {
+        "label": "Agora / depois",
+        "value": "Brisbane · AU → Valencia · ES",
+        "meta": "jun 2026"
+      },
+      "timezone": {
+        "label": "Fuso atual",
+        "value": "AEST · UTC+10",
+        "meta": "flexível com AU, BR, EU"
+      },
+      "mode": {
+        "label": "Modo",
+        "value": "Deep work · TDAH hyperfocus",
+        "meta": "ship rápido"
+      }
     },
     "terminal": {
       "whoami": "matheus de azevedo wilberstaedt",
@@ -208,10 +256,22 @@
       "ctaWhiteLabel": "Falar sobre white-label",
       "ctaEmail": "ou email",
       "stats": {
-        "portals": { "value": "3 portais", "label": "admin · cleaner · cliente" },
-        "stable": { "value": "Estável", "label": "testado, sem surpresas" },
-        "live": { "value": "Live na AU", "label": "operando desde 2026" },
-        "support": { "value": "Suporte", "label": "direto — sem fila de ticket" }
+        "portals": {
+          "value": "3 portais",
+          "label": "admin · cleaner · cliente"
+        },
+        "stable": {
+          "value": "Estável",
+          "label": "testado, sem surpresas"
+        },
+        "live": {
+          "value": "Live na AU",
+          "label": "operando desde 2026"
+        },
+        "support": {
+          "value": "Suporte",
+          "label": "direto — sem fila de ticket"
+        }
       }
     },
     "portals": {
@@ -292,10 +352,26 @@
       "heading1": "Construído para rodar.",
       "heading2": "Não só pra parecer bem.",
       "numbers": [
-        { "value": "3", "label": "portais independentes", "sub": "admin · cleaner · cliente" },
-        { "value": "Estável", "label": "sistema em produção", "sub": "testado, sem surpresas" },
-        { "value": "Rápido", "label": "setup em dias", "sub": "não em semanas" },
-        { "value": "Live AU", "label": "operando desde 2026", "sub": "GlowArt · Brisbane" }
+        {
+          "value": "3",
+          "label": "portais independentes",
+          "sub": "admin · cleaner · cliente"
+        },
+        {
+          "value": "Estável",
+          "label": "sistema em produção",
+          "sub": "testado, sem surpresas"
+        },
+        {
+          "value": "Rápido",
+          "label": "setup em dias",
+          "sub": "não em semanas"
+        },
+        {
+          "value": "Live AU",
+          "label": "operando desde 2026",
+          "sub": "GlowArt · Brisbane"
+        }
       ],
       "stackLabel": "Stack técnica"
     },
