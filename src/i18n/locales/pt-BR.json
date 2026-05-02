@@ -112,8 +112,8 @@
         ]
       },
       "mwflow": {
-        "tagline": "Finanças pessoais multi-moeda do Matheus + Nathalia.",
-        "description": "Tracker pessoal pra gerenciar dinheiro entre BRL/AUD/EUR durante a mudança Brisbane → Valencia. Cotações ECB ao vivo, transferências entre carteiras com conversão automática, metas e itens de viagem linkados.",
+        "tagline": "Tracker pessoal multi-moeda em produção real.",
+        "description": "Aplicação de finanças pessoais multi-moeda (BRL/AUD/EUR) em uso diário. Cotações ECB ao vivo, transferências entre carteiras com conversão automática, metas e itens de viagem linkados a transações. Atualmente em teste fechado.",
         "statusLabel": "Live · Uso pessoal",
         "role": "Dev solo · Do schema ao deploy em 2 dias",
         "highlights": [

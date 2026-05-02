@@ -112,8 +112,8 @@
         ]
       },
       "mwflow": {
-        "tagline": "Tracker personal multi-moneda (Matheus y Nathalia).",
-        "description": "Tracker personal para gestionar BRL/AUD/EUR durante la mudanza Brisbane → Valencia. Tasas ECB en vivo, transferencias entre carteras con conversión automática, metas e ítems de viaje vinculados a transacciones.",
+        "tagline": "Tracker personal multi-moneda en uso real.",
+        "description": "App de finanzas personales multi-moneda (BRL/AUD/EUR) en uso diario. Tasas ECB en vivo, transferencias entre carteras con conversión automática, metas e ítems de viaje vinculados a transacciones. Actualmente en beta cerrada.",
         "statusLabel": "Live · Uso personal",
         "role": "Dev solo · Del esquema al deploy en 2 días",
         "highlights": [

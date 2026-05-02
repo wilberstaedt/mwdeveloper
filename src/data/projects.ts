@@ -82,7 +82,7 @@ export const projects: Project[] = [
       "Docker",
       "Cloudflare Tunnel",
     ],
-    href: "https://flow.mwdeveloper.tech",
+    href: "/flow",
   },
   {
     id: "maestri",

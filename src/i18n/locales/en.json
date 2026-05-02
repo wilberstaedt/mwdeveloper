@@ -112,8 +112,8 @@
         ]
       },
       "mwflow": {
-        "tagline": "Personal multi-currency finance tracker (Matheus & Nathalia).",
-        "description": "Personal tracker for managing BRL/AUD/EUR during the Brisbane → Valencia move. Live ECB rates, cross-account transfers with auto FX, goals and trip items linked to transactions.",
+        "tagline": "Personal multi-currency finance tracker in real production use.",
+        "description": "Personal finance app for managing BRL/AUD/EUR in daily use. Live ECB rates, cross-account transfers with auto FX, goals and trip items linked to transactions. Currently in closed beta.",
         "statusLabel": "Live · Personal use",
         "role": "Solo dev · Schema to deploy in 2 days",
         "highlights": [
