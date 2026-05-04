@@ -30,21 +30,24 @@ export function Process() {
 
         <ol className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {steps.map((step, i) => (
-            <Reveal key={step.no} delay={i * 0.08}>
-              <li className="group relative flex h-full flex-col rounded-[var(--radius-card-sm)] border bg-[color:var(--color-card)] p-6 transition-all hover:-translate-y-1 hover:bg-[color:var(--color-card-hover)]">
-                <div className="flex items-center justify-between">
-                  <span className="mono text-xs font-semibold tracking-[0.22em] text-[color:var(--color-cyan)]">
-                    {step.no}
-                  </span>
-                  <span className="h-px w-10 bg-gradient-to-r from-[color:var(--color-blue)]/40 to-transparent" />
-                </div>
-                <h3 className="mt-6 text-lg font-medium text-[color:var(--color-text-bright)]">
-                  {t(`process.steps.${step.id}.title`)}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-[color:var(--color-text)]">
-                  {t(`process.steps.${step.id}.description`)}
-                </p>
-              </li>
+            <Reveal
+              as="li"
+              key={step.no}
+              delay={i * 0.08}
+              className="group relative flex h-full flex-col rounded-[var(--radius-card-sm)] border bg-[color:var(--color-card)] p-6 transition-all hover:-translate-y-1 hover:bg-[color:var(--color-card-hover)]"
+            >
+              <div className="flex items-center justify-between">
+                <span className="mono text-xs font-semibold tracking-[0.22em] text-[color:var(--color-cyan)]">
+                  {step.no}
+                </span>
+                <span className="h-px w-10 bg-gradient-to-r from-[color:var(--color-blue)]/40 to-transparent" />
+              </div>
+              <h3 className="mt-6 text-lg font-medium text-[color:var(--color-text-bright)]">
+                {t(`process.steps.${step.id}.title`)}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-[color:var(--color-text)]">
+                {t(`process.steps.${step.id}.description`)}
+              </p>
             </Reveal>
           ))}
         </ol>

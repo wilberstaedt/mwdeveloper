@@ -54,21 +54,25 @@ export function About() {
 
                 <dl className="mt-8 space-y-6">
                   {factKeys.map(({ id, icon: Icon }) => (
-                    <div key={id} className="flex items-start gap-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[color:var(--color-border-strong)] bg-white/[0.02]">
+                    <div
+                      key={id}
+                      className="grid grid-cols-[40px_minmax(0,1fr)] items-start gap-x-4"
+                    >
+                      <div
+                        aria-hidden="true"
+                        className="row-span-3 flex h-10 w-10 items-center justify-center rounded-lg border border-[color:var(--color-border-strong)] bg-white/[0.02]"
+                      >
                         <Icon className="h-4 w-4 text-[color:var(--color-cyan)]" />
                       </div>
-                      <div className="min-w-0">
-                        <dt className="mono text-[10px] uppercase tracking-[0.22em] text-[color:var(--color-text-dim)]">
-                          {t(`about.facts.${id}.label`)}
-                        </dt>
-                        <dd className="mt-1 text-sm font-medium text-[color:var(--color-text-bright)]">
-                          {t(`about.facts.${id}.value`)}
-                        </dd>
-                        <dd className="mono text-[11px] text-[color:var(--color-text-dim)]">
-                          {t(`about.facts.${id}.meta`)}
-                        </dd>
-                      </div>
+                      <dt className="mono text-[10px] uppercase tracking-[0.22em] text-[color:var(--color-text-dim)]">
+                        {t(`about.facts.${id}.label`)}
+                      </dt>
+                      <dd className="mt-1 text-sm font-medium text-[color:var(--color-text-bright)]">
+                        {t(`about.facts.${id}.value`)}
+                      </dd>
+                      <dd className="mono text-[11px] text-[color:var(--color-text-dim)]">
+                        {t(`about.facts.${id}.meta`)}
+                      </dd>
                     </div>
                   ))}
                 </dl>

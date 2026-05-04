@@ -37,7 +37,7 @@ export function LanguageSwitcher() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-label={t("language.label")}
+        aria-label={`${t("language.label")}: ${labels[current]}`}
         aria-haspopup="listbox"
         aria-expanded={open}
         className="mono inline-flex items-center gap-1.5 rounded-full border border-[color:var(--color-border-strong)] bg-white/[0.02] px-3 py-1.5 text-[11px] uppercase tracking-[0.2em] text-[color:var(--color-text)] transition-all hover:border-[color:var(--color-cyan)] hover:text-[color:var(--color-text-bright)]"

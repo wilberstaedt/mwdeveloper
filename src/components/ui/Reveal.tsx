@@ -1,11 +1,13 @@
 import { motion, type Variants } from "framer-motion";
 import type { PropsWithChildren } from "react";
 
+type RevealAs = "div" | "section" | "article" | "header" | "footer" | "li";
+
 interface RevealProps {
   delay?: number;
   y?: number;
   className?: string;
-  as?: "div" | "section" | "article" | "header" | "footer";
+  as?: RevealAs;
 }
 
 const variants: Variants = {
@@ -18,9 +20,11 @@ export function Reveal({
   delay = 0,
   y = 24,
   className,
+  as = "div",
 }: PropsWithChildren<RevealProps>) {
+  const MotionTag = motion[as];
   return (
-    <motion.div
+    <MotionTag
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-80px" }}
@@ -30,6 +34,6 @@ export function Reveal({
       className={className}
     >
       {children}
-    </motion.div>
+    </MotionTag>
   );
 }

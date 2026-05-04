@@ -34,7 +34,6 @@ export function Navbar() {
         <a
           href="#top"
           className="flex items-center gap-3 transition-opacity hover:opacity-80"
-          aria-label={t("nav.home")}
         >
           <Logo size={32} />
           <span className="mono text-sm font-semibold tracking-[0.3em] text-[color:var(--color-text-bright)]">
