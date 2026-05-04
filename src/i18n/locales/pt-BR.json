@@ -4,15 +4,15 @@
     "openInNewTab": "abrir em nova aba"
   },
   "nav": {
-    "work": "Work",
-    "services": "Services",
-    "about": "About",
-    "contact": "Contact",
+    "work": "Trabalhos",
+    "services": "Serviços",
+    "about": "Sobre",
+    "contact": "Contato",
     "cv": "CV",
     "home": "MW Dev — início"
   },
   "hero": {
-    "badge": "Available · Brisbane → Valencia · Jun 2026",
+    "badge": "Disponível · Brisbane → Valencia · Jun 2026",
     "titleA": "Construo produtos",
     "titleB": "do primeiro commit",
     "titleC": "ao primeiro cliente.",
@@ -41,7 +41,7 @@
     }
   },
   "services": {
-    "eyebrow": "What I Do",
+    "eyebrow": "O que eu faço",
     "headingA": "O que eu entrego — produto",
     "headingB": "rodando",
     "headingC": ", não promessa.",
@@ -66,7 +66,7 @@
     }
   },
   "projects": {
-    "eyebrow": "Selected Work",
+    "eyebrow": "Trabalhos selecionados",
     "headingA": "Produtos que eu construí —",
     "headingB": "e mantenho",
     "intro": "Sistemas com clientes reais usando. Cada projeto aqui tem código meu do schema do banco ao CSS do botão.",
@@ -138,7 +138,7 @@
     }
   },
   "about": {
-    "eyebrow": "About",
+    "eyebrow": "Sobre",
     "headingA": "Dev solo há 5 anos.",
     "headingB": "Fundador",
     "headingC": "desde sempre.",
@@ -182,7 +182,7 @@
     }
   },
   "process": {
-    "eyebrow": "How I work",
+    "eyebrow": "Como eu trabalho",
     "headingA": "Processo curto.",
     "headingB": "Ship",
     "headingC": "rápido. Sem burocracia.",
