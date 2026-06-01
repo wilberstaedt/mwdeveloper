@@ -1,6 +1,13 @@
 export type ProjectStatus = "live" | "in-development" | "personal" | "planning";
 
-export type ProjectId = "sistemaCleaning" | "fourhub" | "agendaCheia" | "mwflow" | "maestri";
+export type ProjectId =
+  | "sistemaCleaning"
+  | "fourhub"
+  | "removalistSite"
+  | "mwflow"
+  | "maestri"
+  | "imagemEAcao"
+  | "jarvis";
 
 export interface Project {
   id: ProjectId;
@@ -51,21 +58,19 @@ export const projects: Project[] = [
     hasMetric: true,
   },
   {
-    id: "agendaCheia",
+    id: "removalistSite",
     status: "live",
     year: "2026",
     stack: [
-      "React 19",
+      "React 18",
       "Vite",
       "TypeScript",
-      "Tailwind 4",
-      "shadcn/ui",
-      "Vercel Serverless",
-      "Supabase",
-      "Resend",
+      "PHP",
+      "SendGrid",
+      "Apache",
+      "FTP deploy",
     ],
-    href: "https://agendacheia.mwdeveloper.tech",
-    hasMetric: false,
+    hasMetric: true,
   },
   {
     id: "mwflow",
@@ -89,5 +94,25 @@ export const projects: Project[] = [
     status: "personal",
     year: "2026",
     stack: ["Claude Code", "Node.js", "Obsidian", "Telegram Bot API"],
+  },
+  {
+    id: "imagemEAcao",
+    status: "personal",
+    year: "2026",
+    stack: ["React 19", "Vite", "TypeScript", "Express", "Prisma", "SQLite", "Playwright"],
+  },
+  {
+    id: "jarvis",
+    status: "personal",
+    year: "2026",
+    stack: [
+      "React 19",
+      "Vite",
+      "TypeScript",
+      "react-force-graph",
+      "Web Speech",
+      "WebAuthn",
+      "PWA",
+    ],
   },
 ];

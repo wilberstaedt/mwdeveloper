@@ -53,16 +53,16 @@ export function Projects() {
 function ProjectCard({ project }: { project: Project }) {
   const { t } = useTranslation();
   const base = `projects.items.${project.id}`;
-  const name =
-    project.id === "sistemaCleaning"
-      ? "Sistema Cleaning"
-      : project.id === "fourhub"
-      ? "FourHub"
-      : project.id === "agendaCheia"
-      ? "Agenda Cheia"
-      : project.id === "mwflow"
-      ? "Flow"
-      : "Maestri";
+  const nameMap: Record<typeof project.id, string> = {
+    sistemaCleaning: "Sistema Cleaning",
+    fourhub: "FourHub",
+    removalistSite: "Removalist Site",
+    mwflow: "Flow",
+    maestri: "Maestri",
+    imagemEAcao: "Imagem & Ação",
+    jarvis: "JARVIS",
+  };
+  const name = nameMap[project.id];
 
   const highlights = t(`${base}.highlights`, {
     returnObjects: true,

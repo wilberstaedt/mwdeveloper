@@ -59,6 +59,12 @@
         "title": "SaaS White-Label",
         "description": "Sistema de gestão pronto pra operar com a marca da sua empresa. Mesma base, sua identidade, sua operação."
       },
+      "portfolio": {
+        "title": "Sites Portfólio & Landing Pages",
+        "description": "Site bonito, rápido e com formulário de orçamento que funciona de verdade. Identidade visual própria, multi-idioma, deploy seu domínio. Entrega em 7 a 14 dias.",
+        "priceLabel": "A partir de",
+        "priceFrom": "R$ 1.500"
+      },
       "consulting": {
         "title": "Consultoria & Product Review",
         "description": "Audit técnico, decisões de arquitetura, desbloqueio de dev. Quando você precisa de um segundo par de olhos sério."
@@ -99,17 +105,19 @@
         "metricLabel": "Mercado alvo",
         "metricValue": "Santa Catarina · BR"
       },
-      "agendaCheia": {
-        "tagline": "Captação de leads pra clínicas de estética via Google Ads.",
-        "description": "Plataforma multi-tenant que entrega landing de alta conversão + gestão de Google Ads + dashboard de leads. Foco em harmonização facial em cidades médias.",
-        "statusLabel": "Live · Aceitando clientes",
-        "role": "Operação comercial própria · Time de 4",
+      "removalistSite": {
+        "tagline": "Site institucional pra empresa de mudanças em Brisbane.",
+        "description": "Migração completa de WordPress legado pra stack React moderna no mesmo hosting. Formulário multi-step com integração SendGrid + webhook pro CRM da agência parceira. Cutover atômico com 1 segundo de downtime.",
+        "statusLabel": "Live · Cliente AU",
+        "role": "Dev solo · Design + dev + deploy",
         "highlights": [
-          "Landing personalizada por clínica em <slug>.agendacheia",
-          "Form → Supabase → email Resend → conversão Google Ads → WhatsApp",
-          "Multi-tenant com config_json por cliente, dashboard semanal automático",
-          "Pacote setup + mensalidade · Ticket-alvo R$2.000-5.000/mês"
-        ]
+          "Stack: React 18 + Vite + PHP (form handler) no Apache do hosting compartilhado",
+          "2 emails automáticos por lead — notificação interna + auto-resposta",
+          "Templates HTML com identidade visual da marca + mobile-first",
+          "Migração com rollback em 30s via FTP rename"
+        ],
+        "metricLabel": "Cliente",
+        "metricValue": "Brisbane, Austrália"
       },
       "mwflow": {
         "tagline": "Tracker pessoal multi-moeda em produção real.",
@@ -133,6 +141,30 @@
           "Sofia — agente de LinkedIn aplicando a vagas em automático",
           "Bot de Telegram com arquitetura file-based pra push",
           "Segundo Cérebro em Obsidian com memória persistente entre sessões"
+        ]
+      },
+      "imagemEAcao": {
+        "tagline": "Party game multiplayer pra rodar com amigos no fim de semana.",
+        "description": "Jogo de mímica online estilo Imagem & Ação em React, com salas, times, cronômetro e turnos sincronizados em tempo quase real via polling. Side project — feito pra usar com a galera no churrasco, com suíte e2e cobrindo desktop + iPhone.",
+        "statusLabel": "Side project · Uso pessoal",
+        "role": "Solo · Concepção, dev, deploy e QA",
+        "highlights": [
+          "Lobby de salas, times com cores, dado de turno e revelação animada",
+          "Modo \"maluco\" com 12 desafios alternativos",
+          "PWA instalável + Web Audio + haptic feedback no mobile",
+          "24 specs Playwright cobrindo fluxo completo desktop + iPhone"
+        ]
+      },
+      "jarvis": {
+        "tagline": "Painel visual do meu próprio sistema de memória de IA.",
+        "description": "Interface 3D pra navegar pelo vault de notas conectadas (Obsidian), com chat paralelo conversando com qualquer um dos agentes do escritório virtual. Voz hands-free, captura rápida de decisões e PWA com Face ID. Side project — em uso diário.",
+        "statusLabel": "Side project · Uso pessoal",
+        "role": "Solo · Stack visual + auth + integração",
+        "highlights": [
+          "Grafo neural 3D do vault renderizado em WebGL (force-directed)",
+          "Multi-chat com 23 personas diferentes em threads paralelas",
+          "Voz Web Speech (TTS + STT) hands-free no celular",
+          "Login com Passkey / Face ID e PWA instalável"
         ]
       }
     }

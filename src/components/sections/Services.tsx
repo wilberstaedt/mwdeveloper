@@ -48,6 +48,17 @@ export function Services() {
                     {t(`services.items.${service.id}.description`)}
                   </p>
 
+                  {service.hasPrice && (
+                    <div className="mt-5 inline-flex items-center gap-2 rounded-lg border border-[color:var(--color-cyan)]/30 bg-[color:var(--color-cyan)]/[0.06] px-3 py-2">
+                      <span className="mono text-[10px] uppercase tracking-wider text-[color:var(--color-text-dim)]">
+                        {t(`services.items.${service.id}.priceLabel`)}
+                      </span>
+                      <span className="text-sm font-semibold text-[color:var(--color-cyan)]">
+                        {t(`services.items.${service.id}.priceFrom`)}
+                      </span>
+                    </div>
+                  )}
+
                   <div className="mt-6 flex flex-wrap gap-2">
                     {service.stack.map((tech) => (
                       <span

@@ -1,11 +1,13 @@
 import type { LucideIcon } from "lucide-react";
-import { Boxes, Smartphone, Layers, Compass } from "lucide-react";
+import { Boxes, Smartphone, Layers, Compass, Globe } from "lucide-react";
 
 export interface Service {
-  id: "saas" | "mobile" | "whiteLabel" | "consulting";
+  id: "saas" | "mobile" | "whiteLabel" | "consulting" | "portfolio";
   icon: LucideIcon;
   stack: string[];
   meta: string;
+  /** When true, render the priceFrom badge using i18n key services.items.<id>.priceFrom */
+  hasPrice?: boolean;
 }
 
 export const services: Service[] = [
@@ -28,9 +30,16 @@ export const services: Service[] = [
     meta: "03",
   },
   {
+    id: "portfolio",
+    icon: Globe,
+    stack: ["React", "Vite", "Tailwind", "i18n", "SendGrid"],
+    meta: "04",
+    hasPrice: true,
+  },
+  {
     id: "consulting",
     icon: Compass,
     stack: ["Audit", "Architecture", "Code review"],
-    meta: "04",
+    meta: "05",
   },
 ];

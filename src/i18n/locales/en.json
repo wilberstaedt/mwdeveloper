@@ -59,6 +59,12 @@
         "title": "White-Label SaaS",
         "description": "A management system ready to ship under your brand. Same core, your identity, your operation."
       },
+      "portfolio": {
+        "title": "Portfolio Sites & Landing Pages",
+        "description": "Fast, beautiful site with a quote form that actually works. Own visual identity, multi-language, deployed to your domain. Delivered in 7 to 14 days.",
+        "priceLabel": "From",
+        "priceFrom": "USD 699"
+      },
       "consulting": {
         "title": "Consulting & Product Review",
         "description": "Technical audit, architecture decisions, dev unblock. When you need a serious second pair of eyes."
@@ -99,17 +105,19 @@
         "metricLabel": "Target market",
         "metricValue": "Santa Catarina · BR"
       },
-      "agendaCheia": {
-        "tagline": "Lead capture platform for aesthetic clinics via Google Ads.",
-        "description": "Multi-tenant SaaS delivering high-conversion landing pages + Google Ads management + lead dashboards. Focused on facial harmonization in mid-sized Brazilian cities.",
-        "statusLabel": "Live · Onboarding clients",
-        "role": "Own commercial operation · Team of 4",
+      "removalistSite": {
+        "tagline": "Institutional website for a Brisbane removalist company.",
+        "description": "Full migration from legacy WordPress to a modern React stack on the same hosting. Multi-step form with SendGrid integration + webhook to the partner agency's CRM. Atomic cutover with 1 second of downtime.",
+        "statusLabel": "Live · AU client",
+        "role": "Solo dev · Design + dev + deploy",
         "highlights": [
-          "Per-clinic landing at <slug>.agendacheia",
-          "Form → Supabase → Resend email → Google Ads conversion → WhatsApp",
-          "Multi-tenant with per-client config_json, weekly auto-report",
-          "Setup + monthly fee model · Target ticket R$2k–5k/mo"
-        ]
+          "Stack: React 18 + Vite + PHP (form handler) on Apache shared hosting",
+          "Two automated emails per lead — internal notification + auto-reply",
+          "HTML templates with the brand's visual identity + mobile-first",
+          "Migration with 30s rollback via FTP rename"
+        ],
+        "metricLabel": "Customer",
+        "metricValue": "Brisbane, Australia"
       },
       "mwflow": {
         "tagline": "Personal multi-currency finance tracker in real production use.",
@@ -133,6 +141,30 @@
           "Sofia — LinkedIn agent applying to jobs automatically",
           "Telegram bot with file-based architecture for push",
           "Second Brain in Obsidian with persistent cross-session memory"
+        ]
+      },
+      "imagemEAcao": {
+        "tagline": "Multiplayer party game to play with friends on weekends.",
+        "description": "Online charades-style game in React with rooms, teams, timers and turn sync via near-real-time polling. Side project — built to play with friends, with an e2e suite covering desktop + iPhone.",
+        "statusLabel": "Side project · Personal use",
+        "role": "Solo · Concept, dev, deploy and QA",
+        "highlights": [
+          "Room lobby, teams with colors, turn dice and animated reveal",
+          "\"Crazy\" mode with 12 alternative challenges",
+          "Installable PWA + Web Audio + haptic feedback on mobile",
+          "24 Playwright specs covering full flow on desktop + iPhone"
+        ]
+      },
+      "jarvis": {
+        "tagline": "Visual panel for my own AI memory system.",
+        "description": "3D interface to navigate my connected notes vault (Obsidian), with parallel chat to talk to any agent from the virtual office. Hands-free voice, quick decision capture and PWA with Face ID. Side project — used daily.",
+        "statusLabel": "Side project · Personal use",
+        "role": "Solo · Visual stack + auth + integration",
+        "highlights": [
+          "3D neural graph of the vault rendered in WebGL (force-directed)",
+          "Multi-chat with 23 different personas in parallel threads",
+          "Hands-free Web Speech voice (TTS + STT) on mobile",
+          "Passkey / Face ID login and installable PWA"
         ]
       }
     }
