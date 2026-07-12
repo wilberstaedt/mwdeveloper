@@ -3,6 +3,9 @@
 @theme {
   --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Display layer (redesign 2026-07): Bricolage Grotesque carries the hero/heading
+     personality; body stays DM Sans for brand continuity. */
+  --font-display: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif;
 
   --color-void: #06060c;
   --color-card: #0c0c14;
@@ -22,6 +25,12 @@
 
   --color-success: #3fd97f;
   --color-success-glow: rgba(63, 217, 127, 0.3);
+
+  /* Warm human accent (redesign 2026-07): reserved for playful moments only —
+     terminal cursor, easter eggs, hand-note details. Rare by design (60-30-10). */
+  --color-ember: oklch(0.78 0.14 65);
+  --color-ember-dim: oklch(0.66 0.12 65);
+  --color-ember-glow: oklch(0.78 0.14 65 / 0.22);
 
   --radius-card: 1rem;
   --radius-card-sm: 0.75rem;
@@ -93,6 +102,32 @@
 @layer components {
   .mono {
     font-family: var(--font-mono);
+  }
+
+  /* Display type (redesign 2026-07): huge, tight, optical-sized. Fluid via clamp
+     on marketing sections only. Light-on-dark wants a touch more leading than
+     the 0.95 a light theme could take. */
+  .font-display {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+  }
+
+  .text-display-hero {
+    font-family: var(--font-display);
+    font-size: clamp(2.75rem, 9.5vw, 7.5rem);
+    line-height: 1.02;
+    font-weight: 750;
+    letter-spacing: -0.025em;
+    color: var(--color-cloud);
+  }
+
+  .text-display-section {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    line-height: 1.08;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-text-bright);
   }
 
   .text-eyebrow {
