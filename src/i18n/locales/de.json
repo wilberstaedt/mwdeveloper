@@ -1,0 +1,227 @@
+{
+  "nav": {
+    "cv": "Lebenslauf"
+  },
+  "common": {
+    "available": "Verfügbar"
+  },
+  "language": {
+    "label": "Sprache",
+    "en": "English",
+    "es": "Español",
+    "pt-BR": "Português",
+    "fr": "Français",
+    "de": "Deutsch"
+  },
+  "p": {
+    "nav": {
+      "work": "Projekte",
+      "experience": "Erfahrung",
+      "about": "Über mich",
+      "contact": "Kontakt",
+      "cv": "Lebenslauf"
+    },
+    "hero": {
+      "eyebrow": "Full-Stack Engineer · Node.js · React · TypeScript · AWS",
+      "open": "Offen für Remote-Arbeit in der EU",
+      "authorized": "Arbeitserlaubnis für Spanien",
+      "clock": "{{time}} in Castellón, Spanien (CET)",
+      "clockSame": "dieselbe Zeitzone wie du",
+      "clockDiff_one": "{{count}} Stunde Unterschied zu dir",
+      "clockDiff_other": "{{count}} Stunden Unterschied zu dir",
+      "firstName": "Matheus",
+      "lastName": "Wilberstaedt",
+      "lead": "Ich bringe SaaS end-to-end in Produktion: von der Architektur bis zu zahlenden Kunden, beschleunigt durch KI-gestützte Entwicklung.",
+      "sub": "7+ Jahre Softwareentwicklung. Product Engineer, kein Dev, der nur eine Schicht des Stacks bedient.",
+      "ctaWork": "Projekte ansehen",
+      "ctaCv": "Lebenslauf herunterladen",
+      "terminalHint": "probier das Terminal",
+      "scroll": "scrollen"
+    },
+    "proof": {
+      "years": {
+        "value": "7+",
+        "label": "Jahre Softwareentwicklung"
+      },
+      "invoices": {
+        "value": "~160",
+        "label": "automatisierte Rechnungen pro Monat"
+      },
+      "users": {
+        "value": "~10k",
+        "label": "Mitglieder in einer von mir gebauten App"
+      },
+      "customers": {
+        "value": "2",
+        "label": "zahlende Produktkunden"
+      }
+    },
+    "work": {
+      "eyebrow": "Ausgewählte Projekte",
+      "title": "Echte Produkte, echte Nutzer, echte Zahlen",
+      "sub": "Alles hier ist in Produktion oder nachweislich ausgeliefert. Keine Mockups, keine Konzepte.",
+      "visit": "Live-Site ansehen",
+      "problemLabel": "Das Problem",
+      "builtLabel": "Was ich gebaut habe",
+      "outcomeLabel": "Ergebnis",
+      "cases": {
+        "cleaning": {
+          "name": "Sistema Cleaning",
+          "tag": "Founder-Produkt · SaaS in Produktion",
+          "problem": "Eine Reinigungsfirma in Brisbane verwaltete Aufträge, Personal und Rechnungen über Tabellen, WhatsApp und Papier.",
+          "built": "Ein mandantenfähiges White-Label-SaaS: Terminplanung, Personalverwaltung, zeitzonensichere wiederkehrende Abrechnung mit auditierbarer Invoice-State-Machine, rollenbasierte Zugriffskontrolle und Audit-Logs. Von mir allein konzipiert, gebaut, deployt und betrieben.",
+          "outcome": "Läuft 24/7 in Produktion mit einem zahlenden Kunden. Jeden Monat werden rund 160 Rechnungen für etwa 80 Stammkunden automatisch erstellt."
+        },
+        "pipeline": {
+          "name": "KI-Dokumenten-Pipeline",
+          "tag": "Senior-Rolle · Amazon Bedrock",
+          "problem": "Ein landesweites Reseller-Netzwerk musste für eine Marketingkampagne Tausende Einkaufsrechnungen automatisch auslesen und validieren.",
+          "built": "Ich habe den Aufbau einer Dokumentenverarbeitungs-Pipeline auf Basis von Amazon Bedrock und Node.js geleitet. Entstanden bei einem internen Hackathon, dann zu einem produktionsreifen Service gehärtet.",
+          "outcome": "Läuft bis heute in Produktion, Jahre später und über das Ende meines Vertrags hinaus. Diese Arbeit brachte mir nach etwa 3 Monaten die Beförderung zum Senior."
+        },
+        "moving": {
+          "name": "Plattform für ein Umzugsunternehmen",
+          "tag": "Kundenprojekt · Website + CRM",
+          "problem": "Ein australisches Umzugsunternehmen brauchte Ersatz für seine langsame WordPress-Seite und wollte seinen Angebotsprozess digitalisieren.",
+          "built": "Ein React-Rewrite der öffentlichen Website mit einem Produktions-Cutover von einer Sekunde und null Downtime, dazu ein maßgeschneidertes CRM für Angebote, Aufträge und Rechnungsstellung für den australischen Markt.",
+          "outcome": "Die Website läuft seit Juni 2026 in Produktion. Das CRM ist in aktiver Entwicklung. Der zweite zahlende Kunde meines Studios."
+        },
+        "fourhub": {
+          "name": "FourHub",
+          "tag": "Im Aufbau · Mobile Marketplace",
+          "problem": "Autobesitzer in Brasilien tun sich schwer, vertrauenswürdige Werkstätten für Teile und Service in ihrer Nähe zu finden.",
+          "built": "Ein mobiler Marketplace, der Autobesitzer mit verifizierten Werkstätten verbindet: Apps mit React Native und Expo, Node.js-Backend auf AWS, Push-Benachrichtigungen, Verhandlung direkt in der App.",
+          "outcome": "In Entwicklung, Launch für 2026 geplant. Gemeinsam mit drei Partnern gebaut."
+        },
+        "lumen": {
+          "name": "Lúmen",
+          "tag": "Persönlich · KI-Second-Brain",
+          "problem": "Mehrere Produkte solo zu betreiben heißt: Kontext ist die knappste Ressource.",
+          "built": "Mein KI-Operations-Partner: ein persistentes Second Brain mit Sprachsteuerung, einem Live-3D-Wissensgraphen und Multi-Agent-Chat, verdrahtet mit jedem Projekt, das ich betreibe.",
+          "outcome": "Es plant, reviewt und shippt täglich mit mir. Es hat beim Bau der Seite geholfen, die du gerade liest."
+        }
+      }
+    },
+    "experience": {
+      "eyebrow": "Erfahrung",
+      "title": "Sieben Jahre, drei Länder, ein roter Faden: shippen",
+      "presentLabel": "Heute",
+      "jobs": {
+        "mwdev": {
+          "role": "Founder & Full-Stack Engineer",
+          "company": "MW Developer",
+          "location": "Australien → Spanien · Remote",
+          "period": "Nov. 2025 – Heute",
+          "b1": "Aufbau und Betrieb eines mandantenfähigen White-Label-SaaS für Reinigungsfirmen: Engine für wiederkehrende Abrechnung (~160 Rechnungen/Monat), auditierbare Invoice-State-Machine, RBAC und Audit-Logging.",
+          "b2": "Betrieb der Produktion solo, 24/7, ohne dediziertes DevOps-Team: Docker, Caddy, VPS und AWS, Staging als Klon der Produktion, CI mit GitHub Actions.",
+          "b3": "Zwei zahlende Kunden mit voller Ownership vom ersten Commit bis zum Support, beschleunigt durch einen KI-gestützten Multi-Agent-Entwicklungsworkflow."
+        },
+        "essentia": {
+          "role": "Senior Full-Stack Engineer",
+          "company": "Essentia Group",
+          "location": "Brasilien · remote aus Australien",
+          "period": "Juni 2023 – März 2026",
+          "b1": "Leitung einer KI-Pipeline zum Auslesen von Rechnungen auf Amazon Bedrock, Node.js und AWS für ein landesweites Reseller-Netzwerk. Läuft bis heute in Produktion; etwa 3 Monate nach der Auslieferung zum Senior befördert.",
+          "b2": "Die Stack-Migration von Magento/PHP zu Node.js, React und TypeScript vorangetrieben, heute die Basis für alle neuen internen Produkte.",
+          "b3": "~18 Monate als einziger Remote-Entwickler bei 12 Stunden Zeitverschiebung gearbeitet, komplett asynchron."
+        },
+        "zaztech": {
+          "role": "Software Engineer · Praktikant → Mid-Level",
+          "company": "Zaztech",
+          "location": "Brasilien",
+          "period": "Juni 2022 – Juni 2023",
+          "b1": "Mehrere Zahlungsdienstleister in eine White-Label-Fintech- und Cashback-Plattform integriert.",
+          "b2": "Die offizielle App des Figueirense Futebol Clube ausgeliefert, live im App Store und bei Google Play mit ~10.000 aktiven Mitgliedern.",
+          "b3": "Zwei Beförderungen in einem Jahr: vom Praktikanten zum Mid-Level."
+        },
+        "indie": {
+          "role": "Selbstständiger Softwareentwickler",
+          "company": "In Eigenregie",
+          "location": "Brasilien",
+          "period": "2019 – Juni 2022",
+          "b1": "Das Verwaltungssystem für die Keksfabrik meiner Familie gebaut: Lagerbestand und Finanzen, PHP und MySQL, jahrelang im täglichen Einsatz.",
+          "b2": "Intensives Full-Stack-Training (Rocketseat): Node.js, React, REST-APIs. Mein erstes echtes System lief in Produktion, bevor ich meinen ersten Job in der Branche hatte."
+        }
+      }
+    },
+    "skills": {
+      "eyebrow": "Skills",
+      "title": "Die Toolbox",
+      "sub": "Hinter jedem Skill hier steht etwas, das weiter oben ausgeliefert wurde.",
+      "groups": {
+        "core": "Core",
+        "backend": "Backend & Daten",
+        "frontend": "Frontend & Mobile",
+        "infra": "Infra & Ops",
+        "human": "Menschliches"
+      },
+      "humanSkills": {
+        "ownership": "End-to-End-Ownership",
+        "async": "Asynchrone Remote-Zusammenarbeit (12h Zeitverschiebung überlebt)",
+        "product": "Produktdenken",
+        "langs": "PT Muttersprache · EN fließend · ES gute Kenntnisse"
+      }
+    },
+    "about": {
+      "eyebrow": "Über mich",
+      "title": "Von der Keksfabrik zu SaaS in Produktion",
+      "p1": "Mein erstes Produktionssystem entstand nicht in einem Job. Es entstand in der Keksfabrik meiner Familie in Brasilien, die 2019 Software für Lager und Finanzen brauchte. Ich habe sie gebaut, sie lief jahrelang täglich, und ich war angefixt.",
+      "p2": "Seitdem: Fintech und eine Fußballverein-App mit ~10k Mitgliedern in Brasilien, Senior Engineer für einen landesweiten E-Commerce-Betrieb, 18 Monate als einziger Remote-Entwickler mit 12 Stunden Zeitverschiebung von Australien aus und eigene SaaS-Produkte mit zahlenden Kunden.",
+      "p3": "Heute lebe ich mit Arbeitserlaubnis in Oropesa del Mar, Spanien (CET), und suche ein Remote-Team in der EU, das einen Engineer gebrauchen kann, der end-to-end liefert. Ich arbeite transparent, messe, was ich baue, und sage klar, wenn etwas nicht meine Stärke ist: Gespür für Design hat bei mir Jahre gebraucht, Backend-Korrektheit kam zuerst.",
+      "factsTitle": "Auf einen Blick",
+      "facts": {
+        "location": {
+          "label": "Standort",
+          "value": "Oropesa del Mar, Spanien"
+        },
+        "timezone": {
+          "label": "Zeitzone",
+          "value": "CET (UTC+1)"
+        },
+        "workRights": {
+          "label": "Arbeitserlaubnis",
+          "value": "In Spanien arbeitsberechtigt"
+        },
+        "languages": {
+          "label": "Sprachen",
+          "value": "PT · EN · ES"
+        },
+        "journey": {
+          "label": "Stationen",
+          "value": "Brasilien → Australien → Spanien"
+        }
+      }
+    },
+    "contact": {
+      "eyebrow": "Kontakt",
+      "title": "Lass uns reden",
+      "sub": "Du stellst für ein Remote-Team in der EU ein? Ich antworte innerhalb eines Werktags, meist deutlich schneller.",
+      "email": "E-Mail schreiben",
+      "linkedin": "LinkedIn",
+      "github": "GitHub",
+      "cv": "Lebenslauf herunterladen",
+      "cvNote": "PDF · deckt sich mit allem auf dieser Seite",
+      "freelance": "Du stellst gerade nicht ein, hast aber etwas zu bauen? Ich übernehme ausgewählte Freelance-Projekte.",
+      "freelanceCta": "Angebot anfordern"
+    },
+    "footer": {
+      "built": "Von mir designt und gebaut, im Pairing mit meinem KI-Second-Brain.",
+      "source": "Diese Seite ist eine Arbeitsprobe: Schau dir das Terminal an, die Command Palette (Cmd+K) und den Sprachumschalter.",
+      "rights": "© {{year}} Matheus Wilberstaedt"
+    },
+    "terminal": {
+      "welcome": "interaktiv. tipp 'help' oder klick auf einen befehl.",
+      "help": "verfügbar: work · cv · contact · langs · uptime · joke · clear",
+      "uptime": "produkte in produktion: 4 · zahlende kunden: 2 · automatisierte rechnungen: ~160/monat · uptime: seit 2019",
+      "joke": "Ich hab prod schon mal aus einer Restaurantküche gefixt, mitten in meiner Nachtschicht. Der Pasta ist auch nichts passiert.",
+      "langs": "diese seite spricht EN, ES, PT, FR und DE. probier: lang fr",
+      "unknown": "befehl nicht gefunden. probier 'help'.",
+      "cvDone": "lebenslauf wird heruntergeladen...",
+      "langDone": "sprache gewechselt."
+    },
+    "meta": {
+      "title": "Matheus Wilberstaedt - Full-Stack Engineer (Node · React · TypeScript · AWS)",
+      "description": "Full-Stack Engineer mit 7+ Jahren Erfahrung darin, SaaS end-to-end in Produktion zu bringen: von der Architektur bis zu zahlenden Kunden. Ansässig in Spanien (CET), offen für Remote-Rollen in der EU."
+    }
+  }
+}

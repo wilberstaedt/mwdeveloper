@@ -5,6 +5,9 @@ const CV_BY_LANG: Record<SupportedLang, string> = {
   en: "/cv.pdf",
   es: "/cv-es.pdf",
   "pt-BR": "/cv-pt.pdf",
+  // No localized CV yet for fr/de — recruiters there read EN CVs fine.
+  fr: "/cv.pdf",
+  de: "/cv.pdf",
 };
 
 export function useCvPath(): string {
