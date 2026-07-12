@@ -267,7 +267,9 @@
     "label": "Language",
     "en": "English",
     "es": "Español",
-    "pt-BR": "Português"
+    "pt-BR": "Português",
+    "fr": "Français",
+    "de": "Deutsch"
   },
   "cleaning": {
     "nav": {
@@ -590,10 +592,22 @@
       "scroll": "scroll"
     },
     "proof": {
-      "years": { "value": "7+", "label": "years building software" },
-      "invoices": { "value": "~160", "label": "invoices automated monthly" },
-      "users": { "value": "~10k", "label": "members on an app I built" },
-      "customers": { "value": "2", "label": "paying product customers" }
+      "years": {
+        "value": "7+",
+        "label": "years building software"
+      },
+      "invoices": {
+        "value": "~160",
+        "label": "invoices automated monthly"
+      },
+      "users": {
+        "value": "~10k",
+        "label": "members on an app I built"
+      },
+      "customers": {
+        "value": "2",
+        "label": "paying product customers"
+      }
     },
     "work": {
       "eyebrow": "Selected work",
@@ -709,11 +723,26 @@
       "p3": "Now based in Oropesa del Mar, Spain (CET), authorized to work, and looking for a remote EU team where an engineer who ships end-to-end is useful. I work in the open, measure what I build, and say so when something is not my strength: design taste took me years, backend correctness came first.",
       "factsTitle": "Quick facts",
       "facts": {
-        "location": { "label": "Location", "value": "Oropesa del Mar, Spain" },
-        "timezone": { "label": "Timezone", "value": "CET (UTC+1)" },
-        "workRights": { "label": "Work rights", "value": "Authorized to work in Spain" },
-        "languages": { "label": "Languages", "value": "PT · EN · ES" },
-        "journey": { "label": "Journey", "value": "Brazil → Australia → Spain" }
+        "location": {
+          "label": "Location",
+          "value": "Oropesa del Mar, Spain"
+        },
+        "timezone": {
+          "label": "Timezone",
+          "value": "CET (UTC+1)"
+        },
+        "workRights": {
+          "label": "Work rights",
+          "value": "Authorized to work in Spain"
+        },
+        "languages": {
+          "label": "Languages",
+          "value": "PT · EN · ES"
+        },
+        "journey": {
+          "label": "Journey",
+          "value": "Brazil → Australia → Spain"
+        }
       }
     },
     "contact": {
@@ -744,7 +773,7 @@
       "langDone": "language switched."
     },
     "meta": {
-      "title": "Matheus Wilberstaedt — Full-Stack Engineer (Node · React · TypeScript · AWS)",
+      "title": "Matheus Wilberstaedt - Full-Stack Engineer (Node · React · TypeScript · AWS)",
       "description": "Full-stack engineer with 7+ years shipping production SaaS end-to-end: architecture to paying customers. Based in Spain (CET), open to EU remote roles."
     }
   }

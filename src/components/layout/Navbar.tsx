@@ -7,7 +7,7 @@ import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { useCvPath } from "@/i18n/useCvPath";
 import { cn } from "@/lib/utils";
 
-const navKeys = ["work", "services", "about", "contact"] as const;
+const navKeys = ["work", "experience", "about", "contact"] as const;
 
 export function Navbar() {
   const { t } = useTranslation();
@@ -45,10 +45,10 @@ export function Navbar() {
           {navKeys.map((k) => (
             <a
               key={k}
-              href={`#${k === "work" ? "work" : k}`}
+              href={`#${k}`}
               className="mono text-xs uppercase tracking-[0.2em] text-[color:var(--color-text)] transition-colors hover:text-[color:var(--color-text-bright)]"
             >
-              {t(`nav.${k}`)}
+              {t(`p.nav.${k}`)}
             </a>
           ))}
           <a
@@ -63,6 +63,17 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-3">
+          {/* TODO-i18n: palette trigger label (EN-only, like the palette chrome). */}
+          <button
+            type="button"
+            aria-label="Open command palette"
+            onClick={() =>
+              window.dispatchEvent(new CustomEvent("mw:open-palette"))
+            }
+            className="mono hidden items-center gap-1 rounded-full border border-[color:var(--color-border-strong)] bg-white/[0.02] px-3 py-1.5 text-[11px] tracking-[0.1em] text-[color:var(--color-text-dim)] transition-all hover:border-[color:var(--color-cyan)] hover:text-[color:var(--color-text-bright)] md:inline-flex"
+          >
+            ⌘K
+          </button>
           <LanguageSwitcher />
           <div className="hidden md:block">
             <Badge variant="success" pulse>

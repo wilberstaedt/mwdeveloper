@@ -8,6 +8,8 @@ const labels: Record<(typeof SUPPORTED_LANGS)[number], string> = {
   en: "EN",
   es: "ES",
   "pt-BR": "PT",
+  fr: "FR",
+  de: "DE",
 };
 
 export function LanguageSwitcher() {
