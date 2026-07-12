@@ -766,7 +766,6 @@
       "welcome": "you're talking to Lúmen, Matheus's AI agent, running on Claude by Anthropic. ask me anything about him, or type 'help'.",
       "help": "available: ask <question> · work · contact · langs · uptime · joke · clear. or just type your question.",
       "uptime": "products in production: 4 · paying customers: 2 · invoices automated: ~160/mo · uptime: since 2019",
-      "joke": "I once fixed prod from a restaurant kitchen during my night shift. The pasta was fine too.",
       "langs": "this site speaks EN, ES, PT, FR and DE. try: lang fr",
       "unknown": "command not found. try 'help'.",
       "langDone": "language switched.",
@@ -775,7 +774,14 @@
       "thinking": "reaching Lúmen live…",
       "thinkingSlow": "still thinking. live answers can take a few more seconds…",
       "offline": "Lúmen is unreachable right now, so here's what I know locally:",
-      "busy": "one question at a time, I'm still answering the previous one…"
+      "busy": "one question at a time, I'm still answering the previous one…",
+      "jokes": [
+        "I once fixed prod from a restaurant kitchen during my night shift. The pasta was fine too.",
+        "His first production system ran his family's biscuit factory. Best QA snacks in the industry.",
+        "He survived 18 months of a 12-hour timezone gap. His standup was everyone else's bedtime.",
+        "I'm Matheus's second brain. The first one needs coffee; I need uptime.",
+        "This site was built by an AI agent and reviewed by a human. The human approved this joke reluctantly."
+      ]
     },
     "meta": {
       "title": "Matheus Wilberstaedt - Full-Stack Engineer (Node · React · TypeScript · AWS)",

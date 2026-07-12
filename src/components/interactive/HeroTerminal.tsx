@@ -105,6 +105,7 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
   const logRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const mirrorRef = useRef<HTMLDivElement>(null);
+  const lastJokeRef = useRef<number>(-1);
 
   const markTyping = () => {
     setTyping(true);
@@ -324,9 +325,21 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
       case "uptime":
         append("output", t("p.terminal.uptime"));
         break;
-      case "joke":
-        append("output", t("p.terminal.joke"));
+      case "joke": {
+        // Rotating pool, never the same joke twice in a row.
+        const jokes = t("p.terminal.jokes", { returnObjects: true });
+        if (Array.isArray(jokes) && jokes.length > 0) {
+          let idx = Math.floor(Math.random() * jokes.length);
+          if (idx === lastJokeRef.current && jokes.length > 1) {
+            idx = (idx + 1) % jokes.length;
+          }
+          lastJokeRef.current = idx;
+          append("output", String(jokes[idx]));
+        } else {
+          append("output", t("p.terminal.unknown"));
+        }
         break;
+      }
       case "langs":
         append("output", t("p.terminal.langs"));
         break;

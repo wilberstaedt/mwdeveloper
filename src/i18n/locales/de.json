@@ -213,7 +213,6 @@
       "welcome": "du sprichst mit Lúmen, Matheus' KI-Agent, läuft auf Claude von Anthropic. frag mich alles über ihn oder tipp 'help'.",
       "help": "verfügbar: ask <frage> · work · contact · langs · uptime · joke · clear. oder tipp einfach deine frage.",
       "uptime": "produkte in produktion: 4 · zahlende kunden: 2 · automatisierte rechnungen: ~160/monat · uptime: seit 2019",
-      "joke": "Ich hab prod schon mal aus einer Restaurantküche gefixt, mitten in meiner Nachtschicht. Der Pasta ist auch nichts passiert.",
       "langs": "diese seite spricht EN, ES, PT, FR und DE. probier: lang fr",
       "unknown": "befehl nicht gefunden. probier 'help'.",
       "langDone": "sprache gewechselt.",
@@ -222,7 +221,14 @@
       "thinking": "verbinde live mit Lúmen…",
       "thinkingSlow": "denke noch nach. live-antworten können ein paar sekunden dauern…",
       "offline": "Lúmen ist gerade nicht erreichbar, hier ist, was ich lokal weiß:",
-      "busy": "eine frage nach der anderen, ich beantworte noch die vorherige…"
+      "busy": "eine frage nach der anderen, ich beantworte noch die vorherige…",
+      "jokes": [
+        "er hat mal die produktion aus einer restaurantküche repariert, mitten in der nachtschicht. die pasta wurde trotzdem gut.",
+        "sein erstes produktivsystem lief für die keksfabrik seiner familie. bestes QA-gebäck der branche.",
+        "er hat 18 monate mit 12 stunden zeitverschiebung zum team überlebt. sein daily war die schlafenszeit der anderen.",
+        "ich bin Matheus' zweites gehirn. das erste braucht kaffee; ich brauche uptime.",
+        "diese seite hat ein KI-agent gebaut und ein mensch reviewt. der mensch hat diesen witz nur widerwillig freigegeben."
+      ]
     },
     "meta": {
       "title": "Matheus Wilberstaedt - Full-Stack Engineer (Node · React · TypeScript · AWS)",

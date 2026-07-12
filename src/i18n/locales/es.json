@@ -766,7 +766,6 @@
       "welcome": "estás hablando con Lúmen, el agente de IA de Matheus, funcionando con Claude, de Anthropic. pregúntame lo que quieras sobre él o escribe 'help'.",
       "help": "disponibles: ask <pregunta> · work · contact · langs · uptime · joke · clear. o simplemente escribe tu pregunta.",
       "uptime": "productos en producción: 4 · clientes de pago: 2 · facturas automatizadas: ~160/mes · uptime: desde 2019",
-      "joke": "una vez arreglé prod desde la cocina de un restaurante durante mi turno de noche. la pasta también salió bien.",
       "langs": "esta web habla EN, ES, PT, FR y DE. prueba: lang fr",
       "unknown": "comando no encontrado. prueba 'help'.",
       "langDone": "idioma cambiado.",
@@ -775,7 +774,14 @@
       "thinking": "contactando con Lúmen en vivo…",
       "thinkingSlow": "sigo pensando. las respuestas en vivo pueden tardar unos segundos…",
       "offline": "Lúmen no está disponible ahora mismo, así que esto es lo que sé localmente:",
-      "busy": "una pregunta a la vez, todavía estoy respondiendo la anterior…"
+      "busy": "una pregunta a la vez, todavía estoy respondiendo la anterior…",
+      "jokes": [
+        "una vez arregló producción desde la cocina de un restaurante, en pleno turno de noche. la pasta también salió bien.",
+        "su primer sistema de producción gestionaba la fábrica de galletas de su familia. el mejor QA de la industria: comestible.",
+        "sobrevivió 18 meses con 12 horas de diferencia horaria con el resto del equipo. su daily era la hora de dormir de los demás.",
+        "soy el segundo cerebro de Matheus. el primero necesita café; yo necesito uptime.",
+        "este sitio lo construyó un agente de IA y lo revisó un humano. el humano aprobó este chiste con reservas."
+      ]
     },
     "meta": {
       "title": "Matheus Wilberstaedt - Ingeniero Full-Stack (Node · React · TypeScript · AWS)",

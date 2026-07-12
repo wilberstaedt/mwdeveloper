@@ -57,3 +57,26 @@
 
 ### Próximo passo
 - CVs fr/de (hoje caem no EN), chrome do palette/terminal i18n (TODO-i18n), tuning do ask ("years of experience" retorna fato subótimo), sitemap/404/JSON-LD do brief, CLAUDE.md do repo reescrever
+
+---
+
+## [2026-07-13] — Terminal Lúmen AO VIVO + ask multilíngue + polish final EM PROD
+
+### Decisões técnicas
+- Terminal virou canal REAL com o Lúmen em 3 camadas: comandos locais → corpus semântico in-browser (multilíngue, 40 fatos, hallucination-proof) → ponte viva chat.mwdeveloper.tech (tunnel Cloudflare → Mac, worker claude -p Haiku com corpus fechado, ~5-20s)
+- Cold-start ponte-primeiro: 1ª pergunta não espera o modelo de 50MB baixar; modelo esquenta em bg pras próximas
+- Filtragem em 5 camadas antes de gastar token (CORS, validação, rate limit 6/h-sessão 12/h-IP 150/dia, heurística de abuso com deflexão canned, worker sem tools anti-injection). Doc completa: docs/lumen-terminal.md
+- Caret: posicionamento por N×1ch em contexto sans causava drift; espelho de texto real (caret no fluxo) torna drift impossível
+- CV REMOVIDO do site inteiro a pedido do Matheus (hero, navbar, contact, palette, terminal)
+
+### Learnings
+- Modelo multilíngue (paraphrase-multilingual-MiniLM-L12-v2) casa pergunta PT/ES/FR/DE com vetores EN direto; scores rodam mais baixos que o modelo EN-only (recalibrar thresholds) e paráfrases-pergunta embedadas por fato resolvem os misses (13/13 na suíte)
+- Worker Haiku embeleza levemente mesmo com regra; saneamento determinístico no servidor (strip em-dash, cap) > confiar no prompt
+
+### O que foi feito
+- facts.i18n.ts (40 fatos × 4 línguas via fan-out de agentes), detectAskLang, aliases de retrieval, spinner braille + typewriter + caret solid-while-typing, print novo do FourHub repaginado, lumen-web-bridge (repo privado wilberstaedt/lumen-web-bridge, launchd com.mw.lumen-web-bridge, porta 8790)
+- E2E em PROD: PT natural em 13s, fora-do-corpus honesto, abuso deflectido, caret 0px
+
+### Próximo passo
+- Acompanhar logs/conversations.md do bridge (perguntas reais de recrutadores viram candidatas a fatos novos no corpus)
+- Se o volume crescer: digest diário das conversas via cron

@@ -213,7 +213,6 @@
       "welcome": "vous parlez à Lúmen, l'agent IA de Matheus, propulsé par Claude, d'Anthropic. posez-moi vos questions sur lui ou tapez 'help'.",
       "help": "disponibles : ask <question> · work · contact · langs · uptime · joke · clear. ou tapez simplement votre question.",
       "uptime": "produits en production : 4 · clients payants : 2 · factures automatisées : ~160/mois · uptime : depuis 2019",
-      "joke": "J'ai déjà réparé la prod depuis la cuisine d'un restaurant pendant mon service du soir. Les pâtes aussi s'en sont bien sorties.",
       "langs": "ce site parle EN, ES, PT, FR et DE. essayez : lang fr",
       "unknown": "commande introuvable. essayez 'help'.",
       "langDone": "langue changée.",
@@ -222,7 +221,14 @@
       "thinking": "connexion à Lúmen en direct…",
       "thinkingSlow": "je réfléchis encore. les réponses en direct peuvent prendre quelques secondes…",
       "offline": "Lúmen est injoignable pour le moment, voici ce que je sais localement :",
-      "busy": "une question à la fois, je réponds encore à la précédente…"
+      "busy": "une question à la fois, je réponds encore à la précédente…",
+      "jokes": [
+        "un jour il a réparé la prod depuis la cuisine d'un restaurant, en plein service du soir. les pâtes étaient réussies aussi.",
+        "son premier système de production gérait la biscuiterie familiale. le meilleur QA du secteur : comestible.",
+        "il a survécu à 18 mois avec 12 heures de décalage avec le reste de l'équipe. son daily tombait à l'heure du coucher des autres.",
+        "je suis le second cerveau de Matheus. le premier a besoin de café ; moi, d'uptime.",
+        "ce site a été construit par un agent IA et relu par un humain. l'humain a validé cette blague avec réserve."
+      ]
     },
     "meta": {
       "title": "Matheus Wilberstaedt - Ingénieur Full-Stack (Node · React · TypeScript · AWS)",
