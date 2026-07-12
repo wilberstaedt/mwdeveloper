@@ -63,6 +63,9 @@ const LANG_MAP: Record<string, string> = {
 
 const CHIPS = ["ask", "help", "uptime", "joke"] as const;
 
+// Braille spinner, the real-CLI thinking indicator.
+const SPINNER = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"] as const;
+
 const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -93,16 +96,66 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
   const [histIdx, setHistIdx] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
+  // Real terminals hold the caret solid while you type and resume blinking
+  // when you pause — small detail, big "this is real" signal.
+  const [typing, setTyping] = useState(false);
+  const typingTimerRef = useRef<number>(0);
 
   const rootRef = useRef<HTMLDivElement>(null);
   const logRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const mirrorRef = useRef<HTMLDivElement>(null);
+
+  const markTyping = () => {
+    setTyping(true);
+    window.clearTimeout(typingTimerRef.current);
+    typingTimerRef.current = window.setTimeout(() => setTyping(false), 600);
+  };
 
   const append = (kind: Line["kind"], text: string) =>
     setLines((prev) => [...prev, { id: nextId(), kind, text }]);
 
   const replaceLine = (id: number, text: string) =>
     setLines((prev) => prev.map((l) => (l.id === id ? { ...l, text } : l)));
+
+  // ── answer streaming (typewriter) + thinking spinner ──
+  const spinnerRef = useRef<number | null>(null);
+  const stopSpinner = () => {
+    if (spinnerRef.current !== null) {
+      window.clearInterval(spinnerRef.current);
+      spinnerRef.current = null;
+    }
+  };
+  const startSpinner = (lineId: number, label: () => string) => {
+    stopSpinner();
+    if (prefersReducedMotion()) {
+      replaceLine(lineId, label());
+      return;
+    }
+    let frame = 0;
+    spinnerRef.current = window.setInterval(() => {
+      frame = (frame + 1) % SPINNER.length;
+      replaceLine(lineId, `${SPINNER[frame]} ${label()}`);
+    }, 90);
+  };
+
+  const typeOut = (lineId: number, text: string) =>
+    new Promise<void>((resolve) => {
+      stopSpinner();
+      if (prefersReducedMotion()) {
+        replaceLine(lineId, text);
+        resolve();
+        return;
+      }
+      let i = 0;
+      const step = () => {
+        i = Math.min(text.length, i + 2 + Math.floor(Math.random() * 2));
+        replaceLine(lineId, text.slice(0, i));
+        if (i < text.length) window.setTimeout(step, 12);
+        else resolve();
+      };
+      step();
+    });
 
   const goTo = (selector: string) => {
     document.querySelector(selector)?.scrollIntoView({
@@ -185,9 +238,19 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
       if (!mod) return null;
       return mod.askPortfolio(question, lang);
     };
-    const showLocal = (local: { answer: string; sources: string[] }) => {
-      replaceLine(pendingId, local.answer);
+    const showLocal = async (local: { answer: string; sources: string[] }) => {
+      await typeOut(pendingId, local.answer);
       if (local.sources.length > 0) append("output", `· ${local.sources.join(" · ")}`);
+    };
+    const askLive = async () => {
+      let slow = false;
+      startSpinner(pendingId, () =>
+        t(slow ? "p.terminal.thinkingSlow" : "p.terminal.thinking"),
+      );
+      const answer = await askBridge(question, lang, () => {
+        slow = true;
+      });
+      await typeOut(pendingId, answer);
     };
 
     try {
@@ -200,18 +263,17 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
           local = null;
         }
         if (local && local.confidence >= LOCAL_CONFIDENT) {
-          showLocal(local);
+          await showLocal(local);
         } else {
-          replaceLine(pendingId, t("p.terminal.thinking"));
           try {
-            const answer = await askBridge(question, lang, () =>
-              replaceLine(pendingId, t("p.terminal.thinkingSlow")),
-            );
-            replaceLine(pendingId, answer);
+            await askLive();
           } catch {
+            stopSpinner();
             if (local && local.confidence >= LOCAL_FLOOR) {
               replaceLine(pendingId, t("p.terminal.offline"));
-              append("output", local.answer);
+              const answerId = nextId();
+              setLines((prev) => [...prev, { id: answerId, kind: "output", text: "" }]);
+              await typeOut(answerId, local.answer);
             } else {
               replaceLine(pendingId, t("p.terminal.askFail"));
             }
@@ -220,16 +282,13 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
       } else {
         // Cold model: the live bridge answers in seconds while the model
         // downloads in the background for the next questions.
-        replaceLine(pendingId, t("p.terminal.thinking"));
         try {
-          const answer = await askBridge(question, lang, () =>
-            replaceLine(pendingId, t("p.terminal.thinkingSlow")),
-          );
-          replaceLine(pendingId, answer);
+          await askLive();
         } catch {
+          stopSpinner();
           try {
             const local = await answerLocal();
-            if (local && local.confidence >= LOCAL_FLOOR) showLocal(local);
+            if (local && local.confidence >= LOCAL_FLOOR) await showLocal(local);
             else replaceLine(pendingId, t("p.terminal.askFail"));
           } catch {
             replaceLine(pendingId, t("p.terminal.askFail"));
@@ -237,6 +296,7 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
         }
       }
     } finally {
+      stopSpinner();
       setBusy(false);
     }
   };
@@ -303,6 +363,22 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
     const log = logRef.current;
     if (log) log.scrollTop = log.scrollHeight;
   }, [lines]);
+
+  // Long input: keep the caret end of the mirror in view.
+  useEffect(() => {
+    const m = mirrorRef.current;
+    if (m) m.scrollLeft = m.scrollWidth;
+  }, [value]);
+
+  // Never leak the spinner interval or the typing timer.
+  useEffect(
+    () => () => {
+      stopSpinner();
+      window.clearTimeout(typingTimerRef.current);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   // Command palette → "open terminal". The hidden breakpoint twin no-ops
   // (focus/scroll on display:none elements do nothing).
@@ -435,6 +511,9 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
           $
         </span>
         <div className="relative min-w-0 flex-1">
+          {/* Invisible real input on top (focus, keys, IME); the visible text
+              + block caret live in a mirror BELOW it, so the caret sits in the
+              text flow itself — it can never drift from the last character. */}
           <input
             ref={inputRef}
             type="text"
@@ -443,6 +522,7 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
             onChange={(e) => {
               setValue(e.target.value);
               setHistIdx(null);
+              markTyping();
             }}
             onKeyDown={onKeyDown}
             aria-label="Ask Lúmen"
@@ -451,18 +531,23 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
             autoComplete="off"
             spellCheck={false}
             enterKeyHint="send"
-            className="mono w-full bg-transparent text-xs text-[color:var(--color-text-bright)] outline-none [caret-color:transparent]"
+            className="mono absolute inset-0 h-full w-full bg-transparent text-xs opacity-0 outline-none"
           />
-          {/* Block cursor sits after the last character (mono ⇒ 1ch per char);
-              the native caret is transparent so the block reads as the caret. */}
-          <span
+          <div
+            ref={mirrorRef}
             aria-hidden
-            className="pointer-events-none absolute top-1/2 h-[1.05rem] w-[1ch] -translate-y-1/2 bg-[color:var(--color-ember)]"
-            style={{
-              left: `${value.length}ch`,
-              animation: "mw-term-blink 1.1s step-end infinite",
-            }}
-          />
+            className="mono pointer-events-none flex min-h-[1.05rem] items-center overflow-hidden text-xs"
+          >
+            <span className="whitespace-pre text-[color:var(--color-text-bright)]">
+              {value}
+            </span>
+            <span
+              className="h-[1.05rem] w-[1ch] shrink-0 bg-[color:var(--color-ember)]"
+              style={{
+                animation: typing ? "none" : "mw-term-blink 1.1s step-end infinite",
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
