@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FileText } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { Badge } from "@/components/ui/Badge";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
-import { useCvPath } from "@/i18n/useCvPath";
 import { cn } from "@/lib/utils";
 
 const navKeys = ["work", "experience", "about", "contact"] as const;
 
 export function Navbar() {
   const { t } = useTranslation();
-  const cvPath = useCvPath();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -51,15 +48,6 @@ export function Navbar() {
               {t(`p.nav.${k}`)}
             </a>
           ))}
-          <a
-            href={cvPath}
-            target="_blank"
-            rel="noreferrer"
-            className="mono inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] text-[color:var(--color-cyan)] transition-colors hover:text-[color:var(--color-text-bright)]"
-          >
-            <FileText className="h-3 w-3" />
-            {t("nav.cv")}
-          </a>
         </nav>
 
         <div className="flex items-center gap-3">

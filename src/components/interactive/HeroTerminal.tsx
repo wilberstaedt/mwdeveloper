@@ -1,17 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useCvPath } from "@/i18n/useCvPath";
 
 /**
- * Hero terminal (redesign 2026-07): a REAL, usable mini-terminal — the site's
- * "the interactive details must work" principle made literal. Commands answer
- * from i18n (`p.terminal.*`), navigate the page, download the CV and switch
- * languages. No autofocus on load: focus only happens on explicit user intent
- * (click, chip, `mw:focus-terminal` event from the command palette).
+ * Lúmen terminal (redesign 2026-07, v2): the site's proof-of-craft is a REAL
+ * conversation with Matheus's AI agent. Three answer layers:
  *
- * Integration point for the future in-browser AI: if `src/lib/ask.ts` exists
- * and exports `askPortfolio(q)`, the `ask` command uses it (picked up via
- * import.meta.glob so the build stays green until that module lands).
+ *   1. Commands (help/work/contact/langs/uptime/joke/clear) — instant, local.
+ *   2. Confident semantic match — the in-browser embedding engine
+ *      (src/lib/ask) answers from the human-written fact corpus, in the
+ *      asker's language. Free, offline after first load, hallucination-proof.
+ *   3. Everything else escalates to the live bridge (chat.mwdeveloper.tech →
+ *      Matheus's machine), where a rate-limited Claude worker answers from
+ *      the same corpus in seconds. If the bridge is unreachable, we fall
+ *      back to the best weak local match instead of failing.
+ *
+ * Free text auto-routes to layer 2/3 — visitors never need `ask` syntax.
+ * No autofocus on load: focus only happens on explicit user intent.
  */
 
 type Line = { id: number; kind: "input" | "output"; text: string };
@@ -20,7 +24,7 @@ type AskModule = {
   askPortfolio: (
     q: string,
     siteLang?: string,
-  ) => Promise<{ answer: string; sources: string[] }>;
+  ) => Promise<{ answer: string; sources: string[]; confidence: number }>;
   preloadAsk?: () => Promise<void>;
 };
 
@@ -30,12 +34,21 @@ const askLoaders = import.meta.glob([
   "../../lib/ask/index.ts",
 ]) as Record<string, () => Promise<AskModule>>;
 
+const BRIDGE_URL = "https://chat.mwdeveloper.tech";
+// Above this the local corpus answers alone; below it we go live first.
+const LOCAL_CONFIDENT = 0.45;
+// Weak-but-usable local floor (mirrors MIN_CONFIDENCE in the ask engine).
+const LOCAL_FLOOR = 0.22;
+const POLL_MS = 2500;
+const POLL_BUDGET_MS = 75_000;
+const SLOW_HINT_AFTER_MS = 12_000;
+
 const KNOWN_COMMANDS = new Set([
-  "help", "work", "contact", "cv", "uptime", "joke", "langs", "lang", "clear", "ask",
+  "help", "work", "contact", "langs", "lang", "uptime", "joke", "clear", "ask",
 ]);
 
-// Free text that isn't a command is a question for `ask` — visitors shouldn't
-// need to learn the syntax for the terminal to feel functional.
+// Free text that isn't a command is a question for Lúmen — visitors
+// shouldn't need to learn syntax for the terminal to feel functional.
 const looksLikeQuestion = (cmd: string) =>
   cmd.includes(" ") || cmd.endsWith("?") || cmd.length > 14;
 
@@ -53,9 +66,22 @@ const CHIPS = ["ask", "help", "uptime", "joke"] as const;
 const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+function getSessionId(): string {
+  try {
+    const existing = window.localStorage.getItem("mw-lumen-sid");
+    if (existing && /^[a-z0-9]{16,32}$/.test(existing)) return existing;
+    const sid = Array.from(crypto.getRandomValues(new Uint8Array(12)))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+    window.localStorage.setItem("mw-lumen-sid", sid);
+    return sid;
+  } catch {
+    return `anon${Date.now().toString(16)}`;
+  }
+}
+
 export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean }) {
   const { t, i18n } = useTranslation();
-  const cvPath = useCvPath();
 
   const idRef = useRef(1);
   const nextId = () => idRef.current++;
@@ -66,14 +92,11 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
   const [value, setValue] = useState("");
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
   const [histIdx, setHistIdx] = useState<number | null>(null);
+  const [busy, setBusy] = useState(false);
 
   const rootRef = useRef<HTMLDivElement>(null);
   const logRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // cvPath changes with language; keep the latest for async handlers.
-  const cvPathRef = useRef(cvPath);
-  cvPathRef.current = cvPath;
 
   const append = (kind: Line["kind"], text: string) =>
     setLines((prev) => [...prev, { id: nextId(), kind, text }]);
@@ -87,51 +110,134 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
     });
   };
 
-  const downloadCv = () => {
-    const a = document.createElement("a");
-    a.href = cvPathRef.current;
-    a.download = "";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  };
-
-  // Warm the embedding model on first real intent (focus), so the first
-  // question answers fast instead of paying the model download.
+  // Warm the embedding model on first real intent (focus). `askWarmRef` only
+  // flips once model + index are fully ready — until then questions go
+  // bridge-first so a cold visitor never waits for a 50MB model download.
   const preloadedRef = useRef(false);
+  const askWarmRef = useRef(false);
+  const askModRef = useRef<AskModule | null>(null);
   const preloadAskModule = () => {
     if (preloadedRef.current) return;
     preloadedRef.current = true;
     const loader = Object.values(askLoaders)[0];
     void loader?.()
-      .then((mod) => mod.preloadAsk?.())
+      .then(async (mod) => {
+        askModRef.current = mod;
+        await mod.preloadAsk?.();
+        askWarmRef.current = true;
+      })
       .catch(() => {
         preloadedRef.current = false;
       });
   };
 
-  const handleAsk = async (question: string) => {
-    const loader = Object.values(askLoaders)[0];
-    if (!loader) {
-      append("output", t("p.terminal.askFail"));
-      return;
+  // ── live bridge (chat.mwdeveloper.tech → Lúmen on Matheus's machine) ──
+  const askBridge = async (
+    question: string,
+    lang: string,
+    onSlow: () => void,
+  ): Promise<string> => {
+    const post = await fetch(`${BRIDGE_URL}/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: question, sessionId: getSessionId(), lang }),
+    });
+    if (!post.ok && post.status !== 429) throw new Error(`bridge ${post.status}`);
+    const data = (await post.json()) as
+      | { status: "done"; answer: string }
+      | { status: "queued"; id: string };
+    if (data.status === "done") return data.answer;
+
+    const started = Date.now();
+    let slowShown = false;
+    while (Date.now() - started < POLL_BUDGET_MS) {
+      await new Promise((r) => setTimeout(r, POLL_MS));
+      if (!slowShown && Date.now() - started > SLOW_HINT_AFTER_MS) {
+        slowShown = true;
+        onSlow();
+      }
+      const poll = await fetch(`${BRIDGE_URL}/reply/${data.id}`);
+      if (!poll.ok) continue;
+      const body = (await poll.json()) as { status: string; answer?: string };
+      if (body.status === "done" && body.answer) return body.answer;
     }
+    throw new Error("bridge timeout");
+  };
+
+  const handleAsk = async (question: string) => {
     if (!question) {
       append("output", t("p.terminal.askUsage"));
       return;
     }
+    if (busy) {
+      append("output", t("p.terminal.busy"));
+      return;
+    }
+    setBusy(true);
+    preloadAskModule();
+
+    const lang = i18n.resolvedLanguage ?? "en";
     const pendingId = nextId();
     setLines((prev) => [...prev, { id: pendingId, kind: "output", text: "…" }]);
+
+    const answerLocal = async () => {
+      const mod = askModRef.current ?? (await Object.values(askLoaders)[0]?.());
+      if (!mod) return null;
+      return mod.askPortfolio(question, lang);
+    };
+    const showLocal = (local: { answer: string; sources: string[] }) => {
+      replaceLine(pendingId, local.answer);
+      if (local.sources.length > 0) append("output", `· ${local.sources.join(" · ")}`);
+    };
+
     try {
-      const mod = await loader();
-      const { answer, sources } = await mod.askPortfolio(
-        question,
-        i18n.resolvedLanguage ?? "en",
-      );
-      replaceLine(pendingId, answer);
-      if (sources.length > 0) append("output", `· ${sources.join(" · ")}`);
-    } catch {
-      replaceLine(pendingId, t("p.terminal.askFail"));
+      if (askWarmRef.current) {
+        // Warm model: local corpus first (instant + free), bridge for the rest.
+        let local: Awaited<ReturnType<typeof answerLocal>> = null;
+        try {
+          local = await answerLocal();
+        } catch {
+          local = null;
+        }
+        if (local && local.confidence >= LOCAL_CONFIDENT) {
+          showLocal(local);
+        } else {
+          replaceLine(pendingId, t("p.terminal.thinking"));
+          try {
+            const answer = await askBridge(question, lang, () =>
+              replaceLine(pendingId, t("p.terminal.thinkingSlow")),
+            );
+            replaceLine(pendingId, answer);
+          } catch {
+            if (local && local.confidence >= LOCAL_FLOOR) {
+              replaceLine(pendingId, t("p.terminal.offline"));
+              append("output", local.answer);
+            } else {
+              replaceLine(pendingId, t("p.terminal.askFail"));
+            }
+          }
+        }
+      } else {
+        // Cold model: the live bridge answers in seconds while the model
+        // downloads in the background for the next questions.
+        replaceLine(pendingId, t("p.terminal.thinking"));
+        try {
+          const answer = await askBridge(question, lang, () =>
+            replaceLine(pendingId, t("p.terminal.thinkingSlow")),
+          );
+          replaceLine(pendingId, answer);
+        } catch {
+          try {
+            const local = await answerLocal();
+            if (local && local.confidence >= LOCAL_FLOOR) showLocal(local);
+            else replaceLine(pendingId, t("p.terminal.askFail"));
+          } catch {
+            replaceLine(pendingId, t("p.terminal.askFail"));
+          }
+        }
+      }
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -155,10 +261,6 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
         goTo("#contact");
         append("output", "→ #contact");
         break;
-      case "cv":
-        downloadCv();
-        append("output", t("p.terminal.cvDone"));
-        break;
       case "uptime":
         append("output", t("p.terminal.uptime"));
         break;
@@ -171,8 +273,6 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
       case "lang": {
         const target = LANG_MAP[(rest[0] ?? "").toLowerCase()];
         if (target) {
-          // fr/de have no locale files yet — i18next falls back to EN, and the
-          // switch still registers (documented in the redesign brief).
           void i18n.changeLanguage(target).then(() => {
             append("output", t("p.terminal.langDone"));
           });
@@ -188,7 +288,7 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
         void handleAsk(rest.join(" "));
         break;
       default:
-        // Anything that reads as natural language is a question for `ask` —
+        // Anything that reads as natural language is a question for Lúmen —
         // "quantos anos de experiência?" must just work, no syntax required.
         if (!KNOWN_COMMANDS.has(head.toLowerCase()) && looksLikeQuestion(cmd)) {
           void handleAsk(cmd);
@@ -259,8 +359,7 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
     <div
       ref={rootRef}
       role="group"
-      // TODO-i18n: widget label.
-      aria-label="Interactive terminal"
+      aria-label="Lúmen terminal"
       className="w-full overflow-hidden rounded-xl border border-[color:var(--color-border-strong)] bg-[color:var(--color-card)] text-left shadow-[var(--shadow-card)]"
     >
       {/* Blink keyframes are scoped here so no shared CSS file is touched; the
@@ -275,7 +374,10 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
           <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]/60" />
         </span>
         <span className="mono ml-2 select-none text-[11px] text-[color:var(--color-text-dim)]">
-          matheus@mwdeveloper:~
+          lumen@mwdeveloper:~
+        </span>
+        <span className="mono ml-auto select-none text-[10px] text-[color:var(--color-text-dim)]">
+          Claude · Anthropic
         </span>
       </div>
 
@@ -284,10 +386,9 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
         ref={logRef}
         role="log"
         aria-live="polite"
-        // TODO-i18n: log label.
-        aria-label="Terminal output"
+        aria-label="Lúmen terminal output"
         onClick={focusPrompt}
-        className="max-h-44 min-h-[7.5rem] cursor-text space-y-1.5 overflow-y-auto px-3.5 py-3 lg:max-h-60 lg:min-h-[11rem]"
+        className="max-h-52 min-h-[7.5rem] cursor-text space-y-1.5 overflow-y-auto px-3.5 py-3 lg:max-h-72 lg:min-h-[11rem]"
       >
         {lines.map((line) => (
           <p
@@ -309,7 +410,6 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
       </div>
 
       {/* Suggestion chips */}
-      {/* TODO-i18n: suggestions group label. */}
       <div aria-label="Suggested commands" className="flex flex-wrap gap-1.5 px-3.5 pb-2.5">
         {CHIPS.map((chip) => (
           <button
@@ -345,8 +445,7 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
               setHistIdx(null);
             }}
             onKeyDown={onKeyDown}
-            // TODO-i18n: input label.
-            aria-label="Terminal input"
+            aria-label="Ask Lúmen"
             autoCapitalize="off"
             autoCorrect="off"
             autoComplete="off"

@@ -93,6 +93,7 @@ export const facts: AskFact[] = [
     id: "ai-pipeline-built",
     text: "Matheus led the build of an AI document-processing pipeline on Amazon Bedrock and Node.js that reads and validates thousands of purchase invoices automatically for a nationwide reseller network.",
     source: "Work · AI document pipeline",
+    queries: ["What did Matheus build with AI? What AI projects has he done?"],
   },
   {
     id: "ai-pipeline-outcome",
