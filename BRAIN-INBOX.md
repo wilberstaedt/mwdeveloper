@@ -53,7 +53,7 @@
 - Commit `0dbd305` na branch `redesign/portfolio-hire-me`, push, preview: https://mwdeveloper-4s3oiy638-wilberstaedts-projects.vercel.app
 
 ### Mudança de status do projeto
-- Redesign hire-me: de "seções construídas mas soltas" pra "preview completo no Vercel aguardando aprovação do Matheus pra merge em prod"
+- Redesign hire-me EM PRODUÇÃO: Matheus dispensou o gate de aprovação ("pq já não tá em prod?"), merge `6b5393b` em main, www.mwdeveloper.tech verificado live (bundle novo + terminal respondendo em prod)
 
 ### Próximo passo
-- Matheus aprova o preview → merge main = prod. Depois: CVs fr/de (hoje caem no EN), chrome do palette/terminal i18n (TODO-i18n), tuning do ask ("years of experience" retorna fato subótimo), sitemap/404/JSON-LD do brief, CLAUDE.md do repo reescrever
+- CVs fr/de (hoje caem no EN), chrome do palette/terminal i18n (TODO-i18n), tuning do ask ("years of experience" retorna fato subótimo), sitemap/404/JSON-LD do brief, CLAUDE.md do repo reescrever
