@@ -17,7 +17,11 @@ import { useCvPath } from "@/i18n/useCvPath";
 type Line = { id: number; kind: "input" | "output"; text: string };
 
 type AskModule = {
-  askPortfolio: (q: string) => Promise<{ answer: string; sources: string[] }>;
+  askPortfolio: (
+    q: string,
+    siteLang?: string,
+  ) => Promise<{ answer: string; sources: string[] }>;
+  preloadAsk?: () => Promise<void>;
 };
 
 // Resolves to {} while src/lib/ask.ts doesn't exist — zero build coupling.
@@ -26,9 +30,14 @@ const askLoaders = import.meta.glob([
   "../../lib/ask/index.ts",
 ]) as Record<string, () => Promise<AskModule>>;
 
-// TODO-i18n: ask fallback line (copy approved by brief, EN-only for now).
-const ASK_FALLBACK =
-  "ask is coming online soon - an in-browser AI over my CV. try 'uptime' meanwhile.";
+const KNOWN_COMMANDS = new Set([
+  "help", "work", "contact", "cv", "uptime", "joke", "langs", "lang", "clear", "ask",
+]);
+
+// Free text that isn't a command is a question for `ask` — visitors shouldn't
+// need to learn the syntax for the terminal to feel functional.
+const looksLikeQuestion = (cmd: string) =>
+  cmd.includes(" ") || cmd.endsWith("?") || cmd.length > 14;
 
 const LANG_MAP: Record<string, string> = {
   en: "en",
@@ -39,7 +48,7 @@ const LANG_MAP: Record<string, string> = {
   de: "de",
 };
 
-const CHIPS = ["help", "uptime", "joke", "ask"] as const;
+const CHIPS = ["ask", "help", "uptime", "joke"] as const;
 
 const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -87,26 +96,42 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
     a.remove();
   };
 
+  // Warm the embedding model on first real intent (focus), so the first
+  // question answers fast instead of paying the model download.
+  const preloadedRef = useRef(false);
+  const preloadAskModule = () => {
+    if (preloadedRef.current) return;
+    preloadedRef.current = true;
+    const loader = Object.values(askLoaders)[0];
+    void loader?.()
+      .then((mod) => mod.preloadAsk?.())
+      .catch(() => {
+        preloadedRef.current = false;
+      });
+  };
+
   const handleAsk = async (question: string) => {
     const loader = Object.values(askLoaders)[0];
     if (!loader) {
-      append("output", ASK_FALLBACK);
+      append("output", t("p.terminal.askFail"));
       return;
     }
     if (!question) {
-      // TODO-i18n: ask usage hint.
-      append("output", "usage: ask <question>");
+      append("output", t("p.terminal.askUsage"));
       return;
     }
     const pendingId = nextId();
     setLines((prev) => [...prev, { id: pendingId, kind: "output", text: "…" }]);
     try {
       const mod = await loader();
-      const { answer, sources } = await mod.askPortfolio(question);
+      const { answer, sources } = await mod.askPortfolio(
+        question,
+        i18n.resolvedLanguage ?? "en",
+      );
       replaceLine(pendingId, answer);
       if (sources.length > 0) append("output", `· ${sources.join(" · ")}`);
     } catch {
-      replaceLine(pendingId, ASK_FALLBACK);
+      replaceLine(pendingId, t("p.terminal.askFail"));
     }
   };
 
@@ -163,7 +188,13 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
         void handleAsk(rest.join(" "));
         break;
       default:
-        append("output", t("p.terminal.unknown"));
+        // Anything that reads as natural language is a question for `ask` —
+        // "quantos anos de experiência?" must just work, no syntax required.
+        if (!KNOWN_COMMANDS.has(head.toLowerCase()) && looksLikeQuestion(cmd)) {
+          void handleAsk(cmd);
+        } else {
+          append("output", t("p.terminal.unknown"));
+        }
     }
   };
 
@@ -308,6 +339,7 @@ export function HeroTerminal({ focusOnMount = false }: { focusOnMount?: boolean 
             ref={inputRef}
             type="text"
             value={value}
+            onFocus={preloadAskModule}
             onChange={(e) => {
               setValue(e.target.value);
               setHistIdx(null);

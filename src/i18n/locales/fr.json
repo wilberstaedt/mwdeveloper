@@ -210,14 +210,16 @@
       "rights": "© {{year}} Matheus Wilberstaedt"
     },
     "terminal": {
-      "welcome": "interactif. tapez 'help' ou cliquez sur une commande.",
-      "help": "disponibles : work · cv · contact · langs · uptime · joke · clear",
+      "welcome": "interactif. tapez 'help' ou posez-moi n'importe quelle question sur Matheus.",
+      "help": "disponibles : ask <question> · work · cv · contact · langs · uptime · joke · clear",
       "uptime": "produits en production : 4 · clients payants : 2 · factures automatisées : ~160/mois · uptime : depuis 2019",
       "joke": "J'ai déjà réparé la prod depuis la cuisine d'un restaurant pendant mon service du soir. Les pâtes aussi s'en sont bien sorties.",
       "langs": "ce site parle EN, ES, PT, FR et DE. essayez : lang fr",
       "unknown": "commande introuvable. essayez 'help'.",
       "cvDone": "téléchargement du CV...",
-      "langDone": "langue changée."
+      "langDone": "langue changée.",
+      "askUsage": "usage : ask <question>. essayez : ask combien d'années d'expérience ?",
+      "askFail": "le moteur de réponses n'a pas pu se charger. réessayez dans un instant ou tapez 'help'."
     },
     "meta": {
       "title": "Matheus Wilberstaedt - Ingénieur Full-Stack (Node · React · TypeScript · AWS)",
