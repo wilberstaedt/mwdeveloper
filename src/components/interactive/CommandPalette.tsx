@@ -4,14 +4,12 @@ import {
   ArrowRight,
   Check,
   Copy,
-  FileText,
   Github,
   Globe,
   Linkedin,
   Search,
   SquareTerminal,
 } from "lucide-react";
-import { useCvPath } from "@/i18n/useCvPath";
 import { contact } from "@/data/contact";
 
 /**
@@ -71,7 +69,6 @@ const afterClose = (fn: () => void) => {
 
 export function CommandPalette() {
   const { t, i18n } = useTranslation();
-  const cvPath = useCvPath();
 
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -134,22 +131,6 @@ export function CommandPalette() {
       nav("experience", "p.nav.experience"),
       nav("about", "p.nav.about"),
       nav("contact", "p.nav.contact"),
-      {
-        id: "cv",
-        group: "actions",
-        label: t("p.hero.ctaCv"),
-        hint: "pdf",
-        keywords: "download cv resume curriculum pdf",
-        icon: FileText,
-        perform: () => {
-          const a = document.createElement("a");
-          a.href = cvPath;
-          a.download = "";
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-        },
-      },
       {
         id: "copy-email",
         group: "actions",
@@ -216,7 +197,7 @@ export function CommandPalette() {
         }),
       ),
     ];
-  }, [t, i18n, cvPath]);
+  }, [t, i18n]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();

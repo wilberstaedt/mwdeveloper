@@ -7,6 +7,12 @@ export interface AskFact {
   id: string;
   text: string;
   source: string;
+  /**
+   * Optional question paraphrases embedded alongside the fact text — they
+   * pull question-shaped queries toward the right fact (the answer is always
+   * `text`; these are retrieval hints, never shown).
+   */
+  queries?: string[];
 }
 
 export const facts: AskFact[] = [
@@ -15,6 +21,7 @@ export const facts: AskFact[] = [
     id: "role-stack",
     text: "Matheus Wilberstaedt is a full-stack engineer working with Node.js, React, TypeScript and AWS.",
     source: "Hero · Role",
+    queries: ["What is Matheus's tech stack? What technologies does he work with?"],
   },
   {
     id: "positioning",
@@ -25,21 +32,25 @@ export const facts: AskFact[] = [
     id: "years-experience",
     text: "Matheus has 7+ years of experience building software. He is a product engineer, not a single-layer dev.",
     source: "Hero · Experience",
+    queries: ["How many years of experience does Matheus have?", "How long has he been building software?"],
   },
   {
     id: "open-eu-remote",
     text: "Matheus is open to remote roles with EU teams and is looking for a remote EU team where an engineer who ships end-to-end is useful.",
     source: "Hero · Availability",
+    queries: ["Is Matheus available for remote roles? Is he open to work?"],
   },
   {
     id: "location-timezone",
     text: "Matheus is based in Oropesa del Mar, in the Castellón province of Spain, on the CET timezone (UTC+1).",
     source: "About · Quick facts",
+    queries: ["Where does Matheus live?", "Where is he based? What timezone is he in?"],
   },
   {
     id: "work-authorization",
     text: "Matheus is authorized to work in Spain.",
     source: "About · Work rights",
+    queries: ["Can he legally work in Spain? Does he have work authorization?"],
   },
 
   // ── Proof numbers ─────────────────────────────────────────────────────
@@ -57,6 +68,7 @@ export const facts: AskFact[] = [
     id: "proof-customers",
     text: "Matheus has 2 paying customers for his own products, and 4 products in production overall.",
     source: "Proof · Numbers",
+    queries: ["Does he have paying customers? How many products does he run?"],
   },
 
   // ── Case: Sistema Cleaning ────────────────────────────────────────────
@@ -81,6 +93,7 @@ export const facts: AskFact[] = [
     id: "ai-pipeline-built",
     text: "Matheus led the build of an AI document-processing pipeline on Amazon Bedrock and Node.js that reads and validates thousands of purchase invoices automatically for a nationwide reseller network.",
     source: "Work · AI document pipeline",
+    queries: ["What did Matheus build with AI? What AI projects has he done?"],
   },
   {
     id: "ai-pipeline-outcome",
@@ -129,6 +142,7 @@ export const facts: AskFact[] = [
     id: "mwdev-role",
     text: "Since November 2025, Matheus is Founder and Full-Stack Engineer at MW Developer, his own studio, working remotely from Australia and then Spain.",
     source: "Experience · MW Developer",
+    queries: ["Where does Matheus work now? What is his current job?"],
   },
   {
     id: "mwdev-ops",
@@ -185,6 +199,7 @@ export const facts: AskFact[] = [
     id: "biscuit-factory",
     text: "Matheus's first production system was the management system for his family's biscuit factory in Brazil: inventory and finances, built with PHP and MySQL in 2019, in daily use for years.",
     source: "About · Origin story",
+    queries: ["How did Matheus start programming? How did he get into software?"],
   },
   {
     id: "rocketseat",
@@ -207,6 +222,7 @@ export const facts: AskFact[] = [
     id: "languages",
     text: "Matheus speaks Portuguese natively, fluent English, and intermediate Spanish.",
     source: "Skills · Languages",
+    queries: ["What languages does Matheus speak?"],
   },
 
   // ── About / journey ───────────────────────────────────────────────────
@@ -224,6 +240,7 @@ export const facts: AskFact[] = [
     id: "fun-fact",
     text: "Fun fact: Matheus once fixed production from a restaurant kitchen during his night shift. The pasta was fine too.",
     source: "Terminal · Easter egg",
+    queries: ["Tell me a fun fact about Matheus."],
   },
 
   // ── Contact ───────────────────────────────────────────────────────────
@@ -231,6 +248,7 @@ export const facts: AskFact[] = [
     id: "contact-how",
     text: "You can contact Matheus by email, LinkedIn or GitHub, or download his CV from the site. He replies within one business day, usually much faster.",
     source: "Contact",
+    queries: ["How can I contact Matheus? How do I reach him?"],
   },
   {
     id: "contact-freelance",

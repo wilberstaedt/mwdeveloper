@@ -1,8 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { FileText, Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 import { GlowOrb } from "@/components/ui/GridBackground";
-import { useCvPath } from "@/i18n/useCvPath";
 import { contact, mailto } from "@/data/contact";
 
 /**
@@ -16,7 +15,6 @@ const secondaryButton =
 
 export function ContactPortfolio() {
   const { t } = useTranslation();
-  const cvPath = useCvPath();
 
   return (
     <section
@@ -66,16 +64,6 @@ export function ContactPortfolio() {
             <Github className="h-4 w-4" aria-hidden />
             {t("p.contact.github")}
           </a>
-          <a href={cvPath} download className={secondaryButton}>
-            <FileText className="h-4 w-4" aria-hidden />
-            {t("p.contact.cv")}
-          </a>
-        </Reveal>
-
-        <Reveal delay={0.16}>
-          <p className="mono mt-4 text-[11px] text-[color:var(--color-text-dim)]">
-            {t("p.contact.cvNote")}
-          </p>
         </Reveal>
 
         {/* Freelance: deliberately quiet — one small line, no visual weight. */}

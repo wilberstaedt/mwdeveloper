@@ -210,14 +210,19 @@
       "rights": "© {{year}} Matheus Wilberstaedt"
     },
     "terminal": {
-      "welcome": "interaktiv. tipp 'help' oder klick auf einen befehl.",
-      "help": "verfügbar: work · cv · contact · langs · uptime · joke · clear",
+      "welcome": "du sprichst mit Lúmen, Matheus' KI-Agent, läuft auf Claude von Anthropic. frag mich alles über ihn oder tipp 'help'.",
+      "help": "verfügbar: ask <frage> · work · contact · langs · uptime · joke · clear. oder tipp einfach deine frage.",
       "uptime": "produkte in produktion: 4 · zahlende kunden: 2 · automatisierte rechnungen: ~160/monat · uptime: seit 2019",
       "joke": "Ich hab prod schon mal aus einer Restaurantküche gefixt, mitten in meiner Nachtschicht. Der Pasta ist auch nichts passiert.",
       "langs": "diese seite spricht EN, ES, PT, FR und DE. probier: lang fr",
       "unknown": "befehl nicht gefunden. probier 'help'.",
-      "cvDone": "lebenslauf wird heruntergeladen...",
-      "langDone": "sprache gewechselt."
+      "langDone": "sprache gewechselt.",
+      "askUsage": "nutzung: ask <frage>. probier: ask wie viele jahre erfahrung?",
+      "askFail": "die antwort-engine konnte gerade nicht laden. versuch es gleich nochmal oder tipp 'help'.",
+      "thinking": "verbinde live mit Lúmen…",
+      "thinkingSlow": "denke noch nach. live-antworten können ein paar sekunden dauern…",
+      "offline": "Lúmen ist gerade nicht erreichbar, hier ist, was ich lokal weiß:",
+      "busy": "eine frage nach der anderen, ich beantworte noch die vorherige…"
     },
     "meta": {
       "title": "Matheus Wilberstaedt - Full-Stack Engineer (Node · React · TypeScript · AWS)",

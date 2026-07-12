@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { ArrowDown, FileText, Github, Linkedin } from "lucide-react";
+import { ArrowDown, Github, Linkedin } from "lucide-react";
 import { GridBackground, GlowOrb } from "@/components/ui/GridBackground";
 import { CetClock } from "@/components/ui/CetClock";
 import { HeroTerminal } from "@/components/interactive/HeroTerminal";
-import { useCvPath } from "@/i18n/useCvPath";
 import { contact } from "@/data/contact";
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -18,7 +17,6 @@ const ease = [0.16, 1, 0.3, 1] as const;
  */
 export function HeroPortfolio() {
   const { t } = useTranslation();
-  const cvPath = useCvPath();
 
   // Mobile-only disclosure for the terminal (desktop renders it in the right
   // grid column). The command palette's "open terminal" action also expands it.
@@ -121,14 +119,6 @@ export function HeroPortfolio() {
               >
                 {t("p.hero.ctaWork")}
                 <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
-              </a>
-              <a
-                href={cvPath}
-                download
-                className="inline-flex items-center gap-2 rounded-full border border-[color:var(--color-border-strong)] bg-white/[0.02] px-6 py-3 text-sm font-medium text-[color:var(--color-text-bright)] transition-all hover:border-[color:var(--color-blue)] hover:bg-white/[0.05]"
-              >
-                <FileText className="h-4 w-4" />
-                {t("p.hero.ctaCv")}
               </a>
               <span
                 className="mx-1 hidden h-6 w-px bg-[color:var(--color-border-strong)] sm:block"
