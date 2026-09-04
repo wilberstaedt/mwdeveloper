@@ -1,6 +1,12 @@
 {
+  "redirects": [
+    {
+      "source": "/naylume/privacy",
+      "destination": "https://naylume.mwdeveloper.tech/privacy",
+      "permanent": true
+    }
+  ],
   "rewrites": [
-    { "source": "/naylume/privacy", "destination": "/naylume/privacy/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
