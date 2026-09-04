@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/naylume/privacy", "destination": "/naylume/privacy/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
