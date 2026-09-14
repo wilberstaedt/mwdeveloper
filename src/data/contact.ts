@@ -1,7 +1,10 @@
 export const contact = {
   email: "wilberstaedtt@gmail.com",
-  whatsapp: "61410501923",
-  whatsappDisplay: "+61 410 501 923",
+  /* Numero actual (Espanha) desde 13/09/2026. O +61 410 501 923 era o de
+     Brisbane e continuava em todos os botoes de WhatsApp do site, incluindo a
+     landing do Sistema Cleaning. */
+  whatsapp: "34643731430",
+  whatsappDisplay: "+34 643 731 430",
   github: "wilberstaedt",
   linkedin: "matheus-wilberstaedt",
   locationNow: "Brisbane · Austrália",
