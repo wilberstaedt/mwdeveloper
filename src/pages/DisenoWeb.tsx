@@ -18,9 +18,35 @@ import {
    Uma so tarefa: fazer a pessoa mandar mensagem. Tudo o que esta aqui e
    verificavel - os dois casos sao os mesmos do portfolio, sem numero novo. */
 
-const WA_TEXTO = "Hola Matheus, he visto tu web y quiero presupuesto para una página web.";
-const waHref = `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(WA_TEXTO)}`;
-const mailHref = mailto("Presupuesto página web");
+/* Uma pagina por grupo de anuncios: o Google premia a pagina que repete o que a
+   pessoa pesquisou. Prova, processo e medicao sao partilhados. */
+export type Variante = "web" | "landing";
+
+const TEXTOS: Record<Variante, {
+  titulo: string; descricao: string; olho: string; h1: string; sub: string;
+  wa: string; assunto: string; ordem: number[];
+}> = {
+  web: {
+    titulo: "Diseño de páginas web a medida para pymes | MW Dev",
+    descricao: "Páginas web y landing pages a medida para pymes y autónomos en España. Trato directo con el desarrollador, presupuesto claro antes de empezar y medición de contactos incluida.",
+    olho: "Diseño y desarrollo web · España",
+    h1: "Tu página web a medida, con trato directo con quien la programa.",
+    sub: "Diseño, desarrollo, publicación y soporte para pymes y autónomos. Sin plantillas, sin intermediarios y con presupuesto claro antes de empezar.",
+    wa: "Hola Matheus, he visto tu web y quiero presupuesto para una página web.",
+    assunto: "Presupuesto página web",
+    ordem: [0, 1, 2],
+  },
+  landing: {
+    titulo: "Diseño de landing pages para campañas de Google Ads | MW Dev",
+    descricao: "Landing pages a medida para pymes y autónomos en España: una página con un solo objetivo, conseguir contactos, y la medición de conversiones lista para Google Ads.",
+    olho: "Landing pages · España",
+    h1: "Tu landing page a medida, pensada para convertir las visitas de tus anuncios en contactos.",
+    sub: "Una página con un solo objetivo, medición de conversiones incluida y trato directo con quien la programa. Presupuesto claro antes de empezar.",
+    wa: "Hola Matheus, he visto tu web y quiero presupuesto para una landing page.",
+    assunto: "Presupuesto landing page",
+    ordem: [1, 0, 2],
+  },
+};
 
 const SERVICIOS = [
   {
@@ -70,6 +96,11 @@ const PORQUE = [
   "La medición de contactos va incluida: sabrás qué te trae clientes.",
 ] as const;
 
+const FAQ_LANDING: readonly [string, string] = [
+  "¿Qué diferencia hay entre una web y una landing page?",
+  "Una web presenta tu negocio entero. Una landing page tiene un solo objetivo, como que te pidan presupuesto desde un anuncio. Muchas veces conviene tener las dos.",
+];
+
 const FAQ = [
   ["¿Cuánto cuesta una página web?", "Depende de lo que necesites. Después de la primera conversación te doy un precio cerrado por escrito, antes de empezar."],
   ["¿Cuánto tarda?", "Depende del alcance. El plazo va en la propuesta, con fecha, para que sepas cuándo estará publicada."],
@@ -77,10 +108,10 @@ const FAQ = [
   ["¿Puedes llevar también el Google Ads?", "Sí. Puedo dejar la campaña y la medición de conversiones configuradas, para que cada euro tenga un número detrás."],
 ] as const;
 
-function CtaWhatsApp({ className = "", texto = "Pedir presupuesto por WhatsApp" }: { className?: string; texto?: string }) {
+function CtaWhatsApp({ href, className = "", texto = "Pedir presupuesto por WhatsApp" }: { href: string; className?: string; texto?: string }) {
   return (
     <a
-      href={waHref}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       onClick={() => registarConversao("whatsapp")}
@@ -111,7 +142,12 @@ function BannerConsentimento({ onFechar }: { onFechar: () => void }) {
   );
 }
 
-export default function DisenoWeb() {
+export default function DisenoWeb({ variante = "web" }: { variante?: Variante }) {
+  const tx = TEXTOS[variante];
+  const waHref = `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(tx.wa)}`;
+  const mailHref = mailto(tx.assunto);
+  const servicios = tx.ordem.map((i) => SERVICIOS[i]);
+  const faq = variante === "landing" ? [FAQ_LANDING, ...FAQ] : FAQ;
   const [bannerAberto, setBannerAberto] = useState(false);
   const [barraVisivel, setBarraVisivel] = useState(false);
   const ctaHero = useRef<HTMLDivElement>(null);
@@ -133,15 +169,11 @@ export default function DisenoWeb() {
   }, []);
 
   useEffect(() => {
-    document.title = "Diseño de páginas web a medida para pymes | MW Dev";
+    document.title = tx.titulo;
     document.documentElement.lang = "es";
-    const desc = document.querySelector('meta[name="description"]');
-    desc?.setAttribute(
-      "content",
-      "Páginas web y landing pages a medida para pymes y autónomos en España. Trato directo con el desarrollador, presupuesto claro antes de empezar y medición de contactos incluida.",
-    );
+    document.querySelector('meta[name="description"]')?.setAttribute("content", tx.descricao);
     iniciarMedicao();
-  }, []);
+  }, [tx]);
 
   return (
     <div className="min-h-screen bg-void text-text">
@@ -163,15 +195,15 @@ export default function DisenoWeb() {
       <main>
         {/* Hero */}
         <section className="mx-auto max-w-5xl px-5 pb-16 pt-12 md:pb-24 md:pt-20">
-          <p className="font-mono text-[13px] uppercase tracking-[0.14em] text-cyan">Diseño y desarrollo web · España</p>
+          <p className="font-mono text-[13px] uppercase tracking-[0.14em] text-cyan">{tx.olho}</p>
           <h1 className="mt-4 max-w-3xl font-display text-[34px] font-bold leading-[1.1] tracking-tight text-cloud [text-wrap:balance] md:text-[52px]">
-            Tu página web a medida, con trato directo con quien la programa.
+            {tx.h1}
           </h1>
           <p className="mt-6 max-w-2xl text-[17px] leading-7 text-text">
-            Diseño, desarrollo, publicación y soporte para pymes y autónomos. Sin plantillas, sin intermediarios y con presupuesto claro antes de empezar.
+            {tx.sub}
           </p>
           <div ref={ctaHero} className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <CtaWhatsApp />
+            <CtaWhatsApp href={waHref} />
             <a href="#trabajos" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border-strong px-6 text-[15px] font-semibold text-text-bright hover:border-cyan">
               Ver trabajos <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </a>
@@ -188,7 +220,7 @@ export default function DisenoWeb() {
           <div className="mx-auto max-w-5xl px-5 py-16 md:py-24">
             <h2 className="font-display text-[28px] font-bold leading-tight text-cloud md:text-[36px]">Qué puedo hacer por tu negocio</h2>
             <div className="mt-10 grid gap-4 md:grid-cols-3">
-              {SERVICIOS.map(({ icon: Icon, titulo, texto }) => (
+              {servicios.map(({ icon: Icon, titulo, texto }) => (
                 <article key={titulo} className="rounded-2xl border border-border bg-card p-6">
                   <Icon className="h-6 w-6 text-cyan" aria-hidden="true" />
                   <h3 className="mt-4 text-[20px] font-semibold leading-snug text-text-bright">{titulo}</h3>
@@ -256,7 +288,7 @@ export default function DisenoWeb() {
           <div className="mx-auto max-w-3xl px-5 py-16 md:py-24">
             <h2 className="font-display text-[28px] font-bold leading-tight text-cloud md:text-[36px]">Preguntas frecuentes</h2>
             <div className="mt-8 flex flex-col gap-3">
-              {FAQ.map(([p, r]) => (
+              {faq.map(([p, r]) => (
                 <details key={p} className="group rounded-2xl border border-border bg-card px-6 py-5">
                   <summary className="cursor-pointer list-none text-[17px] font-semibold text-text-bright marker:hidden">
                     <span className="flex items-center justify-between gap-4">
@@ -279,7 +311,7 @@ export default function DisenoWeb() {
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-[17px] leading-7 text-text">Te respondo yo, personalmente, con los siguientes pasos y un presupuesto por escrito.</p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <CtaWhatsApp texto="Escribir por WhatsApp" />
+              <CtaWhatsApp href={waHref} texto="Escribir por WhatsApp" />
               <a
                 href={mailHref}
                 onClick={() => registarConversao("email")}
@@ -297,7 +329,7 @@ export default function DisenoWeb() {
           <span>© {new Date().getFullYear()} MW Dev · Matheus Wilberstaedt</span>
           <span className="flex gap-4">
             <Link to="/es/privacidad" className="hover:text-text-bright">Privacidad y cookies</Link>
-            <Link to="/" className="hover:text-text-bright">Portfolio</Link>
+            <Link to="/" className="hover:text-text-bright">Inicio</Link>
           </span>
         </div>
       </footer>
@@ -305,7 +337,7 @@ export default function DisenoWeb() {
       {/* Barra fixa no telemovel: o CTA nunca sai do polegar */}
       {barraVisivel && !bannerAberto && (
         <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border-strong bg-void/95 p-3 backdrop-blur md:hidden">
-          <CtaWhatsApp className="w-full" />
+          <CtaWhatsApp href={waHref} className="w-full" />
         </div>
       )}
 
