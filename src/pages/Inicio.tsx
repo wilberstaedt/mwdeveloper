@@ -5,6 +5,7 @@ import { ArrowRight, MessageCircle } from "lucide-react";
 import { contact } from "@/data/contact";
 import { INICIO, type LinguaInicio } from "@/data/inicio";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { ScrollStory } from "@/components/sections/ScrollStory";
 
 const IMAGENS = ["/lp/samba-site-1200.webp", "/lp/cleaning-dashboard-1200.webp"] as const;
 
@@ -52,6 +53,14 @@ export default function Inicio() {
             <MessageCircle className="h-5 w-5" aria-hidden="true" /> {tx.cta}
           </a>
         </section>
+
+        <ScrollStory
+          olho={tx.historia.olho}
+          atos={tx.historia.atos}
+          fecho={tx.historia.fecho}
+          cta={tx.historia.cta}
+          ctaHref={wa(tx.historia.cta)}
+        />
 
         <section className="border-t border-border bg-card/40">
           <div className="mx-auto max-w-5xl px-5 py-16 md:py-24">
