@@ -18,6 +18,12 @@ export interface Mercado {
 
 export const INICIO: Record<LinguaInicio, {
   titulo: string; descricao: string; olho: string; h1: string; sub: string;
+  /* O h1 partido nas linhas com que entra no heroi: cada uma sobe por tras de
+     uma mascara. Fica aqui e nao no componente porque o corte muda com a
+     lingua. O texto todo continua a ser o h1 acima. */
+  h1Linhas: string[];
+  /* Uma linha de prova por baixo do botao. So o que o site ja afirma. */
+  prova: string;
   cta: string; wa: string; servicosTitulo: string;
   servicos: { titulo: string; texto: string }[];
   mercadosTitulo: string; mercados: Mercado[];
@@ -97,6 +103,8 @@ export const INICIO: Record<LinguaInicio, {
     descricao: "Páginas web, landing pages y sistemas a medida para pymes y autónomos, con trato directo con el desarrollador.",
     olho: "MW Dev · Matheus Wilberstaedt",
     h1: "Páginas web y sistemas a medida, con trato directo con quien los programa.",
+    h1Linhas: ["Páginas web y sistemas", "a medida, con trato directo", "con quien los programa."],
+    prova: "Sistemas en producción en Australia y clientes en Brasil.",
     sub: "Diseño, desarrollo, publicación y soporte para pymes y autónomos. Sin plantillas y sin agencia de por medio.",
     cta: "Escribir por WhatsApp",
     wa: "Hola Matheus, he visto tu web y quiero hablar de un proyecto.",
@@ -208,6 +216,8 @@ export const INICIO: Record<LinguaInicio, {
     descricao: "Sites, landing pages e sistemas sob medida para pequenas e médias empresas, falando direto com o desenvolvedor.",
     olho: "MW Dev · Matheus Wilberstaedt",
     h1: "Sites e sistemas sob medida, falando direto com quem programa.",
+    h1Linhas: ["Sites e sistemas sob medida,", "falando direto", "com quem programa."],
+    prova: "Sistemas em produção na Austrália e clientes no Brasil.",
     sub: "Design, desenvolvimento, publicação e suporte para pequenas e médias empresas. Sem template e sem agência no meio.",
     cta: "Chamar no WhatsApp",
     wa: "Oi Matheus, vi seu site e quero falar sobre um projeto.",
@@ -319,6 +329,8 @@ export const INICIO: Record<LinguaInicio, {
     descricao: "Websites, landing pages and custom systems for small businesses, built by the developer you talk to.",
     olho: "MW Dev · Matheus Wilberstaedt",
     h1: "Websites and custom systems, built by the developer you actually talk to.",
+    h1Linhas: ["Websites and custom systems,", "built by the developer", "you actually talk to."],
+    prova: "Systems in production in Australia and clients in Brazil.",
     sub: "Design, development, launch and support for small businesses. No templates and no agency in between.",
     cta: "Message on WhatsApp",
     wa: "Hi Matheus, I saw your website and want to talk about a project.",

@@ -51,10 +51,12 @@ export default function Inicio() {
         <CinemaHero
           olho={tx.olho}
           h1={tx.h1}
+          linhas={tx.h1Linhas}
           sub={tx.sub}
           cta={tx.cta}
           ctaHref={wa(tx.wa)}
           dica={tx.dicaScroll}
+          prova={tx.prova}
         />
 
         {/* Ordem da história (16/09, correcção do Matheus: a página parecia
