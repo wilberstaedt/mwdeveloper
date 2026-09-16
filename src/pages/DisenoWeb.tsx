@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Check, Gauge, Globe, LayoutTemplate, Mail, MessageCircle, Workflow } from "lucide-react";
+import { motion, useScroll, useTransform, useSpring, useMotionValue, useReducedMotion, type MotionValue } from "framer-motion";
+import { ArrowRight, ArrowUpRight, Check, Gauge, Globe, LayoutTemplate, Mail, MessageCircle, Workflow } from "lucide-react";
 import { contact, mailto } from "@/data/contact";
+import { MarcaMW } from "@/components/brand/MarcaMW";
+import { MacBook, IPhone } from "@/components/brand/Aparelhos";
 import {
   guardarConsentimento,
   iniciarMedicao,
@@ -16,14 +19,20 @@ import {
    pode cair num CV.
 
    Uma so tarefa: fazer a pessoa mandar mensagem. Tudo o que esta aqui e
-   verificavel - os dois casos sao os mesmos do portfolio, sem numero novo. */
+   verificavel - os dois casos sao os mesmos do portfolio, sem numero novo.
 
-/* Uma pagina por grupo de anuncios: o Google premia a pagina que repete o que a
-   pessoa pesquisou. Prova, processo e medicao sao partilhados. */
+   REFEITA A 16/09/2026 com o registo da home, mas com uma diferenca de fundo:
+   aqui o visitante e PAGO. Nao leva capitulos fixos de 400vh nem iframes vivos
+   - a demonstracao entra como captura dentro das mesmas molduras, e o caminho
+   ate ao botao continua curto. Todos os ganchos de medicao ficam onde estavam:
+   registarConversao em cada WhatsApp e no email, iniciarMedicao na montagem,
+   banner de consentimento e barra fixa no telemovel. A COPY NAO MUDA: o titulo,
+   o h1 e as descricoes sao os que o Google Ads esta a avaliar. */
+
 export type Variante = "web" | "landing";
 
 const TEXTOS: Record<Variante, {
-  titulo: string; descricao: string; olho: string; h1: string; sub: string;
+  titulo: string; descricao: string; olho: string; h1: string; h1Linhas: string[]; sub: string;
   wa: string; assunto: string; ordem: number[];
 }> = {
   web: {
@@ -31,6 +40,7 @@ const TEXTOS: Record<Variante, {
     descricao: "Páginas web y landing pages a medida para pymes y autónomos en España. Trato directo con el desarrollador, presupuesto claro antes de empezar y medición de contactos incluida.",
     olho: "Diseño y desarrollo web · España",
     h1: "Tu página web a medida, con trato directo con quien la programa.",
+    h1Linhas: ["Tu página web a medida,", "con trato directo", "con quien la programa."],
     sub: "Diseño, desarrollo, publicación y soporte para pymes y autónomos. Sin plantillas, sin intermediarios y con presupuesto claro antes de empezar.",
     wa: "Hola Matheus, he visto tu web y quiero presupuesto para una página web.",
     assunto: "Presupuesto página web",
@@ -41,6 +51,7 @@ const TEXTOS: Record<Variante, {
     descricao: "Landing pages a medida para pymes y autónomos en España: una página con un solo objetivo, conseguir contactos, y la medición de conversiones lista para Google Ads.",
     olho: "Landing pages · España",
     h1: "Tu landing page a medida, pensada para convertir las visitas de tus anuncios en contactos.",
+    h1Linhas: ["Tu landing page a medida,", "pensada para convertir", "las visitas de tus anuncios", "en contactos."],
     sub: "Una página con un solo objetivo, medición de conversiones incluida y trato directo con quien la programa. Presupuesto claro antes de empezar.",
     wa: "Hola Matheus, he visto tu web y quiero presupuesto para una landing page.",
     assunto: "Presupuesto landing page",
@@ -108,17 +119,69 @@ const FAQ = [
   ["¿Puedes llevar también el Google Ads?", "Sí. Puedo dejar la campaña y la medición de conversiones configuradas, para que cada euro tenga un número detrás."],
 ] as const;
 
-function CtaWhatsApp({ href, className = "", texto = "Pedir presupuesto por WhatsApp" }: { href: string; className?: string; texto?: string }) {
+/* Os ecras que ficam atras do titulo, em profundidade. Sao os MESMOS ficheiros
+   que a pagina ja carrega mais abaixo, por isso o custo extra e so o de os
+   pedir mais cedo (~120 KB de webp) — e vao com fetchpriority low para nao
+   competirem com o texto, que e o que conta para o LCP. Valeu a troca: o heroi
+   estava plano e e aqui que aterra o trafego pago. */
+const PLANOS = [
+  { src: "/lp/samba-site-1200.webp", caixa: "right-[-10%] top-[2%] w-[42vw] rotate-[6deg]", z: 26, op: 0.19, desfoque: 3 },
+  { src: "/work/cleaning-schedule-1000.webp", caixa: "left-[-14%] top-[14%] w-[30vw] rotate-[-7deg]", z: 42, op: 0.15, desfoque: 3 },
+  { src: "/lp/cleaning-dashboard-1200.webp", caixa: "right-[6%] bottom-[-18%] w-[30vw] rotate-[-4deg]", z: 62, op: 0.11, desfoque: 3.5 },
+];
+
+function Plano({ plano, ratoX, ratoY }: { plano: (typeof PLANOS)[number]; ratoX: MotionValue<number>; ratoY: MotionValue<number> }) {
+  const x = useTransform(ratoX, (v) => v * plano.z);
+  const y = useTransform(ratoY, (v) => v * plano.z);
+  return (
+    <motion.div style={{ x, y }} className={`absolute ${plano.caixa}`}>
+      <img
+        src={plano.src}
+        alt=""
+        loading="eager"
+        decoding="async"
+        // @ts-expect-error fetchpriority ainda nao esta nos tipos do React
+        fetchpriority="low"
+        style={{ opacity: plano.op, filter: `blur(${plano.desfoque}px) grayscale(45%)` }}
+        className="block w-full rounded-lg border border-cyan/15 md:rounded-xl"
+      />
+    </motion.div>
+  );
+}
+
+/* Entradas em keyframes CSS e nao em JavaScript: numa pagina que recebe trafego
+   pago, o botao nao pode depender do frameloop para existir. */
+const CSS = `
+@keyframes lp-entra { from { opacity:0; transform:translateY(16px) } to { opacity:1; transform:none } }
+@keyframes lp-linha { from { transform:translateY(112%) } to { transform:none } }
+@keyframes lp-respira { 0%,100% { opacity:.42; transform:translateX(-50%) scale(1) } 50% { opacity:.7; transform:translateX(-50%) scale(1.06) } }
+@keyframes lp-varre { 0% { transform:translateX(-140%) } 60%,100% { transform:translateX(240%) } }
+.lp-entra { animation: lp-entra .8s cubic-bezier(.16,1,.3,1) both }
+.lp-linha { animation: lp-linha .95s cubic-bezier(.16,1,.3,1) both }
+.lp-respira { animation: lp-respira 11s ease-in-out infinite }
+.lp-varre::after {
+  content:""; position:absolute; inset:0; border-radius:inherit;
+  background:linear-gradient(105deg, transparent 40%, rgba(255,255,255,.32) 50%, transparent 60%);
+  animation: lp-varre 5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lp-entra, .lp-linha, .lp-respira, .lp-varre::after { animation: none }
+}
+`;
+
+function CtaWhatsApp({ href, className = "", texto = "Pedir presupuesto por WhatsApp", brilho = false }: { href: string; className?: string; texto?: string; brilho?: boolean }) {
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
       onClick={() => registarConversao("whatsapp")}
-      className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue px-6 text-[15px] font-semibold text-white transition-[transform,background-color] duration-150 ease-[cubic-bezier(.05,.7,.1,1)] hover:scale-[1.02] hover:bg-[#1a75ff] active:scale-[.98] ${className}`}
+      className={`relative inline-flex min-h-13 items-center justify-center gap-2 overflow-hidden rounded-full bg-blue px-7 text-[16px] font-semibold text-white transition-[transform,background-color] duration-200 ease-[cubic-bezier(.05,.7,.1,1)] hover:scale-[1.03] hover:bg-[#1a75ff] active:scale-[.98] ${brilho ? "lp-varre" : ""} ${className}`}
     >
-      <MessageCircle className="h-5 w-5" aria-hidden="true" />
-      {texto}
+      <span className="relative z-10 inline-flex items-center gap-2">
+        <MessageCircle className="h-5 w-5" aria-hidden="true" />
+        {texto}
+      </span>
     </a>
   );
 }
@@ -142,6 +205,71 @@ function BannerConsentimento({ onFechar }: { onFechar: () => void }) {
   );
 }
 
+/* Um passo da linha do tempo: acende quando o traco la chega. */
+function Paso({ i, total, titulo, texto, progresso, parado }: { i: number; total: number; titulo: string; texto: string; progresso: MotionValue<number>; parado: boolean }) {
+  const marca = (i + 0.35) / total;
+  const opacity = useTransform(progresso, [marca - 0.16, marca], [0.32, 1]);
+  const x = useTransform(progresso, [marca - 0.16, marca], [12, 0]);
+  const ponto = useTransform(progresso, [marca - 0.12, marca], [0.45, 1]);
+  const brilho = useTransform(progresso, [marca - 0.12, marca], [0, 1]);
+  const sombra = useTransform(brilho, (v) => `0 0 ${v * 20}px ${v * 3}px rgba(0,212,255,${v * 0.5})`);
+  const cor = useTransform(brilho, (v) => (v > 0.5 ? "#00d4ff" : "#2a2a3a"));
+  return (
+    <motion.li style={parado ? undefined : { opacity, x }} className="relative grid gap-2 pb-10 pl-12 last:pb-0 md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] md:gap-8 md:pb-12 md:pl-16">
+      <motion.span
+        aria-hidden="true"
+        style={parado ? undefined : { scale: ponto, backgroundColor: cor, boxShadow: sombra }}
+        className="absolute left-[13px] top-[7px] h-[11px] w-[11px] rounded-full ring-4 ring-void md:left-[17px]"
+      />
+      <div>
+        <span className="font-mono text-[12px] tracking-[0.18em] text-cyan/80">Paso {i + 1}</span>
+        <h3 className="mt-2 font-display text-[21px] font-bold leading-tight text-cloud md:text-[26px]">{titulo}</h3>
+      </div>
+      <p className="max-w-[46ch] text-[15px] leading-7 text-text md:pt-7">{texto}</p>
+    </motion.li>
+  );
+}
+
+/* Um caso, grande e com a captura a correr devagar dentro da moldura. */
+function Caso({ caso, i, parado }: { caso: (typeof CASOS)[number]; i: number; parado: boolean }) {
+  const alvo = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: alvo, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "-14%"]);
+  const inverso = i % 2 === 1;
+  return (
+    <motion.article
+      ref={alvo}
+      initial={parado ? false : { opacity: 0, y: 26 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-70px" }}
+      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+      className={`group grid items-center gap-8 md:gap-12 ${inverso ? "md:grid-cols-[0.9fr_1.1fr]" : "md:grid-cols-[1.1fr_0.9fr]"}`}
+    >
+      <div className={inverso ? "md:order-2" : ""}>
+        <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-card shadow-[0_44px_100px_-50px_rgba(0,102,255,.5)] transition-[border-color] duration-300 group-hover:border-cyan/30">
+          <div className="relative aspect-[16/10] overflow-hidden">
+            <motion.img
+              src={caso.img}
+              alt={caso.alt}
+              width={1200}
+              height={750}
+              loading="lazy"
+              decoding="async"
+              style={{ y: parado ? 0 : y }}
+              className="absolute inset-x-0 top-0 block h-[122%] w-full object-cover object-top transition-transform duration-500 ease-[cubic-bezier(.05,.7,.1,1)] group-hover:scale-[1.03]"
+            />
+          </div>
+        </div>
+      </div>
+      <div className={inverso ? "md:order-1" : ""}>
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-cyan md:text-[12px]">{caso.etiqueta}</p>
+        <h3 className="mt-3 font-display text-[26px] font-bold leading-[1.05] tracking-[-0.02em] text-cloud md:text-[34px]">{caso.titulo}</h3>
+        <p className="mt-4 max-w-[46ch] text-[16px] leading-7 text-text">{caso.texto}</p>
+      </div>
+    </motion.article>
+  );
+}
+
 export default function DisenoWeb({ variante = "web" }: { variante?: Variante }) {
   const tx = TEXTOS[variante];
   const waHref = `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(tx.wa)}`;
@@ -151,6 +279,38 @@ export default function DisenoWeb({ variante = "web" }: { variante?: Variante })
   const [bannerAberto, setBannerAberto] = useState(false);
   const [barraVisivel, setBarraVisivel] = useState(false);
   const ctaHero = useRef<HTMLDivElement>(null);
+  const listaPasos = useRef<HTMLOListElement>(null);
+  const semMovimento = !!useReducedMotion();
+
+  const { scrollYProgress: progressoPasos } = useScroll({ target: listaPasos, offset: ["start 0.8", "end 0.6"] });
+  const alturaTraco = useTransform(progressoPasos, [0, 1], ["0%", "100%"]);
+
+  /* Paralaxe de rato nos planos do heroi. So em quem tem rato: num telemovel
+     nao ha, e o toque dispara uma vez e fica preso. */
+  const [comRato, setComRato] = useState(false);
+  const cruX = useMotionValue(0);
+  const cruY = useMotionValue(0);
+  const ratoX = useSpring(cruX, { stiffness: 60, damping: 20, mass: 0.6 });
+  const ratoY = useSpring(cruY, { stiffness: 60, damping: 20, mass: 0.6 });
+
+  useEffect(() => {
+    if (semMovimento) return;
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const ver = () => setComRato(mq.matches);
+    ver();
+    mq.addEventListener("change", ver);
+    return () => mq.removeEventListener("change", ver);
+  }, [semMovimento]);
+
+  useEffect(() => {
+    if (!comRato) return;
+    const mexer = (e: PointerEvent) => {
+      cruX.set((e.clientX / window.innerWidth - 0.5) * 2);
+      cruY.set((e.clientY / window.innerHeight - 0.5) * 2);
+    };
+    window.addEventListener("pointermove", mexer, { passive: true });
+    return () => window.removeEventListener("pointermove", mexer);
+  }, [comRato, cruX, cruY]);
 
   // A barra fixa so aparece quando o botao principal sai do ecra: dois botoes
   // iguais no mesmo ecra e ruido, nao insistencia.
@@ -177,15 +337,17 @@ export default function DisenoWeb({ variante = "web" }: { variante?: Variante })
 
   return (
     <div className="min-h-screen bg-void text-text">
+      <style>{CSS}</style>
+
       <header className="sticky top-0 z-40 border-b border-border bg-void/85 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-5">
-          <span className="font-mono text-[13px] font-semibold tracking-[0.14em] text-text-bright">MW DEV</span>
+          <MarcaMW />
           <a
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => registarConversao("whatsapp")}
-            className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border-strong px-4 text-[13px] font-semibold text-text-bright hover:border-cyan"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border-strong px-4 text-[13px] font-semibold text-text-bright transition-colors hover:border-cyan"
           >
             <MessageCircle className="h-4 w-4" aria-hidden="true" /> WhatsApp
           </a>
@@ -193,129 +355,285 @@ export default function DisenoWeb({ variante = "web" }: { variante?: Variante })
       </header>
 
       <main>
-        {/* Hero */}
-        <section className="mx-auto max-w-5xl px-5 pb-16 pt-12 md:pb-24 md:pt-20">
-          <p className="font-mono text-[13px] uppercase tracking-[0.14em] text-cyan">{tx.olho}</p>
-          <h1 className="mt-4 max-w-3xl font-display text-[34px] font-bold leading-[1.1] tracking-tight text-cloud [text-wrap:balance] md:text-[52px]">
-            {tx.h1}
-          </h1>
-          <p className="mt-6 max-w-2xl text-[17px] leading-7 text-text">
-            {tx.sub}
-          </p>
-          <div ref={ctaHero} className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <CtaWhatsApp href={waHref} />
-            <a href="#trabajos" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border-strong px-6 text-[15px] font-semibold text-text-bright hover:border-cyan">
-              Ver trabajos <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </a>
-          </div>
-          <ul className="mt-8 flex flex-col gap-2 text-[15px] text-text sm:flex-row sm:gap-6">
-            {["Webs rápidas y adaptadas al móvil", "Medición de contactos incluida", "Clientes en Australia y Brasil"].map((x) => (
-              <li key={x} className="flex items-center gap-2"><Check className="h-4 w-4 text-success" aria-hidden="true" />{x}</li>
+        {/* HERO: o mesmo registo da home, sem o peso dela. */}
+        <section className="relative overflow-hidden">
+          {/* Os ecras, atras. */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
+            {PLANOS.map((pl) => (
+              <Plano key={pl.src} plano={pl} ratoX={ratoX} ratoY={ratoY} />
             ))}
-          </ul>
+          </div>
+          {/* A vinheta devolve o preto ao centro: o texto ganha sempre. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-[5] bg-[radial-gradient(ellipse_at_30%_48%,rgba(6,6,12,.97)_0%,rgba(6,6,12,.88)_32%,rgba(6,6,12,.62)_68%,rgba(6,6,12,.74)_100%)]"
+          />
+          {/* A luz, por cima e em modo screen, para somar em vez de tapar. */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10 mix-blend-screen">
+            <div className="lp-respira absolute left-[62%] top-[-40%] h-[105vh] w-[82vw] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(0,102,255,.64),rgba(0,212,255,.16),transparent)] blur-[110px]" />
+          </div>
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-[15] h-[28vh] bg-gradient-to-b from-transparent to-void" />
+
+          <div className="relative z-20 mx-auto max-w-5xl px-5 pb-16 pt-14 md:pb-24 md:pt-24">
+            <p className="lp-entra font-mono text-[12px] uppercase tracking-[0.18em] text-cyan md:text-[13px]">{tx.olho}</p>
+            <h1
+              aria-label={tx.h1}
+              className="mt-5 font-display text-[clamp(30px,7.4vw,38px)] font-bold leading-[1.02] tracking-[-0.035em] text-cloud md:whitespace-nowrap md:text-[clamp(32px,4.5vw,54px)]"
+            >
+              {tx.h1Linhas.map((l, i) => (
+                <span key={l} className="block overflow-hidden pb-[0.06em]">
+                  <span className="lp-linha block" style={{ animationDelay: `${0.1 + i * 0.1}s` }}>
+                    {l}
+                  </span>
+                </span>
+              ))}
+            </h1>
+            <p className="lp-entra mt-7 max-w-2xl text-[17px] leading-7 text-text md:text-[19px] md:leading-8" style={{ animationDelay: "0.45s" }}>
+              {tx.sub}
+            </p>
+            <div ref={ctaHero} className="lp-entra mt-9 flex flex-col gap-3 sm:flex-row" style={{ animationDelay: "0.58s" }}>
+              <CtaWhatsApp href={waHref} brilho />
+              <a
+                href="#trabajos"
+                className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full border border-border-strong px-7 text-[16px] font-semibold text-text-bright transition-[transform,border-color] duration-200 hover:scale-[1.02] hover:border-cyan"
+              >
+                Ver trabajos <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </a>
+            </div>
+            <ul className="lp-entra mt-9 flex flex-col gap-2.5 text-[15px] text-text sm:flex-row sm:gap-7" style={{ animationDelay: "0.7s" }}>
+              {["Webs rápidas y adaptadas al móvil", "Medición de contactos incluida", "Clientes en Australia y Brasil"].map((x) => (
+                <li key={x} className="flex items-center gap-2"><Check className="h-4 w-4 text-success" aria-hidden="true" />{x}</li>
+              ))}
+            </ul>
+
+            {/* A mesma linha de prova da home: só o que o site já afirma. */}
+            <p className="lp-entra mt-9 flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-text md:text-[12px]" style={{ animationDelay: "0.82s" }}>
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-70" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-success" />
+              </span>
+              Sistemas en producción en Australia y clientes en Brasil.
+            </p>
+
+            <p className="lp-entra mt-14 hidden font-mono text-[11px] uppercase tracking-[0.2em] text-text-dim md:block" style={{ animationDelay: "0.95s" }}>
+              Baja para ver trabajos reales
+            </p>
+          </div>
         </section>
 
-        {/* Servicios */}
-        <section className="border-t border-border bg-card/40">
+        {/* SERVICIOS */}
+        <section className="border-t border-border">
           <div className="mx-auto max-w-5xl px-5 py-16 md:py-24">
-            <h2 className="font-display text-[28px] font-bold leading-tight text-cloud md:text-[36px]">Qué puedo hacer por tu negocio</h2>
-            <div className="mt-10 grid gap-4 md:grid-cols-3">
-              {servicios.map(({ icon: Icon, titulo, texto }) => (
-                <article key={titulo} className="rounded-2xl border border-border bg-card p-6">
-                  <Icon className="h-6 w-6 text-cyan" aria-hidden="true" />
-                  <h3 className="mt-4 text-[20px] font-semibold leading-snug text-text-bright">{titulo}</h3>
-                  <p className="mt-2 text-[15px] leading-6 text-text">{texto}</p>
-                </article>
+            <motion.h2
+              initial={semMovimento ? false : { opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-70px" }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="max-w-[18ch] font-display text-[30px] font-bold leading-[1.05] tracking-[-0.03em] text-cloud [text-wrap:balance] md:text-[46px]"
+            >
+              Qué puedo hacer por tu negocio
+            </motion.h2>
+            <div className="mt-12 grid gap-4 md:mt-16 md:grid-cols-3">
+              {servicios.map(({ icon: Icon, titulo, texto }, i) => (
+                <motion.article
+                  key={titulo}
+                  initial={semMovimento ? false : { opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.65, delay: i * 0.09, ease: [0.16, 1, 0.3, 1] }}
+                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.07] bg-[linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0))] p-7 transition-[border-color,transform,box-shadow] duration-300 ease-[cubic-bezier(.05,.7,.1,1)] hover:-translate-y-1.5 hover:border-cyan/30 hover:shadow-[0_34px_70px_-45px_rgba(0,102,255,.9)] md:p-8"
+                >
+                  <span aria-hidden="true" className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-gradient-to-r from-cyan via-blue to-transparent transition-transform duration-500 ease-[cubic-bezier(.05,.7,.1,1)] group-hover:scale-x-100" />
+                  <div className="flex items-center justify-between">
+                    <span className="grid h-12 w-12 place-items-center rounded-xl border border-white/10 bg-white/[0.04] transition-transform duration-300 group-hover:scale-110">
+                      <Icon className="h-5 w-5 text-cyan" aria-hidden="true" />
+                    </span>
+                    <span className="font-mono text-[12px] tracking-[0.2em] text-cyan/50">{String(i + 1).padStart(2, "0")}</span>
+                  </div>
+                  <h3 className="mt-6 font-display text-[22px] font-bold leading-tight tracking-[-0.015em] text-cloud md:text-[25px]">{titulo}</h3>
+                  <p className="mt-3 flex-1 text-[15px] leading-7 text-text">{texto}</p>
+                </motion.article>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Trabajos */}
-        <section id="trabajos" className="mx-auto max-w-5xl scroll-mt-20 px-5 py-16 md:py-24">
-          <h2 className="font-display text-[28px] font-bold leading-tight text-cloud md:text-[36px]">Trabajos en producción</h2>
-          <p className="mt-3 max-w-2xl text-[17px] leading-7 text-text">Dos negocios reales que usan todos los días lo que construí.</p>
-          <div className="mt-10 grid gap-8 md:grid-cols-2">
-            {CASOS.map((c) => (
-              <article key={c.titulo} className="flex flex-col">
-                <div className="overflow-hidden rounded-2xl border border-border-strong bg-card">
-                  <img src={c.img} alt={c.alt} width={1200} height={750} loading="lazy" decoding="async" className="block h-auto w-full" />
+        {/* UN EJEMPLO: a demonstracao, em captura para nao pesar. */}
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-5xl px-5 py-16 md:py-24">
+            <motion.div
+              initial={semMovimento ? false : { opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-70px" }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <p className="font-mono text-[12px] uppercase tracking-[0.18em] text-cyan md:text-[13px]">Un ejemplo que puedes abrir</p>
+              <h2 className="mt-4 max-w-[20ch] font-display text-[30px] font-bold leading-[1.05] tracking-[-0.03em] text-cloud [text-wrap:balance] md:text-[46px]">
+                Una página hecha para que te llamen.
+              </h2>
+
+              <div className="mt-12 flex w-full items-end justify-center gap-[4%] md:gap-[3%]">
+                <div className="w-[56%] md:w-[68%]">
+                  <MacBook
+                    url="mwdeveloper.tech/ejemplo/limpieza"
+                    conteudo={
+                      <div className="h-full w-full overflow-hidden bg-[#f3f8f6]">
+                        <img
+                          src="/work/demo-desktop-es.webp"
+                          alt="Landing de ejemplo para una empresa de limpieza, vista en ordenador"
+                          loading="lazy"
+                          decoding="async"
+                          className="block w-full"
+                        />
+                      </div>
+                    }
+                  />
+                  <p className="mt-4 whitespace-nowrap text-center font-mono text-[9px] uppercase tracking-[0.12em] text-text-dim md:mt-5 md:text-[11px] md:tracking-[0.16em]">
+                    Ordenador · 1440 px
+                  </p>
                 </div>
-                <p className="mt-5 font-mono text-[13px] uppercase tracking-[0.12em] text-cyan">{c.etiqueta}</p>
-                <h3 className="mt-2 text-[20px] font-semibold text-text-bright">{c.titulo}</h3>
-                <p className="mt-2 text-[15px] leading-6 text-text">{c.texto}</p>
-              </article>
-            ))}
+                <div className="w-[28%] md:w-[15%]">
+                  <IPhone
+                    conteudo={
+                      <div className="h-full w-full overflow-hidden bg-[#f3f8f6]">
+                        <img src="/work/demo-movil-es.webp" alt="" loading="lazy" decoding="async" className="block w-full" />
+                      </div>
+                    }
+                  />
+                  <p className="mt-4 whitespace-nowrap text-center font-mono text-[9px] uppercase tracking-[0.12em] text-text-dim md:mt-5 md:text-[11px] md:tracking-[0.16em]">
+                    Móvil · 390 px
+                  </p>
+                </div>
+              </div>
+
+              <p className="mx-auto mt-10 max-w-[58ch] text-center text-[15px] leading-7 text-text-dim">
+                Una landing para una empresa de limpieza, con el formulario de presupuesto en el primer golpe de vista. La
+                empresa es ficticia, la página está hecha de verdad.{" "}
+                <a href="/ejemplo/limpieza" className="whitespace-nowrap font-semibold text-cyan hover:text-cloud">
+                  Abrir el ejemplo <ArrowUpRight className="inline h-4 w-4" aria-hidden="true" />
+                </a>
+              </p>
+            </motion.div>
           </div>
         </section>
 
-        {/* Como trabajo */}
-        <section className="border-t border-border bg-card/40">
+        {/* TRABAJOS */}
+        <section id="trabajos" className="scroll-mt-20 border-t border-border">
           <div className="mx-auto max-w-5xl px-5 py-16 md:py-24">
-            <h2 className="font-display text-[28px] font-bold leading-tight text-cloud md:text-[36px]">Cómo trabajamos</h2>
-            <ol className="mt-10 grid gap-4 md:grid-cols-4">
+            <motion.div
+              initial={semMovimento ? false : { opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-70px" }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <h2 className="max-w-[16ch] font-display text-[30px] font-bold leading-[1.05] tracking-[-0.03em] text-cloud [text-wrap:balance] md:text-[46px]">
+                Trabajos en producción
+              </h2>
+              <p className="mt-4 max-w-2xl text-[17px] leading-7 text-text">Dos negocios reales que usan todos los días lo que construí.</p>
+            </motion.div>
+            <div className="mt-14 grid gap-16 md:mt-16 md:gap-20">
+              {CASOS.map((c, i) => (
+                <Caso key={c.titulo} caso={c} i={i} parado={semMovimento} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CÓMO TRABAJAMOS: linha do tempo que se enche com o scroll. */}
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-5xl px-5 py-16 md:py-24">
+            <motion.h2
+              initial={semMovimento ? false : { opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-70px" }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="max-w-[16ch] font-display text-[30px] font-bold leading-[1.05] tracking-[-0.03em] text-cloud [text-wrap:balance] md:text-[46px]"
+            >
+              Cómo trabajamos
+            </motion.h2>
+            <ol ref={listaPasos} className="relative mt-14">
+              <span aria-hidden="true" className="absolute bottom-2 left-[18px] top-2 w-px bg-white/10 md:left-[22px]" />
+              <motion.span
+                aria-hidden="true"
+                style={{ height: semMovimento ? "100%" : alturaTraco }}
+                className="absolute left-[18px] top-2 w-px origin-top bg-gradient-to-b from-cyan via-blue to-blue/20 md:left-[22px]"
+              />
               {PASOS.map(([titulo, texto], i) => (
-                <li key={titulo} className="rounded-2xl border border-border bg-card p-6">
-                  <span className="font-mono text-[13px] font-semibold text-cyan">Paso {i + 1}</span>
-                  <h3 className="mt-3 text-[17px] font-semibold leading-snug text-text-bright">{titulo}</h3>
-                  <p className="mt-2 text-[15px] leading-6 text-text">{texto}</p>
-                </li>
+                <Paso key={titulo} i={i} total={PASOS.length} titulo={titulo} texto={texto} progresso={progressoPasos} parado={semMovimento} />
               ))}
             </ol>
           </div>
         </section>
 
-        {/* Por que */}
-        <section className="mx-auto max-w-5xl px-5 py-16 md:py-24">
-          <div className="grid gap-10 md:grid-cols-[1fr_1.2fr] md:items-start">
-            <div>
-              <Gauge className="h-7 w-7 text-cyan" aria-hidden="true" />
-              <h2 className="mt-4 font-display text-[28px] font-bold leading-tight text-cloud md:text-[36px]">Por qué trabajar conmigo</h2>
+        {/* POR QUÉ */}
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-5xl px-5 py-16 md:py-24">
+            <div className="grid gap-10 md:grid-cols-[0.85fr_1.15fr] md:items-start md:gap-16">
+              <div className="md:sticky md:top-24 md:self-start">
+                <Gauge className="h-7 w-7 text-cyan" aria-hidden="true" />
+                <h2 className="mt-4 max-w-[14ch] font-display text-[30px] font-bold leading-[1.05] tracking-[-0.03em] text-cloud [text-wrap:balance] md:text-[46px]">
+                  Por qué trabajar conmigo
+                </h2>
+              </div>
+              <ul className="flex flex-col gap-5">
+                {PORQUE.map((x, i) => (
+                  <motion.li
+                    key={x}
+                    initial={semMovimento ? false : { opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.55, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 text-[17px] leading-7 text-text-bright md:p-6"
+                  >
+                    <Check className="mt-1 h-5 w-5 shrink-0 text-success" aria-hidden="true" />
+                    {x}
+                  </motion.li>
+                ))}
+              </ul>
             </div>
-            <ul className="flex flex-col gap-4">
-              {PORQUE.map((x) => (
-                <li key={x} className="flex gap-3 text-[17px] leading-7 text-text-bright">
-                  <Check className="mt-1 h-5 w-5 shrink-0 text-success" aria-hidden="true" />
-                  {x}
-                </li>
-              ))}
-            </ul>
           </div>
         </section>
 
-        {/* FAQ */}
-        <section className="border-t border-border bg-card/40">
+        {/* FAQ: fica em <details> de proposito — funciona sem JavaScript e o
+            Google le-a na mesma. */}
+        <section className="border-t border-border">
           <div className="mx-auto max-w-3xl px-5 py-16 md:py-24">
-            <h2 className="font-display text-[28px] font-bold leading-tight text-cloud md:text-[36px]">Preguntas frecuentes</h2>
-            <div className="mt-8 flex flex-col gap-3">
+            <h2 className="font-display text-[30px] font-bold leading-[1.05] tracking-[-0.03em] text-cloud md:text-[46px]">
+              Preguntas frecuentes
+            </h2>
+            <div className="mt-10 flex flex-col">
               {faq.map(([p, r]) => (
-                <details key={p} className="group rounded-2xl border border-border bg-card px-6 py-5">
-                  <summary className="cursor-pointer list-none text-[17px] font-semibold text-text-bright marker:hidden">
+                <details key={p} className="group border-b border-white/[0.08] py-1">
+                  <summary className="cursor-pointer list-none py-5 text-[17px] font-semibold text-text-bright marker:hidden">
                     <span className="flex items-center justify-between gap-4">
                       {p}
-                      <ArrowRight className="h-4 w-4 shrink-0 text-text-dim transition-transform duration-200 group-open:rotate-90" aria-hidden="true" />
+                      <ArrowRight className="h-4 w-4 shrink-0 text-cyan transition-transform duration-300 group-open:rotate-90" aria-hidden="true" />
                     </span>
                   </summary>
-                  <p className="mt-3 text-[15px] leading-6 text-text">{r}</p>
+                  <p className="pb-5 pr-8 text-[15px] leading-7 text-text">{r}</p>
                 </details>
               ))}
             </div>
           </div>
         </section>
 
-        {/* CTA final */}
-        <section className="mx-auto max-w-5xl px-5 py-16 md:py-24">
-          <div className="rounded-3xl border border-border-strong bg-card p-8 text-center md:p-14">
-            <h2 className="mx-auto max-w-2xl font-display text-[28px] font-bold leading-tight text-cloud [text-wrap:balance] md:text-[36px]">
+        {/* CTA FINAL */}
+        <section className="relative overflow-hidden border-t border-border">
+          <div aria-hidden="true" className="lp-respira pointer-events-none absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(0,102,255,.4),transparent)] blur-[100px]" />
+          <div className="relative mx-auto max-w-5xl px-5 py-20 text-center md:py-28">
+            <p className="font-mono text-[12px] uppercase tracking-[0.2em] text-cyan md:text-[13px]">Hablemos</p>
+            <h2 className="mx-auto mt-5 max-w-[16ch] font-display text-[34px] font-bold leading-[1] tracking-[-0.035em] text-cloud [text-wrap:balance] md:text-[64px]">
               Cuéntame qué necesita tu negocio
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-[17px] leading-7 text-text">Te respondo yo, personalmente, con los siguientes pasos y un presupuesto por escrito.</p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <CtaWhatsApp href={waHref} texto="Escribir por WhatsApp" />
+            <p className="mx-auto mt-6 max-w-xl text-[17px] leading-7 text-text md:text-[19px]">
+              Te respondo yo, personalmente, con los siguientes pasos y un presupuesto por escrito.
+            </p>
+            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <CtaWhatsApp href={waHref} texto="Escribir por WhatsApp" brilho />
               <a
                 href={mailHref}
                 onClick={() => registarConversao("email")}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border-strong px-6 text-[15px] font-semibold text-text-bright hover:border-cyan"
+                className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full border border-border-strong px-7 text-[16px] font-semibold text-text-bright transition-[transform,border-color] duration-200 hover:scale-[1.02] hover:border-cyan"
               >
                 <Mail className="h-5 w-5" aria-hidden="true" /> {contact.email}
               </a>

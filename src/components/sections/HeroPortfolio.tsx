@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { ArrowDown, Github, Linkedin } from "lucide-react";
 import { GridBackground, GlowOrb } from "@/components/ui/GridBackground";
@@ -7,14 +6,27 @@ import { CetClock } from "@/components/ui/CetClock";
 import { HeroTerminal } from "@/components/interactive/HeroTerminal";
 import { contact } from "@/data/contact";
 
-const ease = [0.16, 1, 0.3, 1] as const;
-
 /**
  * Hire-me hero (redesign 2026-07): left-aligned, typography-led. The name is
  * the composition; the badge row answers the recruiter's first three
  * questions (open? where? authorized?) before the fold. No gradient text,
  * no centered symmetry — see docs/redesign-brief-2026-07.md.
  */
+/* Entradas em keyframes CSS e nao em JavaScript. Medido a 16/09: quando o
+   separador abre em segundo plano — que e o que acontece quando alguem abre o
+   link num separador novo — o Chrome trava o requestAnimationFrame e a
+   animacao do framer fica presa no estado inicial, com o texto a opacity 0.
+   Numa pagina que se manda a recrutadores, o nome nao pode depender de
+   JavaScript para aparecer. Com fill-mode both o estado final esta garantido e
+   quem tem "reduzir movimento" nao tem animacao nenhuma, logo ve tudo. */
+const CSS = `
+@keyframes cv-entra { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:none } }
+@keyframes cv-respira { 0%,100% { opacity:.4; transform:scale(1) } 50% { opacity:.7; transform:scale(1.07) } }
+.cv-entra { animation: cv-entra .85s cubic-bezier(.16,1,.3,1) both }
+.cv-respira { animation: cv-respira 13s ease-in-out infinite }
+@media (prefers-reduced-motion: reduce) { .cv-entra, .cv-respira { animation: none } }
+`;
+
 export function HeroPortfolio() {
   const { t } = useTranslation();
 
@@ -32,7 +44,13 @@ export function HeroPortfolio() {
 
   return (
     <section id="top" className="relative min-h-screen overflow-hidden">
+      <style>{CSS}</style>
       <GridBackground />
+      {/* A mesma luz da home, para as duas paginas serem a mesma casa. */}
+      <div
+        aria-hidden="true"
+        className="cv-respira pointer-events-none absolute left-[62%] top-[-34%] h-[100vh] w-[80vw] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(0,102,255,.34),rgba(0,212,255,.08),transparent)] blur-[110px]"
+      />
       <GlowOrb
         className="-top-52 -right-40"
         size={680}
@@ -41,11 +59,9 @@ export function HeroPortfolio() {
 
       <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col justify-center px-6 pb-16 pt-32 md:px-10 md:pt-36">
         {/* Badge row: open-to-work + authorization + live clock */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease }}
-          className="flex flex-wrap items-center gap-x-5 gap-y-2"
+        <div
+          className="cv-entra flex flex-wrap items-center gap-x-5 gap-y-2"
+          style={{ animationDelay: "0s" }}
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-[color:var(--color-border-strong)] bg-white/[0.03] py-1.5 pl-3 pr-4">
             <span className="relative flex h-2 w-2" aria-hidden>
@@ -60,58 +76,48 @@ export function HeroPortfolio() {
             {t("p.hero.authorized")}
           </span>
           <CetClock />
-        </motion.div>
+        </div>
 
         {/* Eyebrow + name */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease, delay: 0.08 }}
-          className="mono mt-12 text-xs uppercase tracking-[0.3em] text-[color:var(--color-blue)] md:text-sm"
+        <p
+          className="cv-entra mono mt-12 text-xs uppercase tracking-[0.3em] text-[color:var(--color-blue)] md:text-sm"
+          style={{ animationDelay: "0.08s" }}
         >
           {t("p.hero.eyebrow")}
-        </motion.p>
+        </p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease, delay: 0.16 }}
-          className="text-display-hero mt-4 -ml-[0.04em]"
+        <h1
+          className="cv-entra text-display-hero mt-4 -ml-[0.04em]"
+          style={{ animationDelay: "0.16s" }}
         >
           {t("p.hero.firstName")}
           <br />
           <span className="ml-[0.6ch]">{t("p.hero.lastName")}</span>
           <span className="text-[color:var(--color-ember)]">.</span>
-        </motion.h1>
+        </h1>
 
         {/* Below the name: lead + CTAs on the left, terminal on the right
             (desktop only — the name itself keeps the full container width). */}
         <div className="mt-8 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,23rem)] lg:items-start lg:gap-14">
           <div>
             {/* Lead: the approved positioning line, verbatim from the CV */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease, delay: 0.3 }}
-              className="max-w-[38rem] text-pretty text-lg leading-[1.65] text-[color:var(--color-text)] md:text-xl"
+            <p
+              className="cv-entra max-w-[38rem] text-pretty text-lg leading-[1.65] text-[color:var(--color-text)] md:text-xl"
+              style={{ animationDelay: "0.3s" }}
             >
               {t("p.hero.lead")}
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease, delay: 0.4 }}
-              className="mono mt-3 text-sm text-[color:var(--color-text-dim)]"
+            </p>
+            <p
+              className="cv-entra mono mt-3 text-sm text-[color:var(--color-text-dim)]"
+              style={{ animationDelay: "0.4s" }}
             >
               {t("p.hero.sub")}
-            </motion.p>
+            </p>
 
             {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease, delay: 0.5 }}
-              className="mt-10 flex flex-wrap items-center gap-3"
+            <div
+              className="cv-entra mt-10 flex flex-wrap items-center gap-3"
+              style={{ animationDelay: "0.5s" }}
             >
               <a
                 href="#work"
@@ -142,21 +148,19 @@ export function HeroPortfolio() {
               >
                 <Linkedin className="h-5 w-5" />
               </a>
-            </motion.div>
+            </div>
           </div>
 
           {/* Desktop terminal: the playful proof-of-craft, right column only */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease, delay: 0.55 }}
-            className="hidden lg:block"
+          <div
+            className="cv-entra hidden lg:block"
+            style={{ animationDelay: "0.55s" }}
           >
             <HeroTerminal />
             <p className="mono mt-3 text-center text-[11px] text-[color:var(--color-text-dim)]">
               {t("p.hero.terminalHint")}
             </p>
-          </motion.div>
+          </div>
         </div>
 
         {/* Mobile/tablet: terminal behind an explicit disclosure, so the fold
@@ -179,11 +183,9 @@ export function HeroPortfolio() {
         </div>
 
         {/* Proof strip: the four approved numbers, nothing else */}
-        <motion.dl
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.9, delay: 0.7 }}
-          className="mt-20 grid grid-cols-2 gap-x-10 gap-y-6 border-t border-[color:var(--color-border)] pt-8 md:grid-cols-4"
+        <dl
+          className="cv-entra mt-20 grid grid-cols-2 gap-x-10 gap-y-6 border-t border-[color:var(--color-border)] pt-8 md:grid-cols-4"
+          style={{ animationDelay: "0.7s" }}
         >
           {proof.map((key) => (
             <div key={key} className="flex flex-col">
@@ -195,7 +197,7 @@ export function HeroPortfolio() {
               </dd>
             </div>
           ))}
-        </motion.dl>
+        </dl>
       </div>
     </section>
   );
