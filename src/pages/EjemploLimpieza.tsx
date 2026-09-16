@@ -8,7 +8,9 @@ import {
   useMotionValueEvent,
   type MotionValue,
 } from "framer-motion";
-import { Phone, Check, Sparkles, Building2, Home as Casa, ArrowRight, Plus, ShieldCheck, Clock, Repeat } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Phone, Check, Building2, Home as Casa, ArrowRight, Plus, ShieldCheck, Clock, Repeat, Sparkles } from "lucide-react";
+import { EXEMPLO, linguaExemplo, type ExemploTexto } from "@/data/ejemplo";
 
 /**
  * PÁGINA DE EXEMPLO: LANDING DE UMA EMPRESA DE LIMPEZA (16/09/2026).
@@ -21,11 +23,11 @@ import { Phone, Check, Sparkles, Building2, Home as Casa, ArrowRight, Plus, Shie
  * temporizador em JavaScript. Medido a 16/09: o Chrome trava o
  * requestAnimationFrame de um iframe que ainda não considera visível, e o nosso
  * iframe nasce com a tampa do portátil fechada e o ecrã a opacidade 0. As
- * animações de entrada por tempo ficavam congeladas a meio (opacity 0,
- * translateY parado em 15,5 px) e o herói aparecia em branco lá dentro. As que
- * dependem do scroll não têm esse problema, porque quem as move somos nós.
- * Por isso: `initial` só quando a página é aberta a sério (sem ?embed=1), e as
- * pulsações de fundo em keyframes CSS, que correm no compositor.
+ * animações de entrada por tempo ficavam congeladas a meio e o herói aparecia
+ * em branco lá dentro. As que dependem do scroll não têm esse problema.
+ *
+ * LÍNGUA: segue a do site. Quando corre embutida, a home passa-lhe `?lang=`,
+ * porque dentro do iframe o i18n é outro e não sabe o que o visitante escolheu.
  *
  * "Nítida" é um nome INVENTADO e a página diz isso no topo: não é cliente, não
  * tem avaliações, não tem preços e não usa marca de ninguém. Vai com noindex
@@ -38,13 +40,21 @@ const TINTA = "#0c1a16";
 
 const VER = { once: true, amount: 0.3 } as const;
 
+function param(nome: string) {
+  if (typeof window === "undefined") return null;
+  return new URLSearchParams(window.location.search).get(nome);
+}
+function tem(nome: string) {
+  if (typeof window === "undefined") return false;
+  return new URLSearchParams(window.location.search).has(nome);
+}
+
 /* ?plano=1: página toda no estado final, sem capítulo fixo e sem revelações
    ligadas ao scroll. Serve só para tirar as capturas de reserva que entram nos
    ecrãs pequenos — numa captura de página inteira o scroll nunca acontece, e
    tudo o que depende dele sairia apagado. */
-const PLANO = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("plano");
+const PLANO = tem("plano");
 
-/* Só as keyframes que têm de sobreviver ao travão de rAF do iframe. */
 const CSS = `
 @keyframes nitida-respira { 0%,100% { transform: scale(1); opacity:.5 } 50% { transform: scale(1.12); opacity:.78 } }
 @keyframes nitida-brilho { 0% { transform: translateX(-120%) } 55%,100% { transform: translateX(220%) } }
@@ -61,7 +71,7 @@ const CSS = `
 `;
 
 /* A estrela de quatro pontas da marca, vazada ao centro. Vai em SVG e não em
-   imagem porque aparece a 20 px no cabeçalho e a 200 px no rodapé. */
+   imagem porque aparece a 20 px no cabeçalho e grande no rodapé. */
 function Estrela({ className, cor = "currentColor" }: { className?: string; cor?: string }) {
   return (
     <svg viewBox="0 0 100 100" className={className} fill={cor} fillRule="evenodd" aria-hidden="true">
@@ -124,86 +134,11 @@ function TituloAceso({ texto, className, escuro = false }: { texto: string; clas
   );
 }
 
-const SERVICOS = [
-  {
-    icone: Casa,
-    nome: "Limpieza del hogar",
-    texto: "Semanal, quincenal o puntual. Siempre el mismo equipo, que ya sabe cómo te gusta tu casa.",
-    itens: ["Cocina y baños a fondo", "Cambio de sábanas", "Productos incluidos"],
-  },
-  {
-    icone: Building2,
-    nome: "Oficinas y locales",
-    texto: "Fuera del horario de trabajo, con parte de servicio firmado en cada visita.",
-    itens: ["Antes de abrir o al cerrar", "Parte firmado por visita", "Factura mensual"],
-  },
-  {
-    icone: Sparkles,
-    nome: "Limpieza a fondo",
-    texto: "Mudanzas, fin de alquiler y después de obra, para entregar la casa como nueva.",
-    itens: ["Electrodomésticos por dentro", "Cristales y persianas", "Juntas y cal"],
-  },
-];
+const ICONES_SERVICO = [Casa, Building2, Sparkles];
+const ICONES_GARANTIA = [ShieldCheck, Clock, Repeat];
 
-const PASSOS = [
-  { t: "Cuéntanos tu casa", d: "Metros, habitaciones y cada cuánto la quieres limpia. Dos minutos y sin registrarte." },
-  { t: "Recibes el presupuesto", d: "Cerrado y por escrito el mismo día. Sin visita comercial y sin letra pequeña." },
-  { t: "Reservas el día", d: "Confirmamos por mensaje y te avisamos cuando el equipo sale hacia tu casa." },
-];
-
-const GARANTIAS = [
-  { icone: ShieldCheck, t: "Personal propio", d: "Dado de alta y asegurado. Nada de subcontratas." },
-  { icone: Clock, t: "Puntualidad", d: "Si el equipo se retrasa, te avisamos antes de la hora." },
-  { icone: Repeat, t: "Sin permanencia", d: "Reservas cuando te hace falta y paras cuando quieras." },
-];
-
-const PERGUNTAS = [
-  { p: "¿Tengo que estar en casa?", r: "No hace falta. Muchos clientes nos dejan llave o código, y te avisamos al entrar y al salir." },
-  { p: "¿Traéis los productos?", r: "Sí, van incluidos. Si prefieres que usemos los tuyos por alergias o superficies delicadas, también." },
-  { p: "¿Puedo cambiar el día?", r: "Sí, avisando con 24 horas reorganizamos el equipo sin coste." },
-];
-
-/* Um passo do capítulo fixo: acende, fica, apaga. */
-function PassoFixo({
-  progresso,
-  i,
-  total,
-  passo,
-}: {
-  progresso: MotionValue<number>;
-  i: number;
-  total: number;
-  passo: { t: string; d: string };
-}) {
-  const fatia = 1 / total;
-  const ini = 0.08 + i * fatia * 0.82;
-  const opacity = useTransform(progresso, [ini, ini + 0.1], [0.18, 1]);
-  const y = useTransform(progresso, [ini, ini + 0.1], [26, 0]);
-  const anel = useTransform(progresso, [ini, ini + 0.1], [0.3, 1]);
-  return (
-    <motion.div style={{ opacity, y }} className="flex gap-5 md:gap-7">
-      <motion.span
-        style={{ scale: anel }}
-        className="block h-11 w-11 shrink-0 md:h-14 md:w-14"
-      >
-        <span
-          className="grid h-full w-full place-items-center rounded-full font-mono text-[16px] font-bold text-white md:text-[19px]"
-          style={{ background: VERDE }}
-        >
-          {i + 1}
-        </span>
-      </motion.span>
-      <div>
-        <h3 className="font-display text-[22px] font-bold tracking-[-0.02em] text-white md:text-[30px]">{passo.t}</h3>
-        <p className="mt-2 max-w-[44ch] text-[15px] leading-6 text-white/55 md:text-[17px] md:leading-7">{passo.d}</p>
-      </div>
-    </motion.div>
-  );
-}
-
-/* Banda de foto a toda a largura, com parallax. A imagem entra mais alta do
-   que a janela e desliza devagar: e o unico sitio desta pagina onde uma foto
-   faz falta, por isso leva cuidado a mais. */
+/* Banda de foto a toda a largura, com parallax. É o único sítio desta página
+   onde uma foto faz falta, por isso leva cuidado a mais. */
 function BandaFoto({ src, alt, legenda }: { src: string; alt: string; legenda: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const semMovimento = useReducedMotion();
@@ -212,8 +147,8 @@ function BandaFoto({ src, alt, legenda }: { src: string; alt: string; legenda: s
   return (
     <section
       ref={ref}
-      /* Em ?plano=1 a altura vai em pixeis: a captura de pagina inteira usa uma
-         janela de milhares de pixeis, e 62vh dava uma banda de tres metros. */
+      /* Em ?plano=1 a altura vai em pixéis: a captura de página inteira usa uma
+         janela de milhares de pixéis, e 62vh dava uma banda de três metros. */
       className={`relative overflow-hidden ${PLANO ? "h-[420px]" : "h-[46vh] min-h-[280px] md:h-[62vh]"}`}
     >
       <motion.img
@@ -235,15 +170,47 @@ function BandaFoto({ src, alt, legenda }: { src: string; alt: string; legenda: s
   );
 }
 
+/* Um passo do capítulo fixo: acende, fica, apaga. */
+function PassoFixo({
+  progresso,
+  i,
+  total,
+  passo,
+}: {
+  progresso: MotionValue<number>;
+  i: number;
+  total: number;
+  passo: { t: string; d: string };
+}) {
+  const fatia = 1 / total;
+  const ini = 0.08 + i * fatia * 0.82;
+  const opacity = useTransform(progresso, [ini, ini + 0.1], [0.18, 1]);
+  const y = useTransform(progresso, [ini, ini + 0.1], [26, 0]);
+  const anel = useTransform(progresso, [ini, ini + 0.1], [0.3, 1]);
+  return (
+    <motion.div style={{ opacity, y }} className="flex gap-5 md:gap-7">
+      <motion.span style={{ scale: anel }} className="block h-11 w-11 shrink-0 md:h-14 md:w-14">
+        <span
+          className="grid h-full w-full place-items-center rounded-full font-mono text-[16px] font-bold text-white md:text-[19px]"
+          style={{ background: VERDE }}
+        >
+          {i + 1}
+        </span>
+      </motion.span>
+      <div>
+        <h3 className="font-display text-[22px] font-bold tracking-[-0.02em] text-white md:text-[30px]">{passo.t}</h3>
+        <p className="mt-2 max-w-[44ch] text-[15px] leading-6 text-white/55 md:text-[17px] md:leading-7">{passo.d}</p>
+      </div>
+    </motion.div>
+  );
+}
+
 function Pergunta({ p, r, aberta, aoAbrir }: { p: string; r: string; aberta: boolean; aoAbrir: () => void }) {
   return (
     <div className="border-b border-black/[0.08]">
       <button type="button" onClick={aoAbrir} className="flex w-full items-center justify-between gap-6 py-5 text-left">
         <span className="text-[17px] font-semibold tracking-[-0.01em]">{p}</span>
-        <span
-          className="shrink-0 transition-transform duration-300"
-          style={{ transform: aberta ? "rotate(45deg)" : "rotate(0deg)" }}
-        >
+        <span className="shrink-0 transition-transform duration-300" style={{ transform: aberta ? "rotate(45deg)" : "rotate(0deg)" }}>
           <Plus className="h-5 w-5" style={{ color: VERDE }} aria-hidden="true" />
         </span>
       </button>
@@ -260,16 +227,16 @@ function Pergunta({ p, r, aberta, aoAbrir }: { p: string; r: string; aberta: boo
 }
 
 export default function EjemploLimpieza() {
+  const { i18n } = useTranslation();
   const semMovimento = useReducedMotion();
   /* ?embed=1 → está dentro do portátil na home. Ver o comentário do topo. */
-  const [embutido] = useState(
-    () => typeof window !== "undefined" && new URLSearchParams(window.location.search).has("embed"),
-  );
-  /* ?plano=1 → sem o capítulo fixo. Serve para tirar a captura de reserva que
-     entra nos ecrãs pequenos: uma secção de 240vh numa captura de página
-     inteira sairia como dois mil pixéis de vazio. */
+  const [embutido] = useState(() => tem("embed"));
   const plano = PLANO;
   const quieto = embutido || semMovimento;
+  /* Embutida, a língua vem no URL: o i18n de dentro do iframe não sabe o que o
+     visitante escolheu lá fora. */
+  const tx: ExemploTexto = EXEMPLO[linguaExemplo(param("lang") ?? i18n.resolvedLanguage)];
+
   const [encolhido, setEncolhido] = useState(false);
   const [aberta, setAberta] = useState(0);
   const heroRef = useRef<HTMLElement>(null);
@@ -279,13 +246,11 @@ export default function EjemploLimpieza() {
   useMotionValueEvent(scrollY, "change", (v) => setEncolhido(v > 40));
 
   const { scrollYProgress: progressoPassos } = useScroll({ target: passosRef, offset: ["start start", "end end"] });
-
   const { scrollYProgress: progressoHero } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroY = useTransform(progressoHero, [0, 1], ["0%", "14%"]);
   const cartaoY = useTransform(progressoHero, [0, 1], ["0%", "-9%"]);
   const heroOpacity = useTransform(progressoHero, [0.5, 1], [1, 0.25]);
 
-  /* Entra de baixo ao aparecer. Só quando a página é aberta a sério. */
   const entra = quieto
     ? {}
     : ({
@@ -306,8 +271,7 @@ export default function EjemploLimpieza() {
         } as const);
 
   useEffect(() => {
-    document.title = "Nítida · ejemplo de landing para empresa de limpieza";
-    document.documentElement.lang = "es";
+    document.title = tx.titulo;
     let m = document.querySelector('meta[name="robots"]');
     if (!m) {
       m = document.createElement("meta");
@@ -316,16 +280,14 @@ export default function EjemploLimpieza() {
     }
     m.setAttribute("content", "noindex, nofollow");
     return () => m?.setAttribute("content", "index, follow");
-  }, []);
+  }, [tx.titulo]);
 
   return (
     <MotionConfig reducedMotion="user">
       <style>{CSS}</style>
       <div className="min-h-screen bg-white" style={{ color: TINTA }}>
         {/* Isto é uma demonstração, não uma empresa que existe. */}
-        <div className="bg-[#0c1a16] px-5 py-2 text-center text-[12px] font-medium text-white/70">
-          Página de ejemplo · empresa ficticia creada para mostrar un trabajo de MW Dev
-        </div>
+        <div className="bg-[#0c1a16] px-5 py-2 text-center text-[12px] font-medium text-white/70">{tx.aviso}</div>
 
         <header
           className="sticky top-0 z-30 border-b border-black/[0.06] backdrop-blur transition-[background-color,box-shadow] duration-300"
@@ -341,12 +303,14 @@ export default function EjemploLimpieza() {
             <Marca />
             <div className="flex items-center gap-6">
               <nav className="hidden gap-6 text-[15px] font-medium text-black/55 md:flex">
-                <span className="cursor-pointer transition-colors hover:text-[#0f9d76]">Servicios</span>
-                <span className="cursor-pointer transition-colors hover:text-[#0f9d76]">Cómo funciona</span>
-                <span className="cursor-pointer transition-colors hover:text-[#0f9d76]">Preguntas</span>
+                {tx.nav.map((n) => (
+                  <span key={n} className="cursor-pointer transition-colors hover:text-[#0f9d76]">
+                    {n}
+                  </span>
+                ))}
               </nav>
               <Botao>
-                <Phone className="h-4 w-4" aria-hidden="true" /> Pedir presupuesto
+                <Phone className="h-4 w-4" aria-hidden="true" /> {tx.ctaCurto}
               </Botao>
             </div>
           </div>
@@ -375,29 +339,22 @@ export default function EjemploLimpieza() {
                   className="inline-flex items-center gap-2 rounded-full border border-black/[0.07] bg-white px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em]"
                   style={{ color: VERDE }}
                 >
-                  <span className="h-1.5 w-1.5 rounded-full" style={{ background: VERDE }} /> Hogares y oficinas
+                  <span className="h-1.5 w-1.5 rounded-full" style={{ background: VERDE }} /> {tx.heroOlho}
                 </span>
                 <h1 className="mt-5 font-display text-[40px] font-bold leading-[1.02] tracking-[-0.035em] md:text-[60px]">
-                  Tu casa impecable sin tener que estar encima.
+                  {tx.heroH1}
                 </h1>
-                <p className="mt-6 max-w-[46ch] text-[17px] leading-7 text-black/65">
-                  Equipo propio, asegurado y siempre el mismo en tu domicilio. Presupuesto cerrado antes de empezar y sin
-                  permanencia.
-                </p>
+                <p className="mt-6 max-w-[46ch] text-[17px] leading-7 text-black/65">{tx.heroSub}</p>
                 <div className="mt-8 flex flex-wrap gap-3">
                   <Botao grande brilho>
-                    Pedir presupuesto <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    {tx.heroCta} <ArrowRight className="h-4 w-4" aria-hidden="true" />
                   </Botao>
                   <span className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-black/12 bg-white px-7 py-3.5 text-[16px] font-semibold transition-transform duration-200 hover:scale-[1.03]">
-                    Ver servicios
+                    {tx.heroCta2}
                   </span>
                 </div>
                 <ul className="mt-8 grid gap-2.5 text-[15px] text-black/70">
-                  {[
-                    "Personal propio, dado de alta y asegurado",
-                    "Productos incluidos en el precio",
-                    "Sin permanencia: reservas cuando te hace falta",
-                  ].map((t) => (
+                  {tx.heroChecks.map((t) => (
                     <li key={t} className="flex items-start gap-2.5">
                       <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: VERDE }} aria-hidden="true" />
                       {t}
@@ -415,23 +372,21 @@ export default function EjemploLimpieza() {
                   className="inline-block rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em]"
                   style={{ background: VERDE_FUNDO, color: VERDE }}
                 >
-                  Sin compromiso
+                  {tx.formSelo}
                 </span>
-                <h2 className="mt-4 font-display text-[26px] font-bold tracking-[-0.025em]">Presupuesto en el día</h2>
-                <p className="mt-2 text-[15px] leading-6 text-black/55">
-                  Rellena tres datos y te llamamos con el precio cerrado.
-                </p>
+                <h2 className="mt-4 font-display text-[26px] font-bold tracking-[-0.025em]">{tx.formTitulo}</h2>
+                <p className="mt-2 text-[15px] leading-6 text-black/55">{tx.formSub}</p>
                 <div className="mt-6 space-y-3.5">
-                  {["Nombre", "Teléfono", "Ciudad o código postal"].map((r) => (
+                  {tx.formCampos.map((r) => (
                     <label key={r} className="block">
                       <span className="text-[13px] font-medium text-black/55">{r}</span>
                       <span className="mt-1.5 block h-12 rounded-xl border border-black/10 bg-[#f7faf9] transition-colors duration-200 hover:border-[#0f9d76]" />
                     </label>
                   ))}
                   <div>
-                    <span className="text-[13px] font-medium text-black/55">¿Qué necesitas?</span>
+                    <span className="text-[13px] font-medium text-black/55">{tx.formPergunta}</span>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {["Hogar", "Oficina", "A fondo"].map((o, i) => (
+                      {tx.formOpcoes.map((o, i) => (
                         <span
                           key={o}
                           className="cursor-pointer rounded-full border px-4 py-2 text-[14px] font-medium transition-transform duration-200 hover:-translate-y-0.5"
@@ -451,9 +406,9 @@ export default function EjemploLimpieza() {
                   className="nitida-brilho relative mt-6 flex h-13 cursor-pointer items-center justify-center overflow-hidden rounded-xl text-[16px] font-semibold text-white shadow-[0_16px_34px_-14px_rgba(15,157,118,.95)]"
                   style={{ background: VERDE }}
                 >
-                  <span className="relative z-10">Quiero mi presupuesto</span>
+                  <span className="relative z-10">{tx.formBotao}</span>
                 </span>
-                <p className="mt-3 text-center text-[12px] text-black/40">Respondemos en el mismo día laborable.</p>
+                <p className="mt-3 text-center text-[12px] text-black/40">{tx.formNota}</p>
               </motion.div>
             </motion.div>
           </section>
@@ -461,55 +416,56 @@ export default function EjemploLimpieza() {
           {/* GARANTIAS */}
           <section className="border-y border-black/[0.06] bg-white">
             <div className="mx-auto grid max-w-6xl gap-8 px-5 py-10 md:grid-cols-3 md:py-12">
-              {GARANTIAS.map(({ icone: Icone, t, d }, i) => (
-                <motion.div key={t} {...entraTarde(i)} className="flex gap-4">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl" style={{ background: VERDE_FUNDO }}>
-                    <Icone className="h-5 w-5" style={{ color: VERDE }} aria-hidden="true" />
-                  </span>
-                  <div>
-                    <h3 className="text-[16px] font-semibold tracking-[-0.01em]">{t}</h3>
-                    <p className="mt-1 text-[14px] leading-6 text-black/55">{d}</p>
-                  </div>
-                </motion.div>
-              ))}
+              {tx.garantias.map((g, i) => {
+                const Icone = ICONES_GARANTIA[i] ?? ShieldCheck;
+                return (
+                  <motion.div key={g.t} {...entraTarde(i)} className="flex gap-4">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl" style={{ background: VERDE_FUNDO }}>
+                      <Icone className="h-5 w-5" style={{ color: VERDE }} aria-hidden="true" />
+                    </span>
+                    <div>
+                      <h3 className="text-[16px] font-semibold tracking-[-0.01em]">{g.t}</h3>
+                      <p className="mt-1 text-[14px] leading-6 text-black/55">{g.d}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </section>
 
-          {/* UMA IMAGEM, EM BANDA. Parallax ligado ao scroll (nada de tempo). */}
-          <BandaFoto
-            src="/work/nitida-sala.webp"
-            alt="Salón luminoso y recogido después de una limpieza"
-            legenda="Así queda un salón después de una visita nuestra"
-          />
+          <BandaFoto src="/work/nitida-sala.webp" alt={tx.bandaAlt} legenda={tx.bandaLegenda} />
 
           {/* SERVIÇOS */}
           <section className="mx-auto max-w-6xl px-5 py-16 md:py-24">
             <TituloAceso
-              texto="Qué limpiamos"
+              texto={tx.servicosTitulo}
               className="max-w-[16ch] font-display text-[34px] font-bold tracking-[-0.03em] md:text-[46px]"
             />
             <div className="mt-10 grid gap-5 md:grid-cols-3">
-              {SERVICOS.map(({ icone: Icone, nome, texto, itens }, i) => (
-                <motion.article
-                  key={nome}
-                  {...entraTarde(i)}
-                  className="group rounded-2xl border border-black/[0.07] bg-[#f7faf9] p-7 transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(.05,.7,.1,1)] hover:-translate-y-1.5 hover:shadow-[0_30px_60px_-35px_rgba(12,26,22,.55)]"
-                >
-                  <span className="grid h-11 w-11 place-items-center rounded-xl bg-white shadow-[0_6px_18px_-8px_rgba(12,26,22,.4)] transition-transform duration-300 group-hover:scale-110">
-                    <Icone className="h-5 w-5" style={{ color: VERDE }} aria-hidden="true" />
-                  </span>
-                  <h3 className="mt-5 text-[20px] font-semibold tracking-[-0.015em]">{nome}</h3>
-                  <p className="mt-2 text-[15px] leading-6 text-black/60">{texto}</p>
-                  <ul className="mt-5 space-y-2 border-t border-black/[0.07] pt-5 text-[14px] text-black/60">
-                    {itens.map((it) => (
-                      <li key={it} className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: VERDE }} aria-hidden="true" />
-                        {it}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.article>
-              ))}
+              {tx.servicos.map((s, i) => {
+                const Icone = ICONES_SERVICO[i] ?? Casa;
+                return (
+                  <motion.article
+                    key={s.nome}
+                    {...entraTarde(i)}
+                    className="group rounded-2xl border border-black/[0.07] bg-[#f7faf9] p-7 transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(.05,.7,.1,1)] hover:-translate-y-1.5 hover:shadow-[0_30px_60px_-35px_rgba(12,26,22,.55)]"
+                  >
+                    <span className="grid h-11 w-11 place-items-center rounded-xl bg-white shadow-[0_6px_18px_-8px_rgba(12,26,22,.4)] transition-transform duration-300 group-hover:scale-110">
+                      <Icone className="h-5 w-5" style={{ color: VERDE }} aria-hidden="true" />
+                    </span>
+                    <h3 className="mt-5 text-[20px] font-semibold tracking-[-0.015em]">{s.nome}</h3>
+                    <p className="mt-2 text-[15px] leading-6 text-black/60">{s.texto}</p>
+                    <ul className="mt-5 space-y-2 border-t border-black/[0.07] pt-5 text-[14px] text-black/60">
+                      {s.itens.map((it) => (
+                        <li key={it} className="flex items-start gap-2">
+                          <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: VERDE }} aria-hidden="true" />
+                          {it}
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.article>
+                );
+              })}
             </div>
           </section>
 
@@ -518,15 +474,15 @@ export default function EjemploLimpieza() {
             <div className={plano ? "px-5" : "sticky top-0 flex h-screen flex-col justify-center overflow-hidden px-5"}>
               <div className="mx-auto w-full max-w-4xl">
                 <p className="font-mono text-[11px] uppercase tracking-[0.2em]" style={{ color: VERDE }}>
-                  Tres pasos
+                  {tx.passosOlho}
                 </p>
                 <TituloAceso
-                  texto="Cómo funciona"
+                  texto={tx.passosTitulo}
                   escuro
                   className="mt-3 font-display text-[34px] font-bold tracking-[-0.03em] md:text-[52px]"
                 />
                 <div className="mt-10 space-y-8 md:mt-14 md:space-y-10">
-                  {PASSOS.map((p, i) =>
+                  {tx.passos.map((p, i) =>
                     plano ? (
                       <div key={p.t} className="flex gap-5 md:gap-7">
                         <span className="block h-11 w-11 shrink-0 md:h-14 md:w-14">
@@ -543,7 +499,7 @@ export default function EjemploLimpieza() {
                         </div>
                       </div>
                     ) : (
-                      <PassoFixo key={p.t} progresso={progressoPassos} i={i} total={PASSOS.length} passo={p} />
+                      <PassoFixo key={p.t} progresso={progressoPassos} i={i} total={tx.passos.length} passo={p} />
                     ),
                   )}
                 </div>
@@ -558,7 +514,7 @@ export default function EjemploLimpieza() {
                 <div className="overflow-hidden rounded-3xl">
                   <img
                     src="/work/nitida-cozinha.webp"
-                    alt="Encimera de cocina impecable a contraluz"
+                    alt={tx.cozinhaAlt}
                     loading="lazy"
                     decoding="async"
                     className="block aspect-[4/3] w-full object-cover md:aspect-[3/4]"
@@ -567,11 +523,11 @@ export default function EjemploLimpieza() {
               </motion.div>
               <div>
                 <TituloAceso
-                  texto="Preguntas frecuentes"
+                  texto={tx.perguntasTitulo}
                   className="font-display text-[34px] font-bold tracking-[-0.03em] md:text-[46px]"
                 />
                 <motion.div {...entra} className="mt-8">
-                  {PERGUNTAS.map((q, i) => (
+                  {tx.perguntas.map((q, i) => (
                     <Pergunta key={q.p} p={q.p} r={q.r} aberta={aberta === i} aoAbrir={() => setAberta(aberta === i ? -1 : i)} />
                   ))}
                 </motion.div>
@@ -588,14 +544,12 @@ export default function EjemploLimpieza() {
             />
             <motion.div {...entra} className="relative mx-auto max-w-3xl px-5 text-center">
               <h2 className="mx-auto max-w-[18ch] font-display text-[34px] font-bold leading-[1.05] tracking-[-0.03em] md:text-[48px]">
-                ¿Limpiamos en tu zona?
+                {tx.fechoTitulo}
               </h2>
-              <p className="mx-auto mt-5 max-w-[52ch] text-[17px] leading-7 text-black/60">
-                Escríbenos tu código postal y te decimos el mismo día si tenemos equipo disponible y cuánto costaría.
-              </p>
+              <p className="mx-auto mt-5 max-w-[52ch] text-[17px] leading-7 text-black/60">{tx.fechoSub}</p>
               <div className="mt-8 flex justify-center">
                 <Botao grande brilho>
-                  <Phone className="h-4 w-4" aria-hidden="true" /> Pedir presupuesto
+                  <Phone className="h-4 w-4" aria-hidden="true" /> {tx.ctaCurto}
                 </Botao>
               </div>
             </motion.div>
@@ -605,7 +559,7 @@ export default function EjemploLimpieza() {
         <footer className="bg-[#0c1a16] py-10 text-white">
           <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 text-[14px] text-white/45 sm:flex-row sm:items-center sm:justify-between">
             <Marca claro />
-            <span>Ejemplo de landing page · no es una empresa real</span>
+            <span>{tx.rodape}</span>
           </div>
         </footer>
       </div>

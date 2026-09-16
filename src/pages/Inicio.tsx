@@ -5,6 +5,7 @@ import { contact } from "@/data/contact";
 import { INICIO, type LinguaInicio } from "@/data/inicio";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { MarcaMW } from "@/components/brand/MarcaMW";
+import { SeletorFlutuante } from "@/components/ui/SeletorFlutuante";
 import { CinemaHero } from "@/components/sections/CinemaHero";
 import { CinemaFatura } from "@/components/sections/CinemaFatura";
 import { CinemaAgenda } from "@/components/sections/CinemaAgenda";
@@ -36,12 +37,13 @@ export default function Inicio() {
 
   return (
     <div className="min-h-screen bg-void text-text">
+      <SeletorFlutuante />
       <header className="border-b border-border">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-5">
           <MarcaMW />
           <div className="flex items-center gap-4">
             <Link to="/cv" className="text-[13px] font-semibold text-text-dim hover:text-text-bright">CV</Link>
-            <LanguageSwitcher />
+            <LanguageSwitcher idiomas={["es", "pt-BR", "en"]} />
           </div>
         </div>
       </header>
@@ -64,7 +66,7 @@ export default function Inicio() {
             como caso, depois o leque completo e como se trabalha. */}
         <CinemaAnuncio texto={tx.anuncio} ctaHref={wa(tx.wa)} />
 
-        <CinemaLanding texto={tx.landing} rota="/ejemplo/limpieza" />
+        <CinemaLanding texto={tx.landing} rota="/ejemplo/limpieza" lingua={lingua(i18n.resolvedLanguage)} />
 
         <div className="bg-void px-6 pt-20 text-center md:pt-28">
           <span className="inline-block rounded-full border border-white/12 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-text-dim md:text-[12px]">

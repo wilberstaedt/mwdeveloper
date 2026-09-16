@@ -38,8 +38,11 @@ export interface CinemaLandingTexto {
   rotuloMovel: string;
 }
 
-const DESKTOP = "/work/demo-limpieza-desktop.webp";
-const MOVEL = "/work/demo-limpieza-movil.webp";
+/* As capturas de reserva existem nas três línguas: um visitante em inglês num
+   telemóvel não pode ver a demonstração em espanhol (16/09). */
+const curto = (l: string) => (l === "pt-BR" ? "pt" : l === "es" ? "es" : "en");
+const DESKTOP = (l: string) => `/work/demo-desktop-${curto(l)}.webp`;
+const MOVEL = (l: string) => `/work/demo-movil-${curto(l)}.webp`;
 
 /* Largura lógica de cada aparelho: é a largura de viewport que o iframe tem de
    ter para a página lá dentro escolher o layout certo. Depois é escalada. */
@@ -70,12 +73,14 @@ function usaPalcoVivo() {
 function Ecra({
   rota,
   logica,
+  logicaLingua,
   progresso,
   atraso = 0,
   className = "",
 }: {
   rota: string;
   logica: number;
+  logicaLingua: string;
   progresso: MotionValue<number>;
   atraso?: number;
   className?: string;
@@ -162,8 +167,10 @@ function Ecra({
         <iframe
           ref={quadro}
           /* ?embed=1: a página lá dentro sabe que está dentro do portátil e
-             troca as entradas por tempo por movimento ligado ao scroll. */
-          src={`${rota}?embed=1`}
+             troca as entradas por tempo por movimento ligado ao scroll.
+             ?lang: dentro do iframe o i18n é outro e não sabe o que o visitante
+             escolheu cá fora. */
+          src={`${rota}?embed=1&lang=${encodeURIComponent(logicaLingua)}`}
           title=""
           aria-hidden="true"
           tabIndex={-1}
@@ -289,7 +296,7 @@ function IPhone({ conteudo }: { conteudo: React.ReactNode }) {
   );
 }
 
-export function CinemaLanding({ texto, rota }: { texto: CinemaLandingTexto; rota: string }) {
+export function CinemaLanding({ texto, rota, lingua }: { texto: CinemaLandingTexto; rota: string; lingua: string }) {
   const alvo = useRef<HTMLDivElement>(null);
   const semMovimento = useReducedMotion();
   const largo = usaPalcoVivo();
@@ -339,9 +346,9 @@ export function CinemaLanding({ texto, rota }: { texto: CinemaLandingTexto; rota
           capaOpacity={semMovimento ? undefined : capaOpacity}
           conteudo={
             vivo ? (
-              <Ecra rota={rota} logica={LOGICA_MAC} progresso={scrollYProgress} className="h-full w-full" />
+              <Ecra rota={rota} logica={LOGICA_MAC} logicaLingua={lingua} progresso={scrollYProgress} className="h-full w-full" />
             ) : (
-              parado(DESKTOP)
+              parado(DESKTOP(lingua))
             )
           }
         />
@@ -360,12 +367,13 @@ export function CinemaLanding({ texto, rota }: { texto: CinemaLandingTexto; rota
               <Ecra
                 rota={rota}
                 logica={LOGICA_TELEFONE}
+                logicaLingua={lingua}
                 progresso={scrollYProgress}
                 atraso={0.02}
                 className="h-full w-full"
               />
             ) : (
-              parado(MOVEL)
+              parado(MOVEL(lingua))
             )
           }
         />

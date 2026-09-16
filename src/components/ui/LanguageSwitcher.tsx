@@ -12,12 +12,19 @@ const labels: Record<(typeof SUPPORTED_LANGS)[number], string> = {
   de: "DE",
 };
 
-export function LanguageSwitcher() {
+/**
+ * `idiomas` limita a lista. A home só está escrita em es/pt-BR/en: oferecer lá
+ * FR ou DE dava chrome traduzido com o conteúdo em inglês, que é pior do que
+ * não oferecer (16/09/2026). O CV está mesmo traduzido nas cinco.
+ */
+export function LanguageSwitcher({ idiomas }: { idiomas?: readonly (typeof SUPPORTED_LANGS)[number][] } = {}) {
+  const lista = idiomas ?? SUPPORTED_LANGS;
   const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  const current = (SUPPORTED_LANGS.find((l) => i18n.resolvedLanguage === l) ??
+  const current = (lista.find((l) => i18n.resolvedLanguage === l) ??
+    lista[0] ??
     "en") as (typeof SUPPORTED_LANGS)[number];
 
   useEffect(() => {
@@ -53,7 +60,7 @@ export function LanguageSwitcher() {
           role="listbox"
           className="absolute right-0 top-full z-50 mt-2 min-w-[160px] overflow-hidden rounded-xl border border-[color:var(--color-border-strong)] bg-[color:var(--color-card)]/95 shadow-[0_12px_40px_rgba(0,0,0,0.45)] backdrop-blur-xl"
         >
-          {SUPPORTED_LANGS.map((lng) => {
+          {lista.map((lng) => {
             const active = current === lng;
             return (
               <li key={lng}>
