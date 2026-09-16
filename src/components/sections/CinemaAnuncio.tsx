@@ -68,6 +68,12 @@ export function CinemaAnuncio({ texto, ctaHref }: { texto: CinemaAnuncioTexto; c
   const botaoGlow = useTransform(scrollYProgress, [0.72, 0.78], [0, 1]);
   const botaoSombra = useTransform(botaoGlow, (v) => `0 0 ${v * 40}px rgba(0,102,255,${v * 0.7})`);
 
+  /* Os cartões que ainda não apareceram já ocupam o espaço deles, por isso no
+     primeiro tempo o que se vê fica encostado ao topo e sobra meio ecrã em
+     baixo — foi o que o Matheus viu num ecrã grande. O palco começa mais baixo,
+     centrado na busca, e sobe à medida que os cartões entram. */
+  const palcoY = useTransform(scrollYProgress, [0.08, 0.44], ["15%", "0%"]);
+
   const msgOpacity = useTransform(scrollYProgress, [0.8, 0.86], [0, 1]);
   const msgY = useTransform(scrollYProgress, [0.8, 0.86], [24, 0]);
 
@@ -92,6 +98,7 @@ export function CinemaAnuncio({ texto, ctaHref }: { texto: CinemaAnuncioTexto; c
   return (
     <div ref={alvo} className="relative h-[340vh] bg-void">
       <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden px-6">
+        <motion.div style={{ y: palcoY }} className="flex w-full flex-col items-center">
         <motion.div style={{ opacity: tituloOpacity, y: tituloY }} className="relative z-10 text-center">
           <p className="font-mono text-[12px] uppercase tracking-[0.2em] text-cyan md:text-[13px]">{texto.olho}</p>
           <h2 className="mx-auto mt-3 max-w-[15ch] font-display text-[30px] font-bold leading-[1] tracking-[-0.03em] text-cloud [text-wrap:balance] md:mt-4 md:text-[88px]">
@@ -99,43 +106,47 @@ export function CinemaAnuncio({ texto, ctaHref }: { texto: CinemaAnuncioTexto; c
           </h2>
         </motion.div>
 
-        <div className="relative z-10 mt-6 grid w-full max-w-[980px] gap-4 md:mt-14 md:gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-start">
-          {/* Esquerda: a busca e o anúncio */}
-          <div className="space-y-3 md:space-y-4">
-            <div className="flex items-center gap-3 rounded-full border border-white/12 bg-[#0b0b13] px-4 py-2.5 md:px-5 md:py-3">
-              <Search className="h-4 w-4 shrink-0 text-text-dim" aria-hidden="true" />
-              <motion.span className="font-sans text-[15px] text-text-bright">{buscaTexto}</motion.span>
-              <motion.span style={{ opacity: cursorOpacity }} className="inline-block h-4 w-[2px] bg-cyan" />
-            </div>
-
-            <motion.div
-              style={{ opacity: anuncioOpacity, y: anuncioY }}
-              className="rounded-xl border border-white/10 bg-[#0b0b13] p-4 md:p-5"
-            >
-              <span className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-text-dim">
-                Ad
-              </span>
-              <p className="mt-2 text-[16px] font-semibold leading-snug text-cloud">{texto.anuncioTitulo}</p>
-              <p className="font-mono text-[12px] text-cyan">{texto.anuncioUrl}</p>
-              <p className="mt-1 text-[14px] leading-6 text-text">{texto.anuncioTexto}</p>
-            </motion.div>
+        {/* A BUSCA, grande e ao centro. Era um campo pequeno encostado à
+           esquerda: num ecrã grande o primeiro tempo do capítulo ficava vazio,
+           que foi o que o Matheus viu. É a busca que abre a história, por isso
+           é ela que ocupa o palco enquanto o resto ainda não existe. */}
+        <div className="relative z-10 mt-6 w-full max-w-[760px] md:mt-12">
+          <div className="flex items-center gap-3 rounded-full border border-white/12 bg-[#0b0b13] px-4 py-2.5 shadow-[0_24px_60px_-30px_rgba(0,102,255,.7)] md:gap-4 md:px-7 md:py-4.5">
+            <Search className="h-4 w-4 shrink-0 text-text-dim md:h-5 md:w-5" aria-hidden="true" />
+            <motion.span className="truncate font-sans text-[15px] text-text-bright md:text-[20px]">{buscaTexto}</motion.span>
+            <motion.span style={{ opacity: cursorOpacity }} className="inline-block h-4 w-[2px] bg-cyan md:h-5 md:w-[2.5px]" />
           </div>
+        </div>
+
+        <div className="relative z-10 mt-4 grid w-full max-w-[1060px] gap-4 md:mt-8 md:gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] md:items-start">
+          {/* Esquerda: o anúncio que aparece na busca */}
+          <motion.div
+            style={{ opacity: anuncioOpacity, y: anuncioY }}
+            className="rounded-xl border border-white/10 bg-[#0b0b13] p-4 md:rounded-2xl md:p-6"
+          >
+            <span className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-text-dim md:text-[11px]">
+              Ad
+            </span>
+            <p className="mt-2 text-[16px] font-semibold leading-snug text-cloud md:mt-3 md:text-[20px]">{texto.anuncioTitulo}</p>
+            <p className="font-mono text-[12px] text-cyan md:text-[13px]">{texto.anuncioUrl}</p>
+            <p className="mt-1 text-[14px] leading-6 text-text md:mt-2 md:text-[15px] md:leading-7">{texto.anuncioTexto}</p>
+          </motion.div>
 
           {/* Direita: a landing que monta e o formulário que se preenche */}
           <motion.div
             style={{ opacity: landingOpacity, y: landingY, scale: landingScale }}
-            className="rounded-2xl border border-white/10 bg-[#0b0b13] p-4 shadow-[0_40px_120px_-40px_rgba(0,102,255,.5)] md:p-6"
+            className="rounded-2xl border border-white/10 bg-[#0b0b13] p-4 shadow-[0_40px_120px_-40px_rgba(0,102,255,.5)] md:p-7"
           >
-            <div className="h-1.5 w-24 rounded-full bg-white/15" />
-            <div className="mt-3 h-1.5 w-40 rounded-full bg-white/8" />
-            <div className="mt-4 space-y-2 md:mt-6 md:space-y-3">
+            <div className="h-1.5 w-24 rounded-full bg-white/15 md:h-2 md:w-32" />
+            <div className="mt-3 h-1.5 w-40 rounded-full bg-white/8 md:h-2 md:w-52" />
+            <div className="mt-4 space-y-2 md:mt-7 md:space-y-3">
               {texto.campos.map((c, i) => (
                 <CampoLanding key={c} progresso={scrollYProgress} inicio={0.6 + i * 0.04} rotulo={c} />
               ))}
             </div>
             <motion.div
               style={{ boxShadow: botaoSombra }}
-              className="mt-4 flex items-center justify-center rounded-lg bg-blue py-2.5 text-[13px] font-semibold text-white md:mt-5 md:py-3 md:text-[14px]"
+              className="mt-4 flex items-center justify-center rounded-lg bg-blue py-2.5 text-[13px] font-semibold text-white md:mt-6 md:rounded-xl md:py-3.5 md:text-[15px]"
             >
               {texto.botao}
             </motion.div>
@@ -157,6 +168,7 @@ export function CinemaAnuncio({ texto, ctaHref }: { texto: CinemaAnuncioTexto; c
         <motion.p style={{ opacity: msgOpacity }} className="relative z-10 mt-4 max-w-xl text-center text-[13px] leading-5 text-text-dim md:mt-6 md:text-[15px] md:leading-6">
           {texto.legenda}
         </motion.p>
+        </motion.div>
       </div>
     </div>
   );

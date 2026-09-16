@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform, useReducedMotion, type MotionValue } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionValue, useReducedMotion, type MotionValue } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Check, Gauge, Globe, LayoutTemplate, Mail, MessageCircle, Workflow } from "lucide-react";
 import { contact, mailto } from "@/data/contact";
 import { MarcaMW } from "@/components/brand/MarcaMW";
@@ -118,6 +118,36 @@ const FAQ = [
   ["¿Trabajas con negocios de toda España?", "Sí. Trabajo en remoto y hablamos por WhatsApp, email o videollamada."],
   ["¿Puedes llevar también el Google Ads?", "Sí. Puedo dejar la campaña y la medición de conversiones configuradas, para que cada euro tenga un número detrás."],
 ] as const;
+
+/* Os ecras que ficam atras do titulo, em profundidade. Sao os MESMOS ficheiros
+   que a pagina ja carrega mais abaixo, por isso o custo extra e so o de os
+   pedir mais cedo (~120 KB de webp) — e vao com fetchpriority low para nao
+   competirem com o texto, que e o que conta para o LCP. Valeu a troca: o heroi
+   estava plano e e aqui que aterra o trafego pago. */
+const PLANOS = [
+  { src: "/lp/samba-site-1200.webp", caixa: "right-[-10%] top-[2%] w-[42vw] rotate-[6deg]", z: 26, op: 0.19, desfoque: 3 },
+  { src: "/work/cleaning-schedule-1000.webp", caixa: "left-[-14%] top-[14%] w-[30vw] rotate-[-7deg]", z: 42, op: 0.15, desfoque: 3 },
+  { src: "/lp/cleaning-dashboard-1200.webp", caixa: "right-[6%] bottom-[-18%] w-[30vw] rotate-[-4deg]", z: 62, op: 0.11, desfoque: 3.5 },
+];
+
+function Plano({ plano, ratoX, ratoY }: { plano: (typeof PLANOS)[number]; ratoX: MotionValue<number>; ratoY: MotionValue<number> }) {
+  const x = useTransform(ratoX, (v) => v * plano.z);
+  const y = useTransform(ratoY, (v) => v * plano.z);
+  return (
+    <motion.div style={{ x, y }} className={`absolute ${plano.caixa}`}>
+      <img
+        src={plano.src}
+        alt=""
+        loading="eager"
+        decoding="async"
+        // @ts-expect-error fetchpriority ainda nao esta nos tipos do React
+        fetchpriority="low"
+        style={{ opacity: plano.op, filter: `blur(${plano.desfoque}px) grayscale(45%)` }}
+        className="block w-full rounded-lg border border-cyan/15 md:rounded-xl"
+      />
+    </motion.div>
+  );
+}
 
 /* Entradas em keyframes CSS e nao em JavaScript: numa pagina que recebe trafego
    pago, o botao nao pode depender do frameloop para existir. */
@@ -255,6 +285,33 @@ export default function DisenoWeb({ variante = "web" }: { variante?: Variante })
   const { scrollYProgress: progressoPasos } = useScroll({ target: listaPasos, offset: ["start 0.8", "end 0.6"] });
   const alturaTraco = useTransform(progressoPasos, [0, 1], ["0%", "100%"]);
 
+  /* Paralaxe de rato nos planos do heroi. So em quem tem rato: num telemovel
+     nao ha, e o toque dispara uma vez e fica preso. */
+  const [comRato, setComRato] = useState(false);
+  const cruX = useMotionValue(0);
+  const cruY = useMotionValue(0);
+  const ratoX = useSpring(cruX, { stiffness: 60, damping: 20, mass: 0.6 });
+  const ratoY = useSpring(cruY, { stiffness: 60, damping: 20, mass: 0.6 });
+
+  useEffect(() => {
+    if (semMovimento) return;
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const ver = () => setComRato(mq.matches);
+    ver();
+    mq.addEventListener("change", ver);
+    return () => mq.removeEventListener("change", ver);
+  }, [semMovimento]);
+
+  useEffect(() => {
+    if (!comRato) return;
+    const mexer = (e: PointerEvent) => {
+      cruX.set((e.clientX / window.innerWidth - 0.5) * 2);
+      cruY.set((e.clientY / window.innerHeight - 0.5) * 2);
+    };
+    window.addEventListener("pointermove", mexer, { passive: true });
+    return () => window.removeEventListener("pointermove", mexer);
+  }, [comRato, cruX, cruY]);
+
   // A barra fixa so aparece quando o botao principal sai do ecra: dois botoes
   // iguais no mesmo ecra e ruido, nao insistencia.
   useEffect(() => {
@@ -300,13 +357,24 @@ export default function DisenoWeb({ variante = "web" }: { variante?: Variante })
       <main>
         {/* HERO: o mesmo registo da home, sem o peso dela. */}
         <section className="relative overflow-hidden">
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-            <div className="lp-respira absolute left-[58%] top-[-40%] h-[100vh] w-[80vw] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(0,102,255,.5),rgba(0,212,255,.12),transparent)] blur-[110px]" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_32%_46%,rgba(6,6,12,.94)_0%,rgba(6,6,12,.76)_46%,rgba(6,6,12,.55)_100%)]" />
-            <div className="absolute inset-x-0 bottom-0 h-[30vh] bg-gradient-to-b from-transparent to-void" />
+          {/* Os ecras, atras. */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
+            {PLANOS.map((pl) => (
+              <Plano key={pl.src} plano={pl} ratoX={ratoX} ratoY={ratoY} />
+            ))}
           </div>
+          {/* A vinheta devolve o preto ao centro: o texto ganha sempre. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-[5] bg-[radial-gradient(ellipse_at_30%_48%,rgba(6,6,12,.97)_0%,rgba(6,6,12,.88)_32%,rgba(6,6,12,.62)_68%,rgba(6,6,12,.74)_100%)]"
+          />
+          {/* A luz, por cima e em modo screen, para somar em vez de tapar. */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10 mix-blend-screen">
+            <div className="lp-respira absolute left-[62%] top-[-40%] h-[105vh] w-[82vw] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(0,102,255,.64),rgba(0,212,255,.16),transparent)] blur-[110px]" />
+          </div>
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-[15] h-[28vh] bg-gradient-to-b from-transparent to-void" />
 
-          <div className="relative mx-auto max-w-5xl px-5 pb-16 pt-14 md:pb-24 md:pt-24">
+          <div className="relative z-20 mx-auto max-w-5xl px-5 pb-16 pt-14 md:pb-24 md:pt-24">
             <p className="lp-entra font-mono text-[12px] uppercase tracking-[0.18em] text-cyan md:text-[13px]">{tx.olho}</p>
             <h1
               aria-label={tx.h1}
@@ -337,6 +405,19 @@ export default function DisenoWeb({ variante = "web" }: { variante?: Variante })
                 <li key={x} className="flex items-center gap-2"><Check className="h-4 w-4 text-success" aria-hidden="true" />{x}</li>
               ))}
             </ul>
+
+            {/* A mesma linha de prova da home: só o que o site já afirma. */}
+            <p className="lp-entra mt-9 flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-text md:text-[12px]" style={{ animationDelay: "0.82s" }}>
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-70" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-success" />
+              </span>
+              Sistemas en producción en Australia y clientes en Brasil.
+            </p>
+
+            <p className="lp-entra mt-14 hidden font-mono text-[11px] uppercase tracking-[0.2em] text-text-dim md:block" style={{ animationDelay: "0.95s" }}>
+              Baja para ver trabajos reales
+            </p>
           </div>
         </section>
 
@@ -352,22 +433,25 @@ export default function DisenoWeb({ variante = "web" }: { variante?: Variante })
             >
               Qué puedo hacer por tu negocio
             </motion.h2>
-            <div className="mt-12 grid gap-4 md:grid-cols-3">
+            <div className="mt-12 grid gap-4 md:mt-16 md:grid-cols-3">
               {servicios.map(({ icon: Icon, titulo, texto }, i) => (
                 <motion.article
                   key={titulo}
-                  initial={semMovimento ? false : { opacity: 0, y: 22 }}
+                  initial={semMovimento ? false : { opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                  className="group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-[linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,0))] p-7 transition-[border-color,transform] duration-300 ease-[cubic-bezier(.05,.7,.1,1)] hover:-translate-y-1.5 hover:border-cyan/30"
+                  transition={{ duration: 0.65, delay: i * 0.09, ease: [0.16, 1, 0.3, 1] }}
+                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.07] bg-[linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0))] p-7 transition-[border-color,transform,box-shadow] duration-300 ease-[cubic-bezier(.05,.7,.1,1)] hover:-translate-y-1.5 hover:border-cyan/30 hover:shadow-[0_34px_70px_-45px_rgba(0,102,255,.9)] md:p-8"
                 >
                   <span aria-hidden="true" className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-gradient-to-r from-cyan via-blue to-transparent transition-transform duration-500 ease-[cubic-bezier(.05,.7,.1,1)] group-hover:scale-x-100" />
-                  <span className="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/[0.04] transition-transform duration-300 group-hover:scale-110">
-                    <Icon className="h-5 w-5 text-cyan" aria-hidden="true" />
-                  </span>
-                  <h3 className="mt-5 text-[20px] font-semibold leading-snug text-text-bright">{titulo}</h3>
-                  <p className="mt-2 text-[15px] leading-6 text-text">{texto}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="grid h-12 w-12 place-items-center rounded-xl border border-white/10 bg-white/[0.04] transition-transform duration-300 group-hover:scale-110">
+                      <Icon className="h-5 w-5 text-cyan" aria-hidden="true" />
+                    </span>
+                    <span className="font-mono text-[12px] tracking-[0.2em] text-cyan/50">{String(i + 1).padStart(2, "0")}</span>
+                  </div>
+                  <h3 className="mt-6 font-display text-[22px] font-bold leading-tight tracking-[-0.015em] text-cloud md:text-[25px]">{titulo}</h3>
+                  <p className="mt-3 flex-1 text-[15px] leading-7 text-text">{texto}</p>
                 </motion.article>
               ))}
             </div>
