@@ -23,6 +23,27 @@ export const INICIO: Record<LinguaInicio, {
   mercadosTitulo: string; mercados: Mercado[];
   provaTitulo: string; casos: { etiqueta: string; titulo: string; texto: string; alt: string }[];
   cv: string; cvLink: string;
+  /* Capitulo em ecra cheio: a fatura que se monta sozinha (16/09/2026). */
+  fatura: {
+    olho: string;
+    titulo: string;
+    legenda: string;
+    linhas: { descricao: string; horas: string; valor: number }[];
+    rotuloSubtotal: string;
+    rotuloImposto: string;
+    rotuloTotal: string;
+    carimbo: string;
+  };
+  dicaScroll: string;
+  /* Capitulo em ecra cheio: a semana que se enche (16/09/2026). */
+  agenda: {
+    olho: string;
+    titulo: string;
+    legenda: string;
+    dias: string[];
+    rotuloHoras: string;
+    rotuloServicos: string;
+  };
   /* Historia presa ao scroll (16/09/2026): quatro atos, do codigo ao cliente. */
   historia: {
     olho: string;
@@ -58,6 +79,29 @@ export const INICIO: Record<LinguaInicio, {
     ],
     cv: "¿Eres reclutador?",
     cvLink: "Ver mi CV y experiencia",
+    agenda: {
+      olho: "La operación de una semana",
+      titulo: "La semana se llena sola.",
+      legenda: "Servicios, equipos y horas en una sola pantalla. Lo que antes eran llamadas y una hoja de cálculo.",
+      dias: ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+      rotuloHoras: "Horas de equipo",
+      rotuloServicos: "Servicios",
+    },
+    dicaScroll: "Baja para ver un sistema real",
+    fatura: {
+      olho: "Un sistema real, no una maqueta",
+      titulo: "La factura se escribe sola.",
+      legenda: "El sistema toma los servicios de la semana, calcula el impuesto y la envía al cliente. Nadie abre una hoja de cálculo.",
+      linhas: [
+        { descricao: "Limpieza semanal · 3 hab / 2 baños", horas: "3 h", valor: 150 },
+        { descricao: "Limpieza de fin de contrato", horas: "11 h", valor: 734 },
+        { descricao: "Horno y ventanas", horas: "1,5 h", valor: 75 },
+      ],
+      rotuloSubtotal: "Subtotal",
+      rotuloImposto: "Impuesto (10%)",
+      rotuloTotal: "Total",
+      carimbo: "Enviada",
+    },
     historia: {
       olho: "Cómo trabajo",
       atos: [
@@ -97,6 +141,29 @@ export const INICIO: Record<LinguaInicio, {
     ],
     cv: "É recrutador?",
     cvLink: "Ver meu CV e experiência",
+    agenda: {
+      olho: "A operação de uma semana",
+      titulo: "A semana se enche sozinha.",
+      legenda: "Serviços, equipes e horas numa tela só. O que antes era ligação e planilha.",
+      dias: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+      rotuloHoras: "Horas de equipe",
+      rotuloServicos: "Serviços",
+    },
+    dicaScroll: "Desça para ver um sistema real",
+    fatura: {
+      olho: "Um sistema real, não uma maquete",
+      titulo: "A fatura se escreve sozinha.",
+      legenda: "O sistema pega os serviços da semana, calcula o imposto e envia para o cliente. Ninguém abre planilha.",
+      linhas: [
+        { descricao: "Limpeza semanal · 3 quartos / 2 banheiros", horas: "3 h", valor: 150 },
+        { descricao: "Limpeza de fim de contrato", horas: "11 h", valor: 734 },
+        { descricao: "Forno e janelas", horas: "1,5 h", valor: 75 },
+      ],
+      rotuloSubtotal: "Subtotal",
+      rotuloImposto: "Imposto (10%)",
+      rotuloTotal: "Total",
+      carimbo: "Enviada",
+    },
     historia: {
       olho: "Como eu trabalho",
       atos: [
@@ -136,6 +203,29 @@ export const INICIO: Record<LinguaInicio, {
     ],
     cv: "Recruiter?",
     cvLink: "See my CV and experience",
+    agenda: {
+      olho: "One week of operations",
+      titulo: "The week fills itself.",
+      legenda: "Jobs, crews and hours on a single screen. What used to be phone calls and a spreadsheet.",
+      dias: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      rotuloHoras: "Crew hours",
+      rotuloServicos: "Jobs",
+    },
+    dicaScroll: "Scroll to see a real system",
+    fatura: {
+      olho: "A real system, not a mockup",
+      titulo: "The invoice writes itself.",
+      legenda: "The system picks up the week's jobs, works out the tax and sends it to the client. Nobody opens a spreadsheet.",
+      linhas: [
+        { descricao: "Weekly clean · 3 bed / 2 bath", horas: "3 h", valor: 150 },
+        { descricao: "End of lease clean", horas: "11 h", valor: 734 },
+        { descricao: "Oven and windows", horas: "1.5 h", valor: 75 },
+      ],
+      rotuloSubtotal: "Subtotal",
+      rotuloImposto: "Tax (10%)",
+      rotuloTotal: "Total",
+      carimbo: "Sent",
+    },
     historia: {
       olho: "How I work",
       atos: [

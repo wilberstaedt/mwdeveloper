@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { contact } from "@/data/contact";
 import { INICIO, type LinguaInicio } from "@/data/inicio";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
-import { ScrollStory } from "@/components/sections/ScrollStory";
+import { CinemaHero } from "@/components/sections/CinemaHero";
+import { CinemaFatura } from "@/components/sections/CinemaFatura";
+import { CinemaAgenda } from "@/components/sections/CinemaAgenda";
 
 const IMAGENS = ["/lp/samba-site-1200.webp", "/lp/cleaning-dashboard-1200.webp"] as const;
 
@@ -40,27 +42,22 @@ export default function Inicio() {
       </header>
 
       <main>
-        <section className="mx-auto max-w-5xl px-5 pb-16 pt-12 md:pb-24 md:pt-20">
-          <p className="font-mono text-[13px] uppercase tracking-[0.14em] text-cyan">{tx.olho}</p>
-          <h1 className="mt-4 max-w-3xl font-display text-[34px] font-bold leading-[1.1] tracking-tight text-cloud [text-wrap:balance] md:text-[52px]">{tx.h1}</h1>
-          <p className="mt-6 max-w-2xl text-[17px] leading-7 text-text">{tx.sub}</p>
-          <a
-            href={wa(tx.wa)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-8 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue px-6 text-[15px] font-semibold text-white transition-[transform,background-color] duration-150 ease-[cubic-bezier(.05,.7,.1,1)] hover:scale-[1.02] hover:bg-[#1a75ff] active:scale-[.98]"
-          >
-            <MessageCircle className="h-5 w-5" aria-hidden="true" /> {tx.cta}
-          </a>
-        </section>
-
-        <ScrollStory
-          olho={tx.historia.olho}
-          atos={tx.historia.atos}
-          fecho={tx.historia.fecho}
-          cta={tx.historia.cta}
-          ctaHref={wa(tx.historia.cta)}
+        <CinemaHero
+          olho={tx.olho}
+          h1={tx.h1}
+          sub={tx.sub}
+          cta={tx.cta}
+          ctaHref={wa(tx.wa)}
+          dica={tx.dicaScroll}
         />
+
+        <CinemaFatura texto={tx.fatura} />
+
+        <CinemaAgenda texto={tx.agenda} />
+
+        {/* A ScrollStory (cartoes com capturas paradas) saiu da home a 16/09:
+            o Matheus pediu o registo da Apple, e o capitulo em ecra cheio faz o
+            mesmo trabalho com o produto em movimento. O ficheiro fica no repo. */}
 
         <section className="border-t border-border bg-card/40">
           <div className="mx-auto max-w-5xl px-5 py-16 md:py-24">
