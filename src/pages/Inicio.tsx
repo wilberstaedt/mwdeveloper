@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowRight } from "lucide-react";
 import { contact } from "@/data/contact";
 import { INICIO, type LinguaInicio } from "@/data/inicio";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
@@ -14,8 +13,8 @@ import { Capacidades } from "@/components/sections/Capacidades";
 import { Processo } from "@/components/sections/Processo";
 import { CinemaLanding } from "@/components/sections/CinemaLanding";
 import { Fecho } from "@/components/sections/Fecho";
-
-const IMAGENS = ["/lp/samba-site-1200.webp", "/lp/cleaning-dashboard-1200.webp"] as const;
+import { Casos } from "@/components/sections/Casos";
+import { Mercados } from "@/components/sections/Mercados";
 
 function lingua(l: string | undefined): LinguaInicio {
   if (l?.startsWith("es")) return "es";
@@ -85,51 +84,13 @@ export default function Inicio() {
             o Matheus pediu o registo da Apple, e o capitulo em ecra cheio faz o
             mesmo trabalho com o produto em movimento. O ficheiro fica no repo. */}
 
-        <section className="border-t border-border bg-card/40">
-          <div className="mx-auto max-w-5xl px-5 py-16 md:py-24">
-            <h2 className="font-display text-[28px] font-bold leading-tight text-cloud md:text-[36px]">{tx.mercadosTitulo}</h2>
-            <div className="mt-10 grid gap-4 md:grid-cols-3">
-              {tx.mercados.map((m) => {
-                const classe = "group flex h-full flex-col rounded-2xl border border-border bg-card p-6 transition-colors hover:border-cyan";
-                const corpo = (
-                  <>
-                    <h3 className="text-[20px] font-semibold text-text-bright">{m.nome}</h3>
-                    <p className="mt-2 flex-1 text-[15px] leading-6 text-text">{m.texto}</p>
-                    <span className="mt-6 inline-flex items-center gap-2 text-[15px] font-semibold text-cyan">
-                      {m.cta} <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-1" aria-hidden="true" />
-                    </span>
-                  </>
-                );
-                return m.rota ? (
-                  <Link key={m.id} to={m.rota} className={classe}>{corpo}</Link>
-                ) : (
-                  <a key={m.id} href={wa(m.wa!)} target="_blank" rel="noopener noreferrer" className={classe}>{corpo}</a>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+        <Mercados titulo={tx.mercadosTitulo} itens={tx.mercados} href={wa} />
 
         {/* A secção "Qué hago" saiu a 16/09: a Capacidades cobre o mesmo com
             mais detalhe. Os textos ficam em data/inicio.ts para as landings. */}
 
-        <section className="border-t border-border bg-card/40">
-          <div className="mx-auto max-w-5xl px-5 py-16 md:py-24">
-            <h2 className="font-display text-[28px] font-bold leading-tight text-cloud md:text-[36px]">{tx.provaTitulo}</h2>
-            <div className="mt-10 grid gap-8 md:grid-cols-2">
-              {tx.casos.map((c, i) => (
-                <article key={c.titulo}>
-                  <div className="overflow-hidden rounded-2xl border border-border-strong bg-card">
-                    <img src={IMAGENS[i]} alt={c.alt} width={1200} height={750} loading="lazy" decoding="async" className="block h-auto w-full" />
-                  </div>
-                  <p className="mt-5 font-mono text-[13px] uppercase tracking-[0.12em] text-cyan">{c.etiqueta}</p>
-                  <h3 className="mt-2 text-[20px] font-semibold text-text-bright">{c.titulo}</h3>
-                  <p className="mt-2 text-[15px] leading-6 text-text">{c.texto}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
+        <Casos texto={{ provaTitulo: tx.provaTitulo, casos: tx.casos }} />
+
         <Fecho texto={tx.fecho} ctaHref={wa(tx.wa)} />
 
       </main>

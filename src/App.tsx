@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
+import { ReporScroll } from "./components/ui/ReporScroll";
 import Home from "./pages/Home";
 import Inicio from "./pages/Inicio";
 
@@ -12,6 +13,7 @@ const EjemploLimpieza = lazy(() => import("./pages/EjemploLimpieza"));
 export default function App() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-void" />}>
+      <ReporScroll />
       <Routes>
         {/* 14/09/2026: a home passa a vender servicos; o portfolio para vagas vive em /cv */}
         <Route path="/" element={<Inicio />} />
