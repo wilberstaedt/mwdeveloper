@@ -8,6 +8,9 @@ import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { CinemaHero } from "@/components/sections/CinemaHero";
 import { CinemaFatura } from "@/components/sections/CinemaFatura";
 import { CinemaAgenda } from "@/components/sections/CinemaAgenda";
+import { CinemaAnuncio } from "@/components/sections/CinemaAnuncio";
+import { Capacidades } from "@/components/sections/Capacidades";
+import { Processo } from "@/components/sections/Processo";
 
 const IMAGENS = ["/lp/samba-site-1200.webp", "/lp/cleaning-dashboard-1200.webp"] as const;
 
@@ -51,9 +54,25 @@ export default function Inicio() {
           dica={tx.dicaScroll}
         />
 
+        {/* Ordem da história (16/09, correcção do Matheus: a página parecia
+            vender um sistema de limpeza): primeiro o que ele faz para QUALQUER
+            negócio (anúncio → landing → cliente), depois um caso real mostrado
+            como caso, depois o leque completo e como se trabalha. */}
+        <CinemaAnuncio texto={tx.anuncio} ctaHref={wa(tx.wa)} />
+
+        <div className="bg-void px-6 pt-20 text-center md:pt-28">
+          <span className="inline-block rounded-full border border-white/12 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-text-dim md:text-[12px]">
+            {tx.rotuloCaso}
+          </span>
+        </div>
+
         <CinemaFatura texto={tx.fatura} />
 
         <CinemaAgenda texto={tx.agenda} />
+
+        <Capacidades texto={tx.capacidades} />
+
+        <Processo texto={tx.processo} />
 
         {/* A ScrollStory (cartoes com capturas paradas) saiu da home a 16/09:
             o Matheus pediu o registo da Apple, e o capitulo em ecra cheio faz o
@@ -84,17 +103,8 @@ export default function Inicio() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-5xl px-5 py-16 md:py-24">
-          <h2 className="font-display text-[28px] font-bold leading-tight text-cloud md:text-[36px]">{tx.servicosTitulo}</h2>
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {tx.servicos.map((s) => (
-              <article key={s.titulo} className="rounded-2xl border border-border bg-card p-6">
-                <h3 className="text-[20px] font-semibold text-text-bright">{s.titulo}</h3>
-                <p className="mt-2 text-[15px] leading-6 text-text">{s.texto}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+        {/* A secção "Qué hago" saiu a 16/09: a Capacidades cobre o mesmo com
+            mais detalhe. Os textos ficam em data/inicio.ts para as landings. */}
 
         <section className="border-t border-border bg-card/40">
           <div className="mx-auto max-w-5xl px-5 py-16 md:py-24">

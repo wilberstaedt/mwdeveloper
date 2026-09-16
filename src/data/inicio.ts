@@ -35,6 +35,34 @@ export const INICIO: Record<LinguaInicio, {
     carimbo: string;
   };
   dicaScroll: string;
+  /* Rotulo que diz que o capitulo e UM caso, nao o negocio todo (16/09). */
+  rotuloCaso: string;
+  /* Capitulo: do anuncio ao cliente no WhatsApp. */
+  anuncio: {
+    olho: string;
+    titulo: string;
+    legenda: string;
+    busca: string;
+    anuncioTitulo: string;
+    anuncioUrl: string;
+    anuncioTexto: string;
+    campos: string[];
+    botao: string;
+    mensagem: string;
+  };
+  /* O que da para construir, por familia. */
+  capacidades: {
+    olho: string;
+    titulo: string;
+    familias: { nome: string; itens: string[] }[];
+    nota: string;
+  };
+  /* Como funciona trabalhar comigo. */
+  processo: {
+    olho: string;
+    titulo: string;
+    passos: { n: string; titulo: string; texto: string }[];
+  };
   /* Capitulo em ecra cheio: a semana que se enche (16/09/2026). */
   agenda: {
     olho: string;
@@ -79,6 +107,40 @@ export const INICIO: Record<LinguaInicio, {
     ],
     cv: "¿Eres reclutador?",
     cvLink: "Ver mi CV y experiencia",
+    rotuloCaso: "Caso real · empresa de limpieza en Australia",
+    anuncio: {
+      olho: "Del anuncio al cliente",
+      titulo: "Alguien busca. Tú apareces.",
+      legenda: "Campaña en Google Ads, landing con un solo objetivo y medición que sí funciona: cada clic acaba en un mensaje tuyo, no en una estadística vacía.",
+      busca: "empresa de limpieza en Valencia",
+      anuncioTitulo: "Limpieza profesional en Valencia",
+      anuncioUrl: "tunegocio.es/limpieza",
+      anuncioTexto: "Presupuesto en el día. Equipo propio y seguro.",
+      campos: ["Nombre", "Teléfono", "¿Qué necesitas?"],
+      botao: "Pedir presupuesto",
+      mensagem: "Nuevo contacto: Marta, 3 habitaciones, Ruzafa",
+    },
+    capacidades: {
+      olho: "Qué construyo",
+      titulo: "Software a medida, para el negocio que sea.",
+      familias: [
+        { nome: "Webs y landings", itens: ["Web de empresa", "Landing para campañas", "Medición y consentimiento", "Textos y estructura"] },
+        { nome: "Sistemas a medida", itens: ["Reservas y agenda", "Presupuestos en PDF", "Facturación con impuestos", "Panel financiero", "Portal de cliente", "Inventario y equipos"] },
+        { nome: "Marketing que se mide", itens: ["Campañas de Google Ads", "Seguimiento de conversiones", "Informes claros", "Mejoras mes a mes"] },
+        { nome: "Y después", itens: ["Publicación y dominio", "Soporte directo conmigo", "Cambios y mejoras", "Copias de seguridad"] },
+      ],
+      nota: "Si tu negocio no está en esta lista, probablemente también encaje: el trabajo es entender el problema y construirlo.",
+    },
+    processo: {
+      olho: "Cómo funciona",
+      titulo: "Hablamos, lo construyo, lo publicas.",
+      passos: [
+        { n: "01", titulo: "Una conversación", texto: "Me cuentas el problema por WhatsApp. Te digo si tiene solución y por dónde iría." },
+        { n: "02", titulo: "Una propuesta clara", texto: "Alcance, plazo y precio por escrito, sin letra pequeña ni agencia de por medio." },
+        { n: "03", titulo: "Lo construyo", texto: "Trabajo por partes y te lo enseño funcionando, no en presentaciones." },
+        { n: "04", titulo: "Publicación y soporte", texto: "Lo pongo en producción, lo mido y sigo contigo después de la entrega." },
+      ],
+    },
     agenda: {
       olho: "La operación de una semana",
       titulo: "La semana se llena sola.",
@@ -141,6 +203,40 @@ export const INICIO: Record<LinguaInicio, {
     ],
     cv: "É recrutador?",
     cvLink: "Ver meu CV e experiência",
+    rotuloCaso: "Caso real · empresa de limpeza na Austrália",
+    anuncio: {
+      olho: "Do anúncio ao cliente",
+      titulo: "Alguém procura. Você aparece.",
+      legenda: "Campanha no Google Ads, landing com um objetivo só e medição que funciona: cada clique termina numa mensagem sua, não num gráfico vazio.",
+      busca: "empresa de limpeza em Valencia",
+      anuncioTitulo: "Limpeza profissional em Valencia",
+      anuncioUrl: "seunegocio.com/limpeza",
+      anuncioTexto: "Orçamento no mesmo dia. Equipe própria e seguro.",
+      campos: ["Nome", "Telefone", "O que você precisa?"],
+      botao: "Pedir orçamento",
+      mensagem: "Novo contato: Marta, 3 quartos, Ruzafa",
+    },
+    capacidades: {
+      olho: "O que eu construo",
+      titulo: "Software sob medida, para o negócio que for.",
+      familias: [
+        { nome: "Sites e landings", itens: ["Site da empresa", "Landing para campanha", "Medição e consentimento", "Texto e estrutura"] },
+        { nome: "Sistemas sob medida", itens: ["Reservas e agenda", "Orçamento em PDF", "Faturamento com impostos", "Painel financeiro", "Portal do cliente", "Estoque e equipes"] },
+        { nome: "Marketing que se mede", itens: ["Campanhas no Google Ads", "Rastreio de conversão", "Relatório claro", "Melhoria mês a mês"] },
+        { nome: "E depois", itens: ["Publicação e domínio", "Suporte direto comigo", "Mudanças e melhorias", "Backup"] },
+      ],
+      nota: "Se o seu negócio não está nessa lista, provavelmente também cabe: o trabalho é entender o problema e construir.",
+    },
+    processo: {
+      olho: "Como funciona",
+      titulo: "A gente conversa, eu construo, você publica.",
+      passos: [
+        { n: "01", titulo: "Uma conversa", texto: "Você me conta o problema no WhatsApp. Eu digo se tem solução e por onde eu iria." },
+        { n: "02", titulo: "Uma proposta clara", texto: "Escopo, prazo e preço por escrito, sem letra miúda e sem agência no meio." },
+        { n: "03", titulo: "Eu construo", texto: "Trabalho por partes e te mostro funcionando, não em apresentação." },
+        { n: "04", titulo: "Publicação e suporte", texto: "Ponho no ar, meço, e sigo com você depois da entrega." },
+      ],
+    },
     agenda: {
       olho: "A operação de uma semana",
       titulo: "A semana se enche sozinha.",
@@ -203,6 +299,40 @@ export const INICIO: Record<LinguaInicio, {
     ],
     cv: "Recruiter?",
     cvLink: "See my CV and experience",
+    rotuloCaso: "Real case · cleaning company in Australia",
+    anuncio: {
+      olho: "From the ad to the client",
+      titulo: "Someone searches. You show up.",
+      legenda: "A Google Ads campaign, a landing page with one job, and measurement that actually works: every click ends in a message to you, not in an empty chart.",
+      busca: "cleaning company in Valencia",
+      anuncioTitulo: "Professional cleaning in Valencia",
+      anuncioUrl: "yourbusiness.com/cleaning",
+      anuncioTexto: "Same-day quote. Own crew, fully insured.",
+      campos: ["Name", "Phone", "What do you need?"],
+      botao: "Ask for a quote",
+      mensagem: "New enquiry: Marta, 3 bedrooms, Ruzafa",
+    },
+    capacidades: {
+      olho: "What I build",
+      titulo: "Custom software, for whatever the business is.",
+      familias: [
+        { nome: "Websites and landings", itens: ["Company website", "Campaign landing page", "Measurement and consent", "Copy and structure"] },
+        { nome: "Custom systems", itens: ["Bookings and schedule", "Quotes as PDF", "Invoicing with tax", "Finance dashboard", "Client portal", "Stock and crews"] },
+        { nome: "Marketing you can measure", itens: ["Google Ads campaigns", "Conversion tracking", "Reports in plain words", "Month by month tuning"] },
+        { nome: "And after that", itens: ["Launch and domain", "Support straight from me", "Changes and improvements", "Backups"] },
+      ],
+      nota: "If your business is not on this list, it probably still fits: the work is understanding the problem and building it.",
+    },
+    processo: {
+      olho: "How it works",
+      titulo: "We talk, I build it, you launch.",
+      passos: [
+        { n: "01", titulo: "One conversation", texto: "You tell me the problem on WhatsApp. I tell you whether it has a solution and how I would approach it." },
+        { n: "02", titulo: "A clear proposal", texto: "Scope, timeline and price in writing, no small print and no agency in between." },
+        { n: "03", titulo: "I build it", texto: "I work in parts and show it running, not in slides." },
+        { n: "04", titulo: "Launch and support", texto: "I put it live, measure it, and stay with you after delivery." },
+      ],
+    },
     agenda: {
       olho: "One week of operations",
       titulo: "The week fills itself.",
