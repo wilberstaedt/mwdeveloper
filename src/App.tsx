@@ -7,6 +7,7 @@ const CleaningSystem = lazy(() => import("./pages/CleaningSystem"));
 const Flow = lazy(() => import("./pages/Flow"));
 const DisenoWeb = lazy(() => import("./pages/DisenoWeb"));
 const Privacidad = lazy(() => import("./pages/Privacidad"));
+const EjemploLimpieza = lazy(() => import("./pages/EjemploLimpieza"));
 
 export default function App() {
   return (
@@ -22,6 +23,8 @@ export default function App() {
         <Route path="/es/diseno-web" element={<DisenoWeb variante="web" />} />
         <Route path="/es/landing-page" element={<DisenoWeb variante="landing" />} />
         <Route path="/es/privacidad" element={<Privacidad />} />
+        {/* Mostruario: landing de exemplo do setor da limpeza (16/09/2026) */}
+        <Route path="/ejemplo/limpieza" element={<EjemploLimpieza />} />
       </Routes>
     </Suspense>
   );

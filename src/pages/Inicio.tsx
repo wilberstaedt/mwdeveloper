@@ -11,6 +11,8 @@ import { CinemaAgenda } from "@/components/sections/CinemaAgenda";
 import { CinemaAnuncio } from "@/components/sections/CinemaAnuncio";
 import { Capacidades } from "@/components/sections/Capacidades";
 import { Processo } from "@/components/sections/Processo";
+import { CinemaLanding } from "@/components/sections/CinemaLanding";
+import { Fecho } from "@/components/sections/Fecho";
 
 const IMAGENS = ["/lp/samba-site-1200.webp", "/lp/cleaning-dashboard-1200.webp"] as const;
 
@@ -59,6 +61,8 @@ export default function Inicio() {
             negócio (anúncio → landing → cliente), depois um caso real mostrado
             como caso, depois o leque completo e como se trabalha. */}
         <CinemaAnuncio texto={tx.anuncio} ctaHref={wa(tx.wa)} />
+
+        <CinemaLanding texto={tx.landing} rota="/ejemplo/limpieza" />
 
         <div className="bg-void px-6 pt-20 text-center md:pt-28">
           <span className="inline-block rounded-full border border-white/12 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-text-dim md:text-[12px]">
@@ -123,6 +127,8 @@ export default function Inicio() {
             </div>
           </div>
         </section>
+        <Fecho texto={tx.fecho} ctaHref={wa(tx.wa)} />
+
       </main>
 
       <footer className="border-t border-border">

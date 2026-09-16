@@ -57,6 +57,18 @@ export const INICIO: Record<LinguaInicio, {
     familias: { nome: string; itens: string[] }[];
     nota: string;
   };
+  /* Capitulo: uma landing real, no computador e no telemovel (16/09). */
+  landing: {
+    olho: string;
+    titulo: string;
+    legenda: string;
+    url: string;
+    verMais: string;
+    rotuloDesktop: string;
+    rotuloMovel: string;
+  };
+  /* Fecho grande antes do rodape. */
+  fecho: { olho: string; titulo: string; sub: string; cta: string };
   /* Como funciona trabalhar comigo. */
   processo: {
     olho: string;
@@ -107,6 +119,21 @@ export const INICIO: Record<LinguaInicio, {
     ],
     cv: "¿Eres reclutador?",
     cvLink: "Ver mi CV y experiencia",
+    landing: {
+      olho: "Una landing, de arriba abajo",
+      titulo: "Una página hecha para que te llamen.",
+      legenda: "Ejemplo real que puedes abrir: una landing para una empresa de limpieza, con el formulario de presupuesto en el primer golpe de vista. La empresa es ficticia, la página está hecha de verdad.",
+      url: "mwdeveloper.tech/ejemplo/limpieza",
+      verMais: "Abrir el ejemplo",
+      rotuloDesktop: "Ordenador · 1440 px",
+      rotuloMovel: "Móvil · 390 px",
+    },
+    fecho: {
+      olho: "Hablemos",
+      titulo: "Cuéntame qué necesita tu negocio.",
+      sub: "Me escribes por WhatsApp, te digo si tiene solución y cuánto costaría. Sin compromiso y sin comerciales de por medio.",
+      cta: "Escribir por WhatsApp",
+    },
     rotuloCaso: "Caso real · empresa de limpieza en Australia",
     anuncio: {
       olho: "Del anuncio al cliente",
@@ -203,6 +230,21 @@ export const INICIO: Record<LinguaInicio, {
     ],
     cv: "É recrutador?",
     cvLink: "Ver meu CV e experiência",
+    landing: {
+      olho: "Uma landing, de cima a baixo",
+      titulo: "Uma página feita pra te ligarem.",
+      legenda: "Exemplo real que você pode abrir: uma landing para uma empresa de limpeza, com o formulário de orçamento logo na primeira tela. A empresa é fictícia, a página foi feita de verdade.",
+      url: "mwdeveloper.tech/ejemplo/limpieza",
+      verMais: "Abrir o exemplo",
+      rotuloDesktop: "Computador · 1440 px",
+      rotuloMovel: "Celular · 390 px",
+    },
+    fecho: {
+      olho: "Vamos conversar",
+      titulo: "Me conta o que o seu negócio precisa.",
+      sub: "Você me chama no WhatsApp, eu digo se tem solução e quanto custaria. Sem compromisso e sem vendedor no meio.",
+      cta: "Chamar no WhatsApp",
+    },
     rotuloCaso: "Caso real · empresa de limpeza na Austrália",
     anuncio: {
       olho: "Do anúncio ao cliente",
@@ -299,6 +341,21 @@ export const INICIO: Record<LinguaInicio, {
     ],
     cv: "Recruiter?",
     cvLink: "See my CV and experience",
+    landing: {
+      olho: "A landing page, top to bottom",
+      titulo: "A page built to get you called.",
+      legenda: "A real example you can open: a landing page for a cleaning company, with the quote form in the first screen. The company is fictional, the page is genuinely built.",
+      url: "mwdeveloper.tech/ejemplo/limpieza",
+      verMais: "Open the example",
+      rotuloDesktop: "Desktop · 1440 px",
+      rotuloMovel: "Mobile · 390 px",
+    },
+    fecho: {
+      olho: "Let's talk",
+      titulo: "Tell me what your business needs.",
+      sub: "Message me on WhatsApp and I will tell you whether it has a solution and what it would cost. No commitment and no sales people in between.",
+      cta: "Message on WhatsApp",
+    },
     rotuloCaso: "Real case · cleaning company in Australia",
     anuncio: {
       olho: "From the ad to the client",
