@@ -87,10 +87,17 @@ function Ecra({
   useEffect(() => {
     const el = caixa.current;
     if (!el) return;
+    /* offsetWidth/offsetHeight e não getBoundingClientRect(): o rect vem já
+       deformado pelas transformações dos antepassados, e este ecrã vive dentro
+       da tampa que roda. Medido a 16/09 com a tampa fechada, o rect dava 8 px
+       de altura e o iframe ficava com 86 px de viewport — daí só pintar a
+       primeira faixa. O ResizeObserver também não salvava: uma rotação não
+       muda o layout, por isso nunca voltava a disparar. */
     const medir = () => {
-      const { width, height } = el.getBoundingClientRect();
-      if (!width || !height) return;
-      setMedida({ escala: width / logica, altura: Math.round((height / width) * logica) });
+      const largura = el.offsetWidth;
+      const altura = el.offsetHeight;
+      if (!largura || !altura) return;
+      setMedida({ escala: largura / logica, altura: Math.round((altura / largura) * logica) });
     };
     medir();
     const ro = new ResizeObserver(medir);

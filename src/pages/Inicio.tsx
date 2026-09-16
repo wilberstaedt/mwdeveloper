@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { contact } from "@/data/contact";
 import { INICIO, type LinguaInicio } from "@/data/inicio";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { MarcaMW } from "@/components/brand/MarcaMW";
 import { CinemaHero } from "@/components/sections/CinemaHero";
 import { CinemaFatura } from "@/components/sections/CinemaFatura";
 import { CinemaAgenda } from "@/components/sections/CinemaAgenda";
@@ -38,7 +39,7 @@ export default function Inicio() {
     <div className="min-h-screen bg-void text-text">
       <header className="border-b border-border">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-5">
-          <span className="font-mono text-[13px] font-semibold tracking-[0.14em] text-text-bright">MW DEV</span>
+          <MarcaMW />
           <div className="flex items-center gap-4">
             <Link to="/cv" className="text-[13px] font-semibold text-text-dim hover:text-text-bright">CV</Link>
             <LanguageSwitcher />

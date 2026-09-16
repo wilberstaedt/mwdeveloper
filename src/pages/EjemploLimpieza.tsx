@@ -60,11 +60,21 @@ const CSS = `
 }
 `;
 
+/* A estrela de quatro pontas da marca, vazada ao centro. Vai em SVG e não em
+   imagem porque aparece a 20 px no cabeçalho e a 200 px no rodapé. */
+function Estrela({ className, cor = "currentColor" }: { className?: string; cor?: string }) {
+  return (
+    <svg viewBox="0 0 100 100" className={className} fill={cor} fillRule="evenodd" aria-hidden="true">
+      <path d="M50 2 Q54.5 45.5 98 50 Q54.5 54.5 50 98 Q45.5 54.5 2 50 Q45.5 45.5 50 2 Z M50 30 Q52 48 70 50 Q52 52 50 70 Q48 52 30 50 Q48 48 50 30 Z" />
+    </svg>
+  );
+}
+
 function Marca({ claro = false }: { claro?: boolean }) {
   return (
     <span className="flex items-center gap-2">
       <span className="grid h-8 w-8 place-items-center rounded-lg" style={{ background: VERDE }}>
-        <Sparkles className="h-4 w-4 text-white" aria-hidden="true" />
+        <Estrela className="h-[18px] w-[18px]" cor="#fff" />
       </span>
       <span className="font-display text-[19px] font-bold tracking-[-0.02em]" style={{ color: claro ? "#fff" : TINTA }}>
         Nítida
@@ -188,6 +198,40 @@ function PassoFixo({
         <p className="mt-2 max-w-[44ch] text-[15px] leading-6 text-white/55 md:text-[17px] md:leading-7">{passo.d}</p>
       </div>
     </motion.div>
+  );
+}
+
+/* Banda de foto a toda a largura, com parallax. A imagem entra mais alta do
+   que a janela e desliza devagar: e o unico sitio desta pagina onde uma foto
+   faz falta, por isso leva cuidado a mais. */
+function BandaFoto({ src, alt, legenda }: { src: string; alt: string; legenda: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const semMovimento = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
+  return (
+    <section
+      ref={ref}
+      /* Em ?plano=1 a altura vai em pixeis: a captura de pagina inteira usa uma
+         janela de milhares de pixeis, e 62vh dava uma banda de tres metros. */
+      className={`relative overflow-hidden ${PLANO ? "h-[420px]" : "h-[46vh] min-h-[280px] md:h-[62vh]"}`}
+    >
+      <motion.img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        style={{ y: semMovimento ? 0 : y }}
+        className="absolute inset-0 h-[118%] w-full object-cover"
+      />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-b from-transparent to-black/45"
+      />
+      <p className="absolute bottom-6 left-0 right-0 mx-auto max-w-6xl px-5 text-[14px] font-medium text-white/85 md:bottom-8 md:text-[16px]">
+        {legenda}
+      </p>
+    </section>
   );
 }
 
@@ -431,6 +475,13 @@ export default function EjemploLimpieza() {
             </div>
           </section>
 
+          {/* UMA IMAGEM, EM BANDA. Parallax ligado ao scroll (nada de tempo). */}
+          <BandaFoto
+            src="/work/nitida-sala.webp"
+            alt="Salón luminoso y recogido después de una limpieza"
+            legenda="Así queda un salón después de una visita nuestra"
+          />
+
           {/* SERVIÇOS */}
           <section className="mx-auto max-w-6xl px-5 py-16 md:py-24">
             <TituloAceso
@@ -500,17 +551,32 @@ export default function EjemploLimpieza() {
             </div>
           </div>
 
-          {/* PERGUNTAS */}
-          <section className="mx-auto max-w-3xl px-5 py-16 md:py-24">
-            <TituloAceso
-              texto="Preguntas frecuentes"
-              className="font-display text-[34px] font-bold tracking-[-0.03em] md:text-[46px]"
-            />
-            <motion.div {...entra} className="mt-8">
-              {PERGUNTAS.map((q, i) => (
-                <Pergunta key={q.p} p={q.p} r={q.r} aberta={aberta === i} aoAbrir={() => setAberta(aberta === i ? -1 : i)} />
-              ))}
-            </motion.div>
+          {/* PERGUNTAS, com a cozinha ao lado */}
+          <section className="mx-auto max-w-6xl px-5 py-16 md:py-24">
+            <div className="grid gap-10 md:grid-cols-[0.85fr_1.15fr] md:items-start md:gap-14">
+              <motion.div {...entra} className="md:sticky md:top-28">
+                <div className="overflow-hidden rounded-3xl">
+                  <img
+                    src="/work/nitida-cozinha.webp"
+                    alt="Encimera de cocina impecable a contraluz"
+                    loading="lazy"
+                    decoding="async"
+                    className="block aspect-[4/3] w-full object-cover md:aspect-[3/4]"
+                  />
+                </div>
+              </motion.div>
+              <div>
+                <TituloAceso
+                  texto="Preguntas frecuentes"
+                  className="font-display text-[34px] font-bold tracking-[-0.03em] md:text-[46px]"
+                />
+                <motion.div {...entra} className="mt-8">
+                  {PERGUNTAS.map((q, i) => (
+                    <Pergunta key={q.p} p={q.p} r={q.r} aberta={aberta === i} aoAbrir={() => setAberta(aberta === i ? -1 : i)} />
+                  ))}
+                </motion.div>
+              </div>
+            </div>
           </section>
 
           {/* FECHO */}

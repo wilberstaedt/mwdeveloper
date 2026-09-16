@@ -1,8 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
-  <rect width="160" height="160" rx="32" fill="#06060C"/>
-  <path d="M32 56 L56 32 L80 56 L104 32 L128 56" stroke="#0066FF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <path d="M32 104 L56 128 L80 104 L104 128 L128 104" stroke="#0066FF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <path d="M32 56 L32 104" stroke="#0066FF" stroke-width="14" stroke-linecap="round" fill="none"/>
-  <path d="M128 56 L128 104" stroke="#0066FF" stroke-width="14" stroke-linecap="round" fill="none"/>
-  <path d="M80 56 L80 104" stroke="#00D4FF" stroke-width="14" stroke-linecap="round" fill="none"/>
+  <!-- Marca MW: W em cima, M em baixo, presas por duas barras laterais. É a
+       versão simplificada do monograma escolhido a 16/09/2026
+       (/brand/mw-mark.png): aos 16 px o ziguezague do original vira mancha,
+       esta silhueta aguenta. -->
+  <defs>
+    <linearGradient id="mw" x1="32" y1="32" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0066FF"/>
+      <stop offset="1" stop-color="#00D4FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="34" fill="#06060C"/>
+  <g stroke="url(#mw)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M32 58 L56 32 L80 58 L104 32 L128 58"/>
+    <path d="M32 102 L56 128 L80 102 L104 128 L128 102"/>
+    <path d="M32 58 L32 102"/>
+    <path d="M128 58 L128 102"/>
+  </g>
 </svg>
