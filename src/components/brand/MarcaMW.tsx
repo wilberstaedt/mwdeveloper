@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
+import { Logo } from "@/components/ui/Logo";
 
 /**
  * A MARCA (16/09/2026).
  *
- * O monograma é um W em cima de um M, ligados por duas barras — o mesmo
- * desenho do favicon, mas na versão cheia com o ziguezague. Vem de uma imagem
- * porque foi assim que o Matheus a escolheu; o favicon é a versão em traço,
- * que é a que aguenta 16 px.
- *
- * `eager` de propósito: está no primeiro ecrã e é pequena (68 KB).
+ * O monograma é um W em cima de um M, ligados por duas barras. Usa a versão em
+ * TRAÇO e não a cheia que o Matheus escolheu: medido a 16/09, a cheia a 30 px
+ * fecha as reentrâncias e vira mancha. É o sistema normal de uma marca — o
+ * desenho cheio para tamanhos grandes (a imagem de partilha, o avatar), o traço
+ * para a interface e o ícone. As duas são o mesmo monograma.
  */
 export function MarcaMW({ para = "/", className = "" }: { para?: string; className?: string }) {
   return (
@@ -17,15 +17,7 @@ export function MarcaMW({ para = "/", className = "" }: { para?: string; classNa
       className={`group inline-flex items-center gap-2.5 ${className}`}
       aria-label="MW Dev"
     >
-      <img
-        src="/brand/mw-mark.png"
-        alt=""
-        width={30}
-        height={30}
-        loading="eager"
-        decoding="async"
-        className="h-[26px] w-[26px] shrink-0 transition-transform duration-300 ease-[cubic-bezier(.05,.7,.1,1)] group-hover:scale-110 md:h-[30px] md:w-[30px]"
-      />
+      <Logo size={30} className="h-[26px] w-[26px] shrink-0 transition-transform duration-300 ease-[cubic-bezier(.05,.7,.1,1)] group-hover:scale-110 md:h-[30px] md:w-[30px]" />
       <span className="font-mono text-[13px] font-semibold tracking-[0.14em] text-text-bright">MW DEV</span>
     </Link>
   );

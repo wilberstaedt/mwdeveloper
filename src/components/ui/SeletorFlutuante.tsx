@@ -18,24 +18,28 @@ import { Globe, Check } from "lucide-react";
  * botão que não muda a página seria mentir ao visitante.
  */
 
-const LINGUAS = [
+const TODAS = [
   { id: "es", curto: "ES", nome: "Español" },
   { id: "pt-BR", curto: "PT", nome: "Português" },
   { id: "en", curto: "EN", nome: "English" },
+  { id: "fr", curto: "FR", nome: "Français" },
+  { id: "de", curto: "DE", nome: "Deutsch" },
 ] as const;
 
-function atual(resolvida: string | undefined) {
-  if (resolvida?.startsWith("es")) return LINGUAS[0];
-  if (resolvida?.startsWith("pt")) return LINGUAS[1];
-  return LINGUAS[2];
+type Lingua = (typeof TODAS)[number];
+
+function atual(resolvida: string | undefined, lista: readonly Lingua[]) {
+  const achada = lista.find((l) => resolvida?.startsWith(l.id.slice(0, 2)));
+  return achada ?? lista[lista.length - 1];
 }
 
-export function SeletorFlutuante() {
+export function SeletorFlutuante({ ids }: { ids?: readonly string[] } = {}) {
   const { i18n } = useTranslation();
+  const LINGUAS = ids ? TODAS.filter((l) => ids.includes(l.id)) : TODAS.slice(0, 3);
   const [visivel, setVisivel] = useState(false);
   const [aberto, setAberto] = useState(false);
   const caixa = useRef<HTMLDivElement>(null);
-  const agora = atual(i18n.resolvedLanguage);
+  const agora = atual(i18n.resolvedLanguage, LINGUAS);
 
   useEffect(() => {
     const ver = () => {

@@ -36,7 +36,7 @@ function CampoLanding({ progresso, inicio, rotulo }: { progresso: MotionValue<nu
   return (
     <motion.div
       style={{ opacity }}
-      className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3"
+      className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 md:px-4 md:py-3"
     >
       <span className="text-[13px] text-text-dim">{rotulo}</span>
       <motion.span style={{ scaleX: entrada }} className="h-[2px] w-24 origin-left rounded bg-cyan/70" />
@@ -94,15 +94,15 @@ export function CinemaAnuncio({ texto, ctaHref }: { texto: CinemaAnuncioTexto; c
       <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden px-6">
         <motion.div style={{ opacity: tituloOpacity, y: tituloY }} className="relative z-10 text-center">
           <p className="font-mono text-[12px] uppercase tracking-[0.2em] text-cyan md:text-[13px]">{texto.olho}</p>
-          <h2 className="mx-auto mt-4 max-w-[15ch] font-display text-[44px] font-bold leading-[0.98] tracking-[-0.03em] text-cloud [text-wrap:balance] md:text-[88px]">
+          <h2 className="mx-auto mt-3 max-w-[15ch] font-display text-[30px] font-bold leading-[1] tracking-[-0.03em] text-cloud [text-wrap:balance] md:mt-4 md:text-[88px]">
             {texto.titulo}
           </h2>
         </motion.div>
 
-        <div className="relative z-10 mt-10 grid w-full max-w-[980px] gap-6 md:mt-14 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-start">
+        <div className="relative z-10 mt-6 grid w-full max-w-[980px] gap-4 md:mt-14 md:gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-start">
           {/* Esquerda: a busca e o anúncio */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 rounded-full border border-white/12 bg-[#0b0b13] px-5 py-3">
+          <div className="space-y-3 md:space-y-4">
+            <div className="flex items-center gap-3 rounded-full border border-white/12 bg-[#0b0b13] px-4 py-2.5 md:px-5 md:py-3">
               <Search className="h-4 w-4 shrink-0 text-text-dim" aria-hidden="true" />
               <motion.span className="font-sans text-[15px] text-text-bright">{buscaTexto}</motion.span>
               <motion.span style={{ opacity: cursorOpacity }} className="inline-block h-4 w-[2px] bg-cyan" />
@@ -110,7 +110,7 @@ export function CinemaAnuncio({ texto, ctaHref }: { texto: CinemaAnuncioTexto; c
 
             <motion.div
               style={{ opacity: anuncioOpacity, y: anuncioY }}
-              className="rounded-xl border border-white/10 bg-[#0b0b13] p-5"
+              className="rounded-xl border border-white/10 bg-[#0b0b13] p-4 md:p-5"
             >
               <span className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-text-dim">
                 Ad
@@ -124,18 +124,18 @@ export function CinemaAnuncio({ texto, ctaHref }: { texto: CinemaAnuncioTexto; c
           {/* Direita: a landing que monta e o formulário que se preenche */}
           <motion.div
             style={{ opacity: landingOpacity, y: landingY, scale: landingScale }}
-            className="rounded-2xl border border-white/10 bg-[#0b0b13] p-5 shadow-[0_40px_120px_-40px_rgba(0,102,255,.5)] md:p-6"
+            className="rounded-2xl border border-white/10 bg-[#0b0b13] p-4 shadow-[0_40px_120px_-40px_rgba(0,102,255,.5)] md:p-6"
           >
             <div className="h-1.5 w-24 rounded-full bg-white/15" />
             <div className="mt-3 h-1.5 w-40 rounded-full bg-white/8" />
-            <div className="mt-6 space-y-3">
+            <div className="mt-4 space-y-2 md:mt-6 md:space-y-3">
               {texto.campos.map((c, i) => (
                 <CampoLanding key={c} progresso={scrollYProgress} inicio={0.6 + i * 0.04} rotulo={c} />
               ))}
             </div>
             <motion.div
               style={{ boxShadow: botaoSombra }}
-              className="mt-5 flex items-center justify-center rounded-lg bg-blue py-3 text-[14px] font-semibold text-white"
+              className="mt-4 flex items-center justify-center rounded-lg bg-blue py-2.5 text-[13px] font-semibold text-white md:mt-5 md:py-3 md:text-[14px]"
             >
               {texto.botao}
             </motion.div>
@@ -148,13 +148,13 @@ export function CinemaAnuncio({ texto, ctaHref }: { texto: CinemaAnuncioTexto; c
           target="_blank"
           rel="noopener noreferrer"
           style={{ opacity: msgOpacity, y: msgY }}
-          className="relative z-10 mt-8 inline-flex items-center gap-3 rounded-2xl border border-success/40 bg-success/10 px-5 py-3 text-[14px] text-text-bright md:text-[15px]"
+          className="relative z-10 mt-5 inline-flex items-center gap-2.5 rounded-2xl border border-success/40 bg-success/10 px-4 py-2.5 text-[13px] text-text-bright md:mt-8 md:gap-3 md:px-5 md:py-3 md:text-[15px]"
         >
           <MessageCircle className="h-5 w-5 text-success" aria-hidden="true" />
           {texto.mensagem}
         </motion.a>
 
-        <motion.p style={{ opacity: msgOpacity }} className="relative z-10 mt-6 max-w-xl text-center text-[14px] leading-6 text-text-dim md:text-[15px]">
+        <motion.p style={{ opacity: msgOpacity }} className="relative z-10 mt-4 max-w-xl text-center text-[13px] leading-5 text-text-dim md:mt-6 md:text-[15px] md:leading-6">
           {texto.legenda}
         </motion.p>
       </div>
